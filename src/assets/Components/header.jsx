@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Header() {
   return (
-    <header className="bg-black/50 w-full p-4 shadow-md px-8 absolute top-0 left-0 z-99">
+    <header className="bg-black/50 w-full p-4 shadow-md px-8 absolute">
       <div className="container mx-auto flex justify-between items-center">
         <h2 className="text-lg font-bold font-['Bebas_Neue']">
           Vikings News
