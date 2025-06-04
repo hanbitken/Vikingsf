@@ -1,33 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Home from './assets/Components/home'
-import Header from './assets/Components/Header'
-import Footer from './assets/Components/Footer'
-import Login from './assets/Components/Login'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Components/home";
+import Header from "./Components/header";
+import Footer from "./Components/Footer";
+import Login from "./Components/Login";
+import "./App.css";
 
-
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from 'react-router-dom';
+// Layout utama dengan Header, Footer, dan konten halaman
+function MainLayout({ children }) {
+  return (
+    <>
+      <Header />
+      <div>{children}</div>
+      <Footer />
+    </>
+  );
+}
 
 function App() {
   return (
-    <div>
-    <Header/>
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* Tambahkan route lain jika perlu */}
+        {/* Halaman Login berdiri sendiri, tanpa Header/Footer */}
         <Route path="/login" element={<Login />} />
-        {/* Tambahkan route lain jika perlu */}
+
+        {/* Semua halaman lain dibungkus layout utama */}
+        <Route
+          path="/"
+          element={
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          }
+        />
+
+        {/* Tambahkan rute lain di bawah ini jika perlu */}
+        {/* <Route path="/about" element={<MainLayout><About /></MainLayout>} /> */}
       </Routes>
     </Router>
-    <Footer/>
-    </div>
   );
 }
 
