@@ -17,8 +17,8 @@ export default function Login() {
       console.log("typeof response.data:", typeof response.data);
       console.log("response.data:", response.data);
 
-      const parsedData = JSON.parse(response.data); // hanya jika response.data string
-      const { token, user } = parsedData;
+      // const parsedData = JSON.parse(response.data);  hanya jika response.data string
+      const { token, user } = response.data;
 
       // simpan token
       localStorage.setItem("token", token);
