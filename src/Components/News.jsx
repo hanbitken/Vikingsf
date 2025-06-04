@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { IoMdArrowDropleft , IoMdArrowDropright } from 'react-icons/io';
-import img1 from './assets/1.jpg';
+import img1 from '../assets/1.jpg';
 
 const PrevArrow = ({ onClick }) => (
   <div
@@ -124,7 +124,7 @@ const News = () => {
 
     return (
     // Outer container for centering and fixed width
-    <div className="bg-gray-300 flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
+    <div className="bg-black flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
       <div className="w-[1195px] h-[672px] overflow-hidden justify-center mx-auto relative rounded-lg border-2 border-[#684F28]">
         <Slider {...settings}>
           {carouselData.map((card) => (

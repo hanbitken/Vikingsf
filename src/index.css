@@ -2,27 +2,3 @@
 
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
-
-.gradient-border-box {
-  position: relative; /* Essential for positioning the pseudo-element */
-  z-index: 0; /* Ensures the border is below actual content (z-10 on content) */
-}
-
-.gradient-border-box::before {
-  content: ''; /* Required for pseudo-elements */
-  position: absolute;
-  inset: -2px; /* Controls the thickness of the border (e.g., -2px for a 2px border) */
-  z-index: -1; /* Puts the border behind the main card content */
-  border-radius: 0.5rem; /* Matches your `rounded-lg` (8px) for rounded corners */
-
-  /* The actual gradient from your Figma screenshot */
-  /* Using 45deg for a diagonal look, adjust if needed */
-  background: linear-gradient(
-    45deg,
-    #884F28 0%,    /* Dark orange/brown from Figma */
-    #281B06 47%,   /* Darker brown/black from Figma */
-    #FFC86E 100%   /* Light yellowish/gold from Figma */
-  );
-  /* Optional: background-size cover if gradient looks too small/repeated */
-  background-size: cover;
-}
