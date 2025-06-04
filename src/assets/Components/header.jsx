@@ -10,7 +10,7 @@ export default function Header() {
         <nav className="space-x-4 font-bold font-white font-['Bebas_Neue']">
           <a href="#" className="hover:underline">NEWS</a>
           <a href="#" className="hover:underline">DOWNLOAD</a>
-          <a href="#" className="hover:underline">GAME INFO</a>
+          <a href="/gameinfo" className="hover:underline">GAME INFO</a>
           <a href="#" className="hover:underline">MEMBERSHIP</a>
           <a href="#" className="hover:underline">DONATION</a>
         </nav>
