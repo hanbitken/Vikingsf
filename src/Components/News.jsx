@@ -126,7 +126,7 @@ const News = () => {
     // Outer container for centering and fixed width
     <div className="bg-[#AC9364] flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
       <div className="relative w-[1195px] h-[672px] mx-auto p-[2px] box-border rounded-lg gold-border">
-        <div className="w-full h-full overflow-hidden relative rounded-lg">
+        <div className="w-full h-full overflow-hidden relative rounded-[15px]">
           <Slider {...settings}>
             {carouselData.map((card) => (
               <CarouselCard
