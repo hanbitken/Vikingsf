@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import News from './Components/News';
+import News from './components/News';
+import NewsDetail from './components/NewsDetail';
 
 function App() {
   
@@ -11,6 +12,11 @@ function App() {
         <Route path="/news" element={
           <>
           <News />
+          </>
+        } />
+        <Route path="/newsdetail" element={
+          <>
+          <NewsDetail />
           </>
         } />
       </Routes>

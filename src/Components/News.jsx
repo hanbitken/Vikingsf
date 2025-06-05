@@ -126,6 +126,7 @@ const News = () => {
     // Outer container for centering and fixed width
     <div className="bg-black flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
       <div className="w-[1195px] h-[672px] overflow-hidden justify-center mx-auto relative rounded-lg border-2 border-[#684F28]">
+        <div className='gold-border'></div>
         <Slider {...settings}>
           {carouselData.map((card) => (
             <CarouselCard
@@ -139,7 +140,7 @@ const News = () => {
       </div>
     {/* Additional content below the carousel */}
         <div className="mt-16 w-[1195px] mx-auto">
-          <div className="border-2 border-[#684F28] rounded-lg bg-[linear-gradient(to_bottom,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_100%),linear-gradient(to_right,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0, 0, 0, 0.2)_100%)]">
+          <div className="gold-border rounded-lg bg-[linear-gradient(to_bottom,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_100%),linear-gradient(to_right,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0, 0, 0, 0.2)_100%)]">
             {newsData.map((news) => (
               <NewsList
                 key={news.id}
@@ -150,6 +151,7 @@ const News = () => {
             ))}
           </div>
         </div>
+
     </div>
   );
 }
