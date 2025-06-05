@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from 'react-icons/fa';
-import backg from '../../Picture/background.png'
-import LOGO from '../../Picture/LOGO VIKINGS 1.png';
-import Line from '../../Picture/Line Border.png';
-import atas from '../../Picture/atas.png';
-import news from '../../Picture/RF-Project-News.png';
-import InfoLine from '../../Picture/Line-Info.png';
-import profile from '../../Picture/profile.png';
-import Cora from '../../Picture/Cora.png';
-import Bellato from '../../Picture/Bellato.png'
-import Accretia from '../../Picture/Accretia.png'
+import backg from '../../assets/Picture/background.png'
+import LOGO from '../../assets/Picture/LOGO VIKINGS 1.png';
+import Line from '../../assets/Picture/Line Border.png';
+import atas from '../../assets/Picture/atas.png';
+import news from '../../assets/Picture/RF-Project-News.png';
+import InfoLine from '../../assets/Picture/Line-Info.png';
+import profile from '../../assets/Picture/profile.png';
+import Cora from '../../assets/Picture/Cora.png';
+import Bellato from '../../assets/Picture/Bellato.png'
+import Accretia from '../../assets/Picture/Accretia.png'
 
 
 export default function gameinfo() {

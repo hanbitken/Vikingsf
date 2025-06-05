@@ -1,8 +1,8 @@
 import React from 'react';
-import backg from '../../Picture/background.png'
-import LOGO from '../../Picture/LOGO VIKINGS 1.png';
-import Line from '../../Picture/Line Border.png';
-import LineQuest from '../../Picture/Line-Quest.png'
+import backg from '../../assets/Picture/background.png'
+import LOGO from '../../assets/Picture/LOGO VIKINGS 1.png';
+import Line from '../../assets/Picture/Line Border.png';
+import LineQuest from '../../assets/Picture/Line-Quest.png'
 
 export default function QuestInfo() {
     const quests = [

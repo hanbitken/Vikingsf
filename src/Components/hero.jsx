@@ -1,7 +1,7 @@
 import React from 'react';
-import atas from '../Picture/atas.png';
-import LOGO from '../Picture/LOGO VIKINGS 1.png';
-import Line from '../Picture/Line Border.png';
+import atas from '../assets/Picture/atas.png';
+import LOGO from '../assets/Picture/LOGO VIKINGS 1.png';
+import Line from '../assets/Picture/Line Border.png';
 
 export default function Hero() {
   return (
