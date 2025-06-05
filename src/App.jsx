@@ -3,10 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Home from './assets/Components/home'
-import Header from './assets/Components/Header'
+import Header from './assets/Components/header'
 import Footer from './assets/Components/footer'
 import Login from './assets/Components/Login'
-import GameInfo from './assets/Pages/gameinfo'
+import GameInfo from './assets/Pages/GameInfo/gameinfo'
 
 import {
   BrowserRouter as Router,

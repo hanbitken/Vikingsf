@@ -1,6 +1,6 @@
 #root {
   text-align: center;
-  width : 100%;
+  width: 100%;
 }
 
 .logo {
@@ -9,9 +9,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -20,6 +22,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -37,4 +40,52 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.gold-border {
+  position: relative;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+}
+
+.gold-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #684F28 0%, #281806 47%, #FFC86E 100%);
+
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.gold-tier {
+  background: linear-gradient(158.64deg, #FFFFFF 27.76%, #FFC86E 59.96%, #1D1405 87.56%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.silver-tier {
+  background: linear-gradient(158.64deg, #FFFFFF 27.76%, #9AB5F0 59.96%, #05161D 87.56%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.bronze-tier {
+  background: linear-gradient(163.63deg, #FFFFFF 11.5%, #5D1919 53.74%, #1D0505 89.95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }

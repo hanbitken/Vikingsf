@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from 'react-icons/fa';
-import backg from '../Picture/background.png'
-import LOGO from '../Picture/LOGO VIKINGS 1.png';
-import Line from '../Picture/Line Border.png';
-import atas from '../Picture/atas.png';
-import news from '../Picture/RF-Project-News.png';
-import InfoLine from '../Picture/Line-Info.png';
-import profile from '../Picture/profile.png';
-import Cora from '../Picture/Cora.png';
-import Bellato from '../Picture/Bellato.png'
-import Accretia from '../Picture/Accretia.png'
+import backg from '../../Picture/background.png'
+import LOGO from '../../Picture/LOGO VIKINGS 1.png';
+import Line from '../../Picture/Line Border.png';
+import atas from '../../Picture/atas.png';
+import news from '../../Picture/RF-Project-News.png';
+import InfoLine from '../../Picture/Line-Info.png';
+import profile from '../../Picture/profile.png';
+import Cora from '../../Picture/Cora.png';
+import Bellato from '../../Picture/Bellato.png'
+import Accretia from '../../Picture/Accretia.png'
 
 
 export default function gameinfo() {
@@ -39,6 +39,34 @@ export default function gameinfo() {
         { name: "PLAYER4", faction: "Accretia", win: 400, lose: 350 },
         { name: "PLAYER5", faction: "Accretia", win: 400, lose: 350 },
     ];
+
+    const Guilds = [
+        { name: "GUILD1", faction: "Accretia", win: 400, lose: 350 },
+        { name: "GUILD2", faction: "Accretia", win: 400, lose: 350 },
+        { name: "GUILD3", faction: "Accretia", win: 400, lose: 350 },
+        { name: "GUILD4", faction: "Accretia", win: 400, lose: 350 },
+        { name: "GUILD5", faction: "Accretia", win: 400, lose: 350 },
+    ];
+
+    const Vips = [
+        { name: "PLAYER1", faction: "Accretia", tier: "gold tier" },
+        { name: "PLAYER2", faction: "Accretia", tier: "gold tier" },
+        { name: "PLAYER3", faction: "Accretia", tier: "silver tier" },
+        { name: "PLAYER4", faction: "Accretia", tier: "bronze tier" }
+      ];
+
+      const getTierColor = (tier) => {
+        switch (tier.toLowerCase()) {
+          case 'gold tier':
+            return 'gold-tier';
+          case 'silver tier':
+            return 'silver-tier';
+          case 'bronze tier':
+            return 'bronze-tier';
+          default:
+            return 'text-gray-300';
+        }
+      };
 
     const slides = [
         {
@@ -104,7 +132,7 @@ export default function gameinfo() {
                 </div>
                 <div className='flex flex-col gap-8 justify-between pt-12 w-full h-full px-16'>
                     <div className='flex flex-row gap-8'>
-                        <div className="relative w-full  border-2 overflow-hidden bg-black/25 rounded-xl border-[#FFC86E]/60">
+                        <div className="relative w-full overflow-hidden gold-border">
                             {/* Background image */}
                             <div
                                 className="w-full h-full bg-cover transition-all duration-700"
@@ -142,7 +170,7 @@ export default function gameinfo() {
                                 {/* Right arrow */}
                                 <button
                                     onClick={nextSlide}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white "
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/30 rounded-full"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +185,7 @@ export default function gameinfo() {
                                 </button>
                             </div>
                         </div>
-                        <div className="w-[40%] flex flex-col border-2 h-full gap-4 bg-black/25 rounded-xl border-[#FFC86E]/60 p-8">
+                        <div className="w-[40%] flex flex-col h-full gap-4 rounded-lg p-8 gold-border">
                             <div className='text-center text-xl'>
                                 <h2>
                                     SERVER INFO
@@ -193,7 +221,7 @@ export default function gameinfo() {
                     </div>
                     <div className='flex flex-row gap-8'>
                         {/* TOP PLAYER */}
-                        <div className='flex flex-col h-full gap-4 w-1/3 border-2 bg-black/25 rounded-xl border-[#FFC86E]/60 p-8'>
+                        <div className='flex flex-col h-full gap-4 w-1/3 p-8 gold-border'>
                             <div className='text-center text-xl'>
                                 <h2>
                                     TOP PLAYER
@@ -204,21 +232,6 @@ export default function gameinfo() {
                                 {players.map((player, index) => (
                                     <div key={index} className='flex flex-row justify-between items-center align-center'>
                                         <div className='flex flex-row gap-4 items-center'>
-                                            {/* <div className="border-2 rounded-md p-2">
-                                                <svg
-                                                    className="w-8 h-8 text-white"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth={2}
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"
-                                                    />
-                                                </svg>
-                                            </div> */}
                                             <div className='w-full h-full'>
                                                 <img src={profile} alt="" />
                                             </div>
@@ -237,7 +250,7 @@ export default function gameinfo() {
                                 ))}
                             </div>
                         </div>
-                        <div className='flex flex-col h-full gap-4 w-1/3 border-2 h-64 bg-black/25 rounded-xl border-[#FFC86E]/60 p-8'>
+                        <div className='flex flex-col h-full gap-4 w-1/3 gold-border p-8'>
                             <div className='text-center text-xl'>
                                 <h2>
                                     TOP GUILD
@@ -245,43 +258,28 @@ export default function gameinfo() {
                             </div>
                             <img src={InfoLine} alt="" />
                             <div className='flex flex-col justify-center gap-4 px-8'>
-                                {players.map((player, index) => (
+                                {Guilds.map((guild, index) => (
                                     <div key={index} className='flex flex-row justify-between items-center align-center'>
                                         <div className='flex flex-row gap-4 items-center'>
-                                            {/* <div className="border-2 rounded-md p-2">
-                                                <svg
-                                                    className="w-8 h-8 text-white"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth={2}
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"
-                                                    />
-                                                </svg>
-                                            </div> */}
                                             <div className='w-full h-full'>
                                                 <img src={profile} alt="" />
                                             </div>
                                             <div className='flex flex-col text-left'>
-                                                <h2 className='text-xl'>{player.name}r</h2>
-                                                <h3 className='text-lg'>{player.faction}</h3>
+                                                <h2 className='text-xl'>{guild.name}r</h2>
+                                                <h3 className='text-lg'>{guild.faction}</h3>
                                             </div>
                                         </div>
                                         {/* kill | Death */}
                                         <div className='text-xl'>
-                                            <span className="text-green-400">{player.win}</span>{" "}
+                                            <span className="text-green-400">{guild.win}</span>{" "}
                                             <span className="text-white">|</span>{" "}
-                                            <span className="text-red-500">{player.lose}</span>
+                                            <span className="text-red-500">{guild.lose}</span>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <div className='flex flex-col h-full gap-4 w-1/3 border-2 h-64 bg-black/25 rounded-xl border-[#FFC86E]/60 p-8'>
+                        <div className='flex flex-col min-h-full gap-4 w-1/3 gold-border p-8'>
                             <div className='text-center text-xl'>
                                 <h2>
                                     VIP
@@ -289,37 +287,19 @@ export default function gameinfo() {
                             </div>
                             <img src={InfoLine} alt="" />
                             <div className='flex flex-col justify-center gap-4 px-8'>
-                                {players.map((player, index) => (
+                                {Vips.map((vip, index) => (
                                     <div key={index} className='flex flex-row justify-between items-center align-center'>
                                         <div className='flex flex-row gap-4 items-center'>
-                                            {/* <div className="border-2 rounded-md p-2">
-                                                <svg
-                                                    className="w-8 h-8 text-white"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth={2}
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"
-                                                    />
-                                                </svg>
-                                            </div> */}
                                             <div className='w-full h-full'>
                                                 <img src={profile} alt="" />
                                             </div>
                                             <div className='flex flex-col text-left'>
-                                                <h2 className='text-xl'>{player.name}r</h2>
-                                                <h3 className='text-lg'>{player.faction}</h3>
+                                                <h2 className='text-xl'>{vip.name}r</h2>
+                                                <h3 className='text-lg'>{vip.faction}</h3>
                                             </div>
                                         </div>
-                                        {/* kill | Death */}
-                                        <div className='text-xl'>
-                                            <span className="text-green-400">{player.win}</span>{" "}
-                                            <span className="text-white">|</span>{" "}
-                                            <span className="text-red-500">{player.lose}</span>
+                                        <div className={`w-1/2 flex justify-center items-center align-center text-xl  ${getTierColor(vip.tier)}`}>
+                                            {vip.tier.toUpperCase()}
                                         </div>
                                     </div>
                                 ))}
