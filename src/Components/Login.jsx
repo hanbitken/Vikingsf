@@ -5,6 +5,7 @@ import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function Login() {
     setMessage("");
 
     try {
-      const response = await api.post("/login", { email, password });
+      const response = await api.post("/login", { username, password });
       const { token, user } = response.data;
       localStorage.setItem("token", token);
 
@@ -36,26 +37,23 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
       {/* Bungkus dengan border */}
-       <div className="border border-yellow-300 rounded-lg p-8 w-full max-w-md shadow-[0_0_15px_#facc15] flex flex-col items-center">
+      <div className="border border-yellow-300 rounded-lg p-8 w-full max-w-md shadow-[0_0_15px_#facc15] flex flex-col items-center">
         {/* Logo */}
         <img src={Logo} alt="Vikings Logo" className="w-50 mb-6 mx-auto" />
 
         {/* Divider dengan Tree */}
-               <div className="relative flex items-center justify-center w-full mb-4">
-                 <div className="w-full h-px bg-gray-400" />
-                 <img
-                   src={Tree}
-                   alt="Tree"
-                   className="absolute bg-black px-2"
-                   style={{ width: "40px" }}
-                 />
-               </div>
+        <div className="relative flex items-center justify-center w-full mb-4">
+          <div className="w-full h-px bg-gray-400" />
+          <img
+            src={Tree}
+            alt="Tree"
+            className="absolute bg-black px-2"
+            style={{ width: "40px" }}
+          />
+        </div>
 
         {/* Form */}
-        <form
-          onSubmit={handleLogin}
-          className="w-full flex flex-col gap-4"
-        >
+        <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
           <h2 className="text-white text-xl font-bold text-center mb-2">
             WELCOME BACK
           </h2>
@@ -66,8 +64,8 @@ export default function Login() {
 
           <input
             type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             placeholder="USERNAME"
             className="bg-gray-300 text-black px-4 py-2 rounded outline-none"
             required
