@@ -83,6 +83,13 @@ const NewsPage = () => {
     ));
   };
 
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm('Apakah Anda yakin ingin menghapus berita ini?');
+    if (confirmDelete) {
+      setNews(news.filter(item => item.id !== id));
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -125,12 +132,20 @@ const NewsPage = () => {
                 </div>
               )}
             </div>
-            <button
-              onClick={() => toggleEdit(item.id)}
-              className="ml-4 bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-            >
-              {item.isEditing ? 'Simpan' : 'Edit'}
-            </button>
+            <div className="flex flex-col gap-2 ml-4">
+              <button
+                onClick={() => toggleEdit(item.id)}
+                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+              >
+                {item.isEditing ? 'Simpan' : 'Edit'}
+              </button>
+              <button
+                onClick={() => handleDelete(item.id)}
+                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              >
+                Hapus
+              </button>
+            </div>
           </div>
         ))}
       </div>
