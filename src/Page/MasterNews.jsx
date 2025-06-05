@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const API_URL = 'http://127.0.0.1:8000/api/news';
 
@@ -15,19 +16,26 @@ const NewsPage = () => {
         fetchNews();
     }, []);
 
-    // Fetch semua news dari backend
     const fetchNews = async () => {
         try {
             const res = await axios.get(API_URL);
-            // Tambah properti isEditing default false tiap item
-            const dataWithEditing = res.data.map(item => ({ ...item, isEditing: false }));
+            const rawData = Array.isArray(res.data)
+                ? res.data
+                : Array.isArray(res.data.data)
+                    ? res.data.data
+                    : [];
+
+            const dataWithEditing = rawData.map(item => ({
+                ...item,
+                isEditing: false
+            }));
             setNews(dataWithEditing);
         } catch (error) {
             console.error('Error fetching news:', error);
         }
     };
 
-    // Handle upload gambar & preview
+
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         setNewImage(file);
@@ -45,10 +53,9 @@ const NewsPage = () => {
         e.preventDefault();
     };
 
-    // Submit berita baru ke backend
     const handleAddNews = async () => {
         if (!newTitle.trim() || !newDescription.trim()) {
-            alert('Judul dan deskripsi harus diisi');
+            Swal.fire('Gagal', 'Judul dan deskripsi harus diisi', 'warning');
             return;
         }
 
@@ -56,7 +63,7 @@ const NewsPage = () => {
             const formData = new FormData();
             formData.append('title', newTitle);
             formData.append('description', newDescription);
-            if (newImage) formData.append('image', newImage); // file image
+            if (newImage) formData.append('image', newImage);
 
             await axios.post(API_URL, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
@@ -68,32 +75,30 @@ const NewsPage = () => {
             setNewImage(null);
             setNewImagePreview(null);
 
-            fetchNews(); // refresh data
+            Swal.fire('Sukses', 'Berita berhasil ditambahkan', 'success');
+            fetchNews();
         } catch (error) {
             console.error('Error adding news:', error);
+            Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan berita', 'error');
         }
     };
 
-
-    // Toggle mode edit berita
     const toggleEdit = (id) => {
         setNews(news.map(item =>
             item.id === id ? { ...item, isEditing: !item.isEditing } : item
         ));
     };
 
-    // Edit field title/description lokal state
     const handleEditChange = (id, field, value) => {
         setNews(news.map(item =>
             item.id === id ? { ...item, [field]: value } : item
         ));
     };
 
-    // Simpan perubahan berita ke backend (PATCH)
     const handleSaveEdit = async (id) => {
         const item = news.find(n => n.id === id);
         if (!item.title.trim() || !item.description.trim()) {
-            alert('Judul dan deskripsi tidak boleh kosong');
+            Swal.fire('Gagal', 'Judul dan deskripsi tidak boleh kosong', 'warning');
             return;
         }
 
@@ -101,24 +106,35 @@ const NewsPage = () => {
             await axios.patch(`${API_URL}/${id}`, {
                 title: item.title,
                 description: item.description,
-                // Jika backend mendukung update gambar, tambahkan juga disini
             });
             toggleEdit(id);
             fetchNews();
+            Swal.fire('Sukses', 'Berita berhasil diperbarui', 'success');
         } catch (error) {
             console.error('Error saving edit:', error);
+            Swal.fire('Gagal', 'Gagal menyimpan perubahan', 'error');
         }
     };
 
-    // Hapus berita dari backend
     const handleDelete = async (id) => {
-        if (!window.confirm('Apakah Anda yakin ingin menghapus berita ini?')) return;
+        const confirm = await Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: 'Tindakan ini tidak dapat dikembalikan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+        });
+
+        if (!confirm.isConfirmed) return;
 
         try {
             await axios.delete(`${API_URL}/${id}`);
             fetchNews();
+            Swal.fire('Terhapus!', 'Berita telah dihapus.', 'success');
         } catch (error) {
             console.error('Error deleting news:', error);
+            Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus', 'error');
         }
     };
 
@@ -135,66 +151,15 @@ const NewsPage = () => {
             </div>
 
             <div className="space-y-5">
-                {news.map(item => (
-                    <div
-                        key={item.id}
-                        className="flex items-start bg-white border rounded shadow p-4"
-                    >
-                        <img
-                            src={item.image}  // item.image harus URL lengkap
-                            alt={item.title}
-                            className="w-24 h-24 object-cover rounded mr-5"
-                        />
-                        <div className="flex-1">
-                            {item.isEditing ? (
-                                <>
-                                    <input
-                                        type="text"
-                                        value={item.title}
-                                        onChange={e => handleEditChange(item.id, 'title', e.target.value)}
-                                        className="w-full border rounded p-2 mb-2"
-                                    />
-                                    <textarea
-                                        rows={3}
-                                        value={item.description}
-                                        onChange={e => handleEditChange(item.id, 'description', e.target.value)}
-                                        className="w-full border rounded p-2"
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <h3 className="text-xl font-semibold">{item.title}</h3>
-                                    <p className="mt-1 text-gray-600">{item.description}</p>
-                                </>
-                            )}
+                <div>
+                    {news.length === 0 && <p>No news available</p>}
+                    {news.map(item => (
+                        <div key={item.id}>
+                            <h3>{item.title}</h3>
                         </div>
+                    ))}
+                </div>
 
-                        <div className="flex flex-col gap-2 ml-5">
-                            {item.isEditing ? (
-                                <button
-                                    onClick={() => handleSaveEdit(item.id)}
-                                    className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
-                                >
-                                    Simpan
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={() => toggleEdit(item.id)}
-                                    className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600"
-                                >
-                                    Edit
-                                </button>
-                            )}
-
-                            <button
-                                onClick={() => handleDelete(item.id)}
-                                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
-                            >
-                                Hapus
-                            </button>
-                        </div>
-                    </div>
-                ))}
             </div>
 
             {/* Modal Add News */}
@@ -204,7 +169,6 @@ const NewsPage = () => {
                         <button
                             onClick={() => setIsModalOpen(false)}
                             className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-lg font-bold"
-                            aria-label="Close modal"
                         >
                             ✕
                         </button>
