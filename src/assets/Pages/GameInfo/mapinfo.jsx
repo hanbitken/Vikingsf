@@ -13,7 +13,11 @@ export default function MapInfo() {
                     <img src={Line} alt="Line" className="w-full" />
                 </div>
                 <div className='flex flex-col gap-8 justify-between pt-12 w-full h-full px-16'>
-                    
+                    <div className='flex flex-col w-full h-64 gold-border'>
+                        <div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
