@@ -5,7 +5,7 @@
 
 .gold-border {
   position: relative;
-  border-radius: 14px;
+  border-radius: 16px;
   background: transparent;
   color: white;
 }
@@ -15,8 +15,8 @@
   position: absolute;
   inset: 0;
   padding: 2px;
-  border-radius: 14px;
-  background: linear-gradient(90deg, #684F28 0%, #281806 47%, #FFC86E 100%);
+  border-radius: 16px;
+  background: linear-gradient(45deg, #684F28 0%, #281806 47%, #FFC86E 100%);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);

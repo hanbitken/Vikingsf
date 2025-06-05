@@ -124,19 +124,20 @@ const News = () => {
 
     return (
     // Outer container for centering and fixed width
-    <div className="bg-black flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
-      <div className="w-[1195px] h-[672px] overflow-hidden justify-center mx-auto relative rounded-lg border-2 border-[#684F28]">
-        <div className='gold-border'></div>
-        <Slider {...settings}>
-          {carouselData.map((card) => (
-            <CarouselCard
-              key={card.id}
-              image={card.image}
-              title={card.title}
-              subtitle={card.subtitle}
-            />
-          ))}
-        </Slider>
+    <div className="bg-[#AC9364] flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
+      <div className="relative w-[1195px] h-[672px] mx-auto p-[2px] box-border rounded-lg gold-border">
+        <div className="w-full h-full overflow-hidden relative rounded-lg">
+          <Slider {...settings}>
+            {carouselData.map((card) => (
+              <CarouselCard
+                key={card.id}
+                image={card.image}
+                title={card.title}
+                subtitle={card.subtitle}
+              />
+            ))}
+          </Slider>
+        </div>
       </div>
     {/* Additional content below the carousel */}
         <div className="mt-16 w-[1195px] mx-auto">
