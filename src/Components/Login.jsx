@@ -81,9 +81,9 @@ export default function Login() {
           />
 
           {/* Forgot Password */}
-          <span className="text-[12px] text-yellow-500 text-left -mt-2">
+          <a className="no-underline text-[12px] cursor-pointer !text-yellow-500 text-left -mt-2">
             FORGOT PASSWORD
-          </span>
+          </a>
 
           {/* Server input (dummy placeholder) */}
           <input
