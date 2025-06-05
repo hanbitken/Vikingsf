@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../assets/logic/api";
+import api from "./api";
 import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 import Tree from "../assets/Picture/Tree Celtic.png";
 
@@ -17,20 +17,26 @@ export default function Login() {
 
     try {
       const response = await api.post("/login", { username, password });
-      const { token, user } = response.data;
+      const { token } = response.data;
       localStorage.setItem("token", token);
 
-      if (user) {
-        setMessage(`Selamat datang, ${user.username}`);
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      const makeResponse = await api.get("/me");
+      const { user, role } = makeResponse.data;
+
+      if (role === "admin") {
+        navigate("/Admin");
+      } else if (role === "user") {
         navigate("/");
-      } else {
-        setMessage("Login berhasil, tapi user data tidak ditemukan.");
       }
+
+      setMessage(`Selamat datang, ${user.username}`);
     } catch (error) {
       const errMsg =
         error.response?.data?.message ||
         error.message ||
-        "Login gagal. Cek email/password.";
+        "Login gagal. Cek username/password.";
       setMessage(errMsg);
     }
   };
