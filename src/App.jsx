@@ -3,6 +3,7 @@ import Home from "./Components/home";
 import Header from "./Components/header";
 import Footer from "./Components/footer";
 import Login from "./Components/Login";
+import Register from "./Components/Register";
 import "./App.css";
 
 // Layout utama dengan Header, Footer, dan konten halaman
@@ -22,7 +23,7 @@ function App() {
       <Routes>
         {/* Halaman Login berdiri sendiri, tanpa Header/Footer */}
         <Route path="/login" element={<Login />} />
-
+        <Route path="/register" element={<Register />} />
         {/* Semua halaman lain dibungkus layout utama */}
         <Route
           path="/"

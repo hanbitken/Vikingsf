@@ -5,6 +5,7 @@ import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function Login() {
     setMessage("");
 
     try {
-      const response = await api.post("/login", { email, password });
+      const response = await api.post("/login", { username, password });
       const { token, user } = response.data;
       localStorage.setItem("token", token);
 
@@ -50,14 +51,12 @@ export default function Login() {
           WELCOME BACK
         </h2>
 
-        {message && (
-          <p className="text-white text-sm text-center">{message}</p>
-        )}
+        {message && <p className="text-white text-sm text-center">{message}</p>}
 
         <input
           type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="USERNAME"
           className="bg-gray-300 text-black px-4 py-2 rounded outline-none"
           required
@@ -83,22 +82,22 @@ export default function Login() {
           className="bg-gray-300 text-black px-4 py-2 rounded outline-none"
         />
 
-       {/* Tombol */}
-<div className="flex gap-4 mt-4">
-  <button
-    type="submit"
-    className="flex-1 !bg-[#FEC567] !hover:bg-[#f5b640] !text-black font-bold py-2 rounded shadow-md"
-  >
-    LOGIN
-  </button>
-  <button
-    type="button"
-    onClick={() => navigate("/register")}
-    className="flex-1 !bg-white !hover:bg-gray-100 !text-black font-bold py-2 rounded shadow-md"
-  >
-    REGISTER
-  </button>
-</div>
+        {/* Tombol */}
+        <div className="flex gap-4 mt-4">
+          <button
+            type="submit"
+            className="flex-1 !bg-[#FEC567] !hover:bg-[#f5b640] !text-black font-bold py-2 rounded shadow-md"
+          >
+            LOGIN
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="flex-1 !bg-white !hover:bg-gray-100 !text-black font-bold py-2 rounded shadow-md"
+          >
+            REGISTER
+          </button>
+        </div>
       </form>
 
       {/* Garis bawah */}
