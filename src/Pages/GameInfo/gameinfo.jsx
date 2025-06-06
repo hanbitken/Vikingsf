@@ -126,7 +126,7 @@ export default function gameinfo() {
     return (
         <section className='h-full' >
             <div className='bg-cover bg-no-repeat ' style={{ backgroundImage: `url(${backg})` }}>
-                <div className='flex flex-col items-center justify-center '>
+                <div className='flex flex-col items-center justify-center mx-8'>
                     <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
                     <img src={Line} alt="Line" className="w-full" />
                 </div>

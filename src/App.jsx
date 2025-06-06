@@ -2,14 +2,14 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Home from './Components/home'
-import Header from './Components/header'
-import Footer from './Components/footer'
-import Login from './Components/Login'
-import GameInfo from './Pages/GameInfo/gameinfo'
-import ServerInfo from './Pages/GameInfo/serverinfo'
-import QuestInfo from './Pages/GameInfo/questinfo'
-import Rules from './Pages/GameInfo/rules'
+import Home from './Components/home';
+import Header from './Components/header';
+import Footer from './Components/footer';
+import Login from './Components/Login';
+import GameInfo from './Pages/GameInfo/gameinfo';
+import ServerInfo from './Pages/GameInfo/serverinfo';
+import QuestInfo from './Pages/GameInfo/questinfo';
+import Rules from './Pages/GameInfo/rules';
 import MapInfo from './Pages/GameInfo/mapinfo'
 
 import {
