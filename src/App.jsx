@@ -5,6 +5,7 @@ import NewsDetail from "./components/NewsDetail";
 import Admin from "./Page/Admin";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 function App() {
   return (
@@ -22,9 +23,9 @@ function App() {
         <Route
           path="/Admin"
           element={
-            <>
+            <ProtectedRoute roleRequired="admin">
               <Admin />
-            </>
+            </ProtectedRoute>
           }
         />
         <Route
