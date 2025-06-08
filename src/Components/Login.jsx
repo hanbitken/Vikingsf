@@ -81,9 +81,12 @@ export default function Login() {
           />
 
           {/* Forgot Password */}
-          <a className="no-underline text-[12px] cursor-pointer !text-yellow-500 text-left -mt-2">
+          <p
+            className="no-underline text-[12px] cursor-pointer !text-yellow-500 text-left -mt-2"
+            onClick={() => navigate("/forgot")}
+          >
             FORGOT PASSWORD
-          </a>
+          </p>
 
           {/* Server input (dummy placeholder) */}
           <input
