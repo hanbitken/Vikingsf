@@ -65,6 +65,29 @@
 
   pointer-events: none;
 }
+.blue-border {
+  position: relative;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+}
+
+.blue-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 14px;
+  background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%);
+
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
 
 .gold-tier {
   background: linear-gradient(158.64deg, #FFFFFF 27.76%, #FFC86E 59.96%, #1D1405 87.56%);
