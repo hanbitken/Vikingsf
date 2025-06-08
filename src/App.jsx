@@ -7,29 +7,25 @@ import Admin from './components/Admin';
 import Donation from './components/Donation';
 
 function App() {
-  
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<h1>Home Page</h1>} />
         <Route path="/news" element={
           <>
-          <News />
+            <News />
           </>
         } />
-         <Route path="/Admin" element={
+        <Route path="/Admin" element={
           <>
-          <Admin />
+            <Admin />
           </>
         } />
-        <Route path="/newsdetail" element={
-          <>
-          <NewsDetail />
-          </>
-        } />
+        <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/download" element={
           <>
-          <Download />
+            <Download />
           </>
         } />
         <Route path="/donation" element={
