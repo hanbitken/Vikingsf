@@ -63,7 +63,7 @@ const NewsList = ({ image, title, description}) => {
                 <p className="text-white text-base">{description}</p>
                 </div>
                 {/* Read More Link */}
-                <a href="#" className="mt-5 text-blue-400 hover:text-blue-500 font-semibold self-end">
+                <a href="/newsdetail" className="mt-5 text-blue-400 hover:text-blue-500 font-semibold self-end">
                 Read More &rarr;
                 </a>
             </div>

@@ -4,6 +4,7 @@ import News from './components/News';
 import NewsDetail from './components/NewsDetail';
 import Download from './components/Download';
 import Admin from './components/Admin';
+import Donation from './components/Donation';
 
 function App() {
   
@@ -29,6 +30,11 @@ function App() {
         <Route path="/download" element={
           <>
           <Download />
+          </>
+        } />
+        <Route path="/donation" element={
+          <>
+          <Donation />
           </>
         } />
       </Routes>
