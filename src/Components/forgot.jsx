@@ -25,7 +25,7 @@ export default function forgot() {
       const response = await api.post("/forgot-password", {
         username,
         email,
-        PIN,
+        pin: PIN,
       });
       setMessage("Reset link has been sent to your email!");
     } catch (error) {
