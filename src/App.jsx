@@ -4,7 +4,7 @@ import Header from "./Components/header";
 import Footer from "./Components/footer";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import forgot from "./Components/forgot";
+import Forgot from "./Components/forgot";
 import "./App.css";
 
 // Layout utama dengan Header, Footer, dan konten halaman
@@ -25,7 +25,7 @@ function App() {
         {/* Halaman Login & Register berdiri sendiri, tanpa Header/Footer */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/forgot" element={<forgot />} />
+        <Route path="/forgot" element={<Forgot />} />
         {/* Semua halaman lain dibungkus layout utama */}
         <Route
           path="/"
