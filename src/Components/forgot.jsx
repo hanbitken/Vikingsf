@@ -5,7 +5,7 @@ import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 import Tree from "../assets/Picture/Tree Celtic.png";
 import api from "../assets/logic/api";
 
-export default function Forgot() {
+export default function forgot() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [PIN, setPIN] = useState("");
