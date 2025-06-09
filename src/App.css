@@ -1,3 +1,5 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
 #root {
   text-align: center;
   width: 100%;
@@ -46,7 +48,7 @@
   position: relative;
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.25);
-  color: white;
+  color: white; /* Perhatikan: warna teks juga mungkin perlu dark: */
 }
 
 .gold-border::before {
@@ -55,21 +57,30 @@
   inset: 0;
   padding: 2px;
   border-radius: 14px;
+  /* GRADIENT UNTUK LIGHT MODE (GOLD) */
   background: linear-gradient(315deg, #684F28 0%, #281806 47%, #FFC86E 100%);
 
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-
   pointer-events: none;
 }
+
+/* --- Definisi Gold Border (Dark Mode) --- */
+/* Ketika elemen <html> memiliki kelas 'dark' DAN elemen ini memiliki 'gold-border' */
+html.dark .gold-border::before {
+  /* GRADIENT UNTUK DARK MODE (BIRU, sesuai keinginan Anda) */
+  background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%); /* Menggunakan gradient dari blue-border */
+}
+
+
+/* --- Definisi Blue Border (Light Mode) --- */
 .blue-border {
   position: relative;
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.25);
-  color: white;
+  color: white; /* Perhatikan: warna teks juga mungkin perlu dark: */
 }
 
 .blue-border::before {
@@ -78,16 +89,43 @@
   inset: 0;
   padding: 2px;
   border-radius: 14px;
+  /* GRADIENT UNTUK LIGHT MODE (BIRU) */
   background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%);
 
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-
   pointer-events: none;
 }
+
+/* --- Definisi Blue Border (Dark Mode) --- */
+/* Ketika elemen <html> memiliki kelas 'dark' DAN elemen ini memiliki 'blue-border' */
+html.dark .blue-border::before {
+  /* GRADIENT UNTUK DARK MODE (GOLD, sesuai keinginan Anda) */
+  background: linear-gradient(315deg, #684F28 0%, #281806 47%, #FFC86E 100%); /* Menggunakan gradient dari gold-border */
+}
+
+/* --- Opsional: Transisi untuk Pseudo-element --- */
+/* Untuk membuat transisi lebih halus, Anda mungkin perlu menambahkan transisi pada pseudo-elementnya */
+.gold-border::before,
+.blue-border::before {
+    transition: background 0.3s ease; /* Sesuaikan durasi transisi */
+}
+
+/* --- Opsional: Gaya Teks di Dalam Kotak --- */
+/* Jika teks di dalam kotak juga perlu berubah warna */
+.gold-border,
+.blue-border {
+    color: white; /* Default light mode text color */
+}
+
+/* Jika Anda ingin teks berubah di dark mode, tambahkan kelas Tailwind di JSX Anda: */
+/* <div className="gold-border text-white dark:text-gray-200"> */
+/* Atau jika Anda ingin tetap menggunakan warna kustom yang sama dengan backgroundnya */
+/* html.dark .gold-border {
+    color: lightblue;
+} */
 
 .gold-tier {
   background: linear-gradient(158.64deg, #FFFFFF 27.76%, #FFC86E 59.96%, #1D1405 87.56%);

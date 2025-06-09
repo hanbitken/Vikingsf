@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+.transition-bg-image {
+  background-size: cover;
+  background-position: center;
+  /* Transisi untuk properti umum, tapi bukan image itu sendiri */
+  transition: background-image 0s, background-color 0.3s ease;
+  /* Transisi background-image tidak langsung, tapi properti lain bisa */
+}
+
+/* Definisikan gambar latar belakang default (light mode) */
+.light-mode-bg {
+  background-image: var(--light-bg-image);
+  /* Menggunakan variabel CSS */
+}
+
+/* Definisikan gambar latar belakang untuk dark mode */
+.dark-mode-bg {
+  background-image: var(--dark-bg-image);
+  /* Menggunakan variabel CSS */
+}
+
+/* Ketika dark mode aktif, timpa variabel CSS pada elemen <html> */
+html.dark {
+  /* Ini akan menimpa variabel --current-bg-image pada <html> */
+  --current-bg-image: var(--dark-bg-image);
+}
+
 :root {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
@@ -13,7 +41,20 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --light-bg-image: url('./assets/Picture/background.png');
+  /* Gambar terang Anda */
+  --dark-bg-image: url('./assets/Picture/background-dark.png');
+  /* Gambar gelap Anda */
+  --current-bg-image: var(--light-bg-image);
+  /* Default: gambar terang */
 }
+
+.main-background-container {
+  background-image: var(--current-bg-image);
+  transition: background-image 0s, background-color 0.3s ease; /* Transisi untuk warna, bukan gambar */
+}
+
 .bebas-neue-regular {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
@@ -38,9 +79,11 @@ h1 {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }

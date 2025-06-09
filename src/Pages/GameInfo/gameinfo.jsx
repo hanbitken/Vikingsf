@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from 'react-icons/fa';
 import backg from '../../assets/Picture/background.png'
+import darkbackg from '../../assets/Picture/background-dark.png'
 import LOGO from '../../assets/Picture/LOGO VIKINGS 1.png';
 import Line from '../../assets/Picture/Line Border.png';
 import atas from '../../assets/Picture/atas.png';
@@ -53,20 +54,20 @@ export default function gameinfo() {
         { name: "PLAYER2", faction: "Accretia", tier: "gold tier" },
         { name: "PLAYER3", faction: "Accretia", tier: "silver tier" },
         { name: "PLAYER4", faction: "Accretia", tier: "bronze tier" }
-      ];
+    ];
 
-      const getTierColor = (tier) => {
+    const getTierColor = (tier) => {
         switch (tier.toLowerCase()) {
-          case 'gold tier':
-            return 'gold-tier';
-          case 'silver tier':
-            return 'silver-tier';
-          case 'bronze tier':
-            return 'bronze-tier';
-          default:
-            return 'text-gray-300';
+            case 'gold tier':
+                return 'gold-tier';
+            case 'silver tier':
+                return 'silver-tier';
+            case 'bronze tier':
+                return 'bronze-tier';
+            default:
+                return 'text-gray-300';
         }
-      };
+    };
 
     const slides = [
         {
@@ -122,17 +123,17 @@ export default function gameinfo() {
     };
 
     const currentSlide = slides[current];
-
+   
     return (
         <section className='h-full' >
-            <div className='bg-cover bg-no-repeat ' style={{ backgroundImage: `url(${backg})` }}>
+            <div className='bg-cover bg-no-repeat main-background-container'>
                 <div className='flex flex-col items-center justify-center mx-8'>
                     <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
                     <img src={Line} alt="Line" className="w-full" />
                 </div>
                 <div className='flex flex-col gap-8 justify-between pt-12 w-full h-full px-16'>
                     <div className='flex flex-row gap-8'>
-                        <div className="relative w-full overflow-hidden gold-border">
+                        <div className="relative w-full overflow-hidden gold-border dark:blue-border">
                             {/* Background image */}
                             <div
                                 className="w-full h-full bg-cover transition-all duration-700"
