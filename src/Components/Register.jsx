@@ -48,6 +48,7 @@ export default function Register() {
       const { token, user } = response.data;
       setMessage("Register Successful! Please login.");
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/");
     } catch (error) {
       if (error.response?.data?.errors) {
