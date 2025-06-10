@@ -15,18 +15,13 @@ import ServerInfo from "./Pages/GameInfo/serverinfo";
 import QuestInfo from "./Pages/GameInfo/questinfo";
 import Rules from "./Pages/GameInfo/rules";
 import MapInfo from "./Pages/GameInfo/mapinfo";
-import News from './components/News';
-import NewsDetail from './components/NewsDetail';
-import Download from './components/Download';
+import News from './Pages/News/News';
+import NewsDetail from './Pages/News/NewsDetail';
+import Download from './Pages/Download/Download';
 import Admin from './components/Admin';
-import Donation from './components/Donation';
 
 // Layout utama dengan Header dan Footer
 function MainLayout({ children }) {
-
-
-function App() {
-
   return (
     <>
       <Header />
@@ -83,6 +78,30 @@ function App() {
           element={
             <MainLayout>
               <Rules />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/news"
+          element={
+            <MainLayout>
+              <News />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/news/:id"
+          element={
+            <MainLayout>
+              <NewsDetail />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/download"
+          element={
+            <MainLayout>
+              <Download />
             </MainLayout>
           }
         />

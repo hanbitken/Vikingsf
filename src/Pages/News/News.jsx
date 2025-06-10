@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
+
 import { IoMdArrowDropleft , IoMdArrowDropright } from 'react-icons/io';
-import img1 from '../assets/1.jpg';
+import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
+import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
+import Line from "../../assets/Picture/Line Border.png";
+import img1 from '../../assets/Picture/1.jpg';
 
 const PrevArrow = ({ onClick }) => (
   <div
@@ -123,37 +127,81 @@ const News = () => {
     ]
 
     return (
-    // Outer container for centering and fixed width
-    <div className="bg-[#AC9364] flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
-      <div className="relative w-[1195px] h-[672px] mx-auto p-[2px] box-border rounded-lg gold-border">
-        <div className="w-full h-full overflow-hidden relative rounded-[15px]">
-          <Slider {...settings}>
-            {carouselData.map((card) => (
-              <CarouselCard
-                key={card.id}
-                image={card.image}
-                title={card.title}
-                subtitle={card.subtitle}
-              />
-            ))}
-          </Slider>
+    <section classname="h-full">
+      <div className="bg-cover bg-no-repeat main-background-container text-left">
+        <div className="flex flex-col items-center justify-center mx-8">
+          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={Line} alt="Line" className="w-full" />
+        </div>
+        
+        <div className="flex flex-col justify-center py-8"> {/* Added margin for visual spacing */}
+          <div className="relative w-[1195px] h-[672px] mx-auto p-[2px] box-border rounded-lg gold-border">
+            <div className="w-full h-full overflow-hidden relative rounded-[15px]">
+              <Slider {...settings}>
+                {carouselData.map((card) => (
+                  <CarouselCard
+                    key={card.id}
+                    image={card.image}
+                    title={card.title}
+                    subtitle={card.subtitle}
+                  />
+                ))}
+              </Slider>
+            </div>
+          </div>
+        {/* Additional content below the carousel */}
+            <div className="mt-16 w-[1195px] mx-auto">
+              <div className="gold-border rounded-lg bg-[linear-gradient(to_bottom,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_100%),linear-gradient(to_right,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0, 0, 0, 0.2)_100%)]">
+                {newsData.map((news) => (
+                  <NewsList
+                    key={news.id}
+                    image={news.image}
+                    title={news.title}
+                    description={news.description}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="items-center justify-center pb-4">
+              <img src={Line} alt="Line" className="w-full" />
+              <div className="flex flex-row justify-center items-center gap-2">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-pink-400 transition"
+                >
+                  <FaInstagram />
+                </a>
+                <a
+                  href="https://tiktok.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-black transition"
+                >
+                  <FaTiktok />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-500 transition"
+                >
+                  <FaFacebook />
+                </a>
+                <a
+                  href="https://discord.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-indigo-400 transition"
+                >
+                  <FaDiscord />
+                </a>
+              </div>
+            </div>
         </div>
       </div>
-    {/* Additional content below the carousel */}
-        <div className="mt-16 w-[1195px] mx-auto">
-          <div className="gold-border rounded-lg bg-[linear-gradient(to_bottom,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_100%),linear-gradient(to_right,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0, 0, 0, 0.2)_100%)]">
-            {newsData.map((news) => (
-              <NewsList
-                key={news.id}
-                image={news.image}
-                title={news.title}
-                description={news.description}
-              />
-            ))}
-          </div>
-        </div>
-
-    </div>
+    </section>
   );
 }
 
