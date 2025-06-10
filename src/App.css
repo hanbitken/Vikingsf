@@ -113,19 +113,10 @@ html.dark .blue-border::before {
     transition: background 0.3s ease; /* Sesuaikan durasi transisi */
 }
 
-/* --- Opsional: Gaya Teks di Dalam Kotak --- */
-/* Jika teks di dalam kotak juga perlu berubah warna */
 .gold-border,
 .blue-border {
     color: white; /* Default light mode text color */
 }
-
-/* Jika Anda ingin teks berubah di dark mode, tambahkan kelas Tailwind di JSX Anda: */
-/* <div className="gold-border text-white dark:text-gray-200"> */
-/* Atau jika Anda ingin tetap menggunakan warna kustom yang sama dengan backgroundnya */
-/* html.dark .gold-border {
-    color: lightblue;
-} */
 
 .gold-tier {
   background: linear-gradient(158.64deg, #FFFFFF 27.76%, #FFC86E 59.96%, #1D1405 87.56%);
