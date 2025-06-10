@@ -41,7 +41,7 @@ export default function forgot() {
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
       <div className="border border-yellow-300 rounded-lg p-6 w-full max-w-md shadow-[0_0_15px_#facc15] flex flex-col items-center">
-        <img src={Logo} alt="Vikings Logo" className="w-40 mb-4" />
+        <img src={Logo} alt="Vikings Logo" className="w-50 mb-4" />
 
         <div className="relative flex items-center justify-center w-full mb-4">
           <div className="w-full h-px bg-gray-400" />
