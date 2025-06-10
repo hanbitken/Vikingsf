@@ -61,7 +61,7 @@ export default function Header() {
 
           {/* Game Info Dropdown */}
           <div className="relative group">
-            <a href="/gameinfo" className="hover:text-yellow-400 text-white">
+            <a href="#" className="hover:text-yellow-400 text-white">
               Game Info
             </a>
             <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-36 bg-black/80 text-white mt-6 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
