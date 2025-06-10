@@ -19,6 +19,7 @@ export default function Login() {
       const response = await api.post("/login", { username, password });
       const { token, user } = response.data;
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       if (user) {
         setMessage(`Selamat datang, ${user.username}`);

@@ -112,7 +112,7 @@ export default function Header() {
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="cursor-pointer"
               >
-                {username.toUpperCase()}
+                Halo, {username}
               </span>
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-32 bg-white text-black rounded shadow-lg z-50">
