@@ -11,6 +11,7 @@ import Footer from "./Components/footer";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Forgot from "./Components/forgot";
+import ResetPassword from "./Components/ResetPassword";
 import ServerInfo from "./Pages/GameInfo/serverinfo";
 import QuestInfo from "./Pages/GameInfo/questinfo";
 import Rules from "./Pages/GameInfo/rules";
@@ -35,7 +36,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot" element={<Forgot />} />
-
+        <Route path="/reset-password" element={<ResetPassword />} />
         {/* Halaman utama dan GameInfo dibungkus layout */}
         <Route
           path="/"

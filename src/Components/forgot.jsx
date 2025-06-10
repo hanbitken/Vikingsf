@@ -27,7 +27,12 @@ export default function forgot() {
         email,
         pin: PIN,
       });
-      setMessage("Reset link has been sent to your email!");
+      navigate("/reset-password", {
+        state: {
+          email,
+          pin: PIN,
+        },
+      });
     } catch (error) {
       if (error.response?.data?.errors) {
         const firstError = Object.values(error.response.data.errors)[0][0];
@@ -45,10 +50,17 @@ export default function forgot() {
 
         <div className="relative flex items-center justify-center w-full mb-4">
           <div className="w-full h-px bg-gray-400" />
-          <img src={Tree} alt="Tree" className="absolute bg-black px-2" style={{ width: "40px" }} />
+          <img
+            src={Tree}
+            alt="Tree"
+            className="absolute bg-black px-2"
+            style={{ width: "40px" }}
+          />
         </div>
 
-        <h2 className="text-white text-center font-bold text-md mb-4">RESET PASSWORD</h2>
+        <h2 className="text-white text-center font-bold text-md mb-4">
+          RESET PASSWORD
+        </h2>
         {message && <p className="text-white text-sm mb-4">{message}</p>}
 
         <form onSubmit={handleReset} className="flex flex-col gap-3 w-full">
@@ -79,7 +91,12 @@ export default function forgot() {
 
           <div className="relative flex items-center justify-center mt-6 mb-4 w-full">
             <div className="w-full h-px bg-gray-400" />
-            <img src={Tree} alt="Tree Icon" className="absolute bg-black px-2" style={{ width: "40px" }} />
+            <img
+              src={Tree}
+              alt="Tree Icon"
+              className="absolute bg-black px-2"
+              style={{ width: "40px" }}
+            />
           </div>
 
           <div className="flex justify-between gap-4 mt-4 w-full">

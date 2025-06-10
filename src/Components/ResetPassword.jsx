@@ -57,7 +57,7 @@ export default function ResetPassword() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full mb-3 p-2 rounded text-black"
+          className="w-full mb-3 p-2 rounded"
         />
         <input
           type="password"
@@ -65,7 +65,7 @@ export default function ResetPassword() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
-          className="w-full mb-3 p-2 rounded text-black"
+          className="w-full mb-3 p-2 rounded"
         />
         <button
           type="submit"

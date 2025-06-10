@@ -354,7 +354,7 @@ export default function Home() {
             <img src={Line} alt="Line" className="w-full" />
             <div className="flex flex-row justify-center items-center gap-2">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-pink-400 transition"
@@ -362,7 +362,7 @@ export default function Home() {
                 <FaInstagram />
               </a>
               <a
-                href="https://tiktok.com"
+                href="https://tiktok.com/@rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-black transition"
@@ -370,7 +370,7 @@ export default function Home() {
                 <FaTiktok />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61562554693454"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-500 transition"
@@ -378,7 +378,7 @@ export default function Home() {
                 <FaFacebook />
               </a>
               <a
-                href="https://discord.com"
+                href="https://discord.gg/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-indigo-400 transition"
