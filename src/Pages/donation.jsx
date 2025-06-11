@@ -43,10 +43,10 @@ export default function Donation() {
                         </div>
                     </div> */}
 
-                    {/* --- MODIFIED QUEST LIST SECTION --- */}
+                    {/* --- MODIFIED DONATION LIST SECTION --- */}
                     <div className='flex flex-col w-full h-full gold-border p-8'>
                         <div className='flex text-center align-center justify-center items-center text-xl font-bold'>
-                            QUEST INFORMATION
+                            DONATION INFORMATION
                         </div>
                         <img src={LineQuest} alt="Separator" className="w-full my-4" />
 
