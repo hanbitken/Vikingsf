@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import SwitchMode from "./switchMode";
 import line from "../assets/Picture/Line-header.png";
+import api from "../assets/logic/api";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,6 +33,26 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      api
+        .get("/me")
+        .then((res) => {
+          setUsername(res.data.username);
+          // Ambil role pertama dari array Spatie
+          const userRole = res.data.roles?.[0]?.toLowerCase();
+          setRole(userRole);
+        })
+        .catch(() => {
+          setUsername(null);
+          setRole(null);
+        });
+    }
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -40,8 +61,9 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full p-4 px-8 fixed top-0 z-50 transition-all duration-300 ${scrolled ? "bg-black shadow-md" : "bg-black/50"
-        }`}
+      className={`w-full p-4 px-8 fixed top-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-black shadow-md" : "bg-black/50"
+      }`}
     >
       <div className="container mx-auto flex justify-between items-center">
         <SwitchMode />
@@ -96,6 +118,11 @@ export default function Header() {
           <a href="/donation" className="hover:underline text-white">
             DONATION
           </a>
+          {role === "admin" && (
+            <a href="/Admin" className="hover:underline text-white">
+              ADMIN
+            </a>
+          )}
         </nav>
 
         {/* Login / Username */}
