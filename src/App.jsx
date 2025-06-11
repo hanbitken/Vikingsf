@@ -16,6 +16,7 @@ import ServerInfo from "./Pages/GameInfo/serverinfo";
 import QuestInfo from "./Pages/GameInfo/questinfo";
 import Rules from "./Pages/GameInfo/rules";
 import MapInfo from "./Pages/GameInfo/mapinfo";
+import Donation from "./Pages/donation";
 
 // Layout utama dengan Header dan Footer
 function MainLayout({ children }) {
@@ -75,6 +76,14 @@ function App() {
           element={
             <MainLayout>
               <Rules />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/donation"
+          element={
+            <MainLayout>
+              <Donation />
             </MainLayout>
           }
         />

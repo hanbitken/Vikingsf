@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from 'react-icons/fa';
-import backg from '../../assets/Picture/background.png'
 import LOGO from '../../assets/Picture/LOGO VIKINGS 1.png';
 import Line from '../../assets/Picture/Line Border.png';
 import LineQuest from '../../assets/Picture/Line-Quest.png'

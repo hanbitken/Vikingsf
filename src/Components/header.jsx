@@ -40,9 +40,8 @@ export default function Header() {
 
   return (
     <header
-      className={`w-full p-4 px-8 fixed top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-black shadow-md" : "bg-black/50"
-      }`}
+      className={`w-full p-4 px-8 fixed top-0 z-50 transition-all duration-300 ${scrolled ? "bg-black shadow-md" : "bg-black/50"
+        }`}
     >
       <div className="container mx-auto flex justify-between items-center">
         <SwitchMode />
@@ -55,16 +54,12 @@ export default function Header() {
           <a href="#" className="hover:underline text-white">
             NEWS
           </a>
-          <a href="#" className="hover:underline text-white">
-            DOWNLOAD
-          </a>
-
           {/* Game Info Dropdown */}
           <div className="relative group">
             <a href="#" className="hover:text-yellow-400 text-white">
               Game Info
             </a>
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-36 bg-black/80 text-white mt-6 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-36 bg-black/50 text-white mt-4 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <a
                 href="/gameinfo/server"
                 className="block px-4 py-2 hover:bg-yellow-600/20"
@@ -92,11 +87,13 @@ export default function Header() {
               </a>
             </div>
           </div>
-
           <a href="#" className="hover:underline text-white">
-            MEMBERSHIP
+            DOWNLOAD
           </a>
-          <a href="#" className="hover:underline text-white">
+          {/* <a href="#" className="hover:underline text-white">
+            MEMBERSHIP
+          </a> */}
+          <a href="/donation" className="hover:underline text-white">
             DONATION
           </a>
         </nav>

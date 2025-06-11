@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord, FaChevronDown, FaChevronRight } from 'react-icons/fa';
-import backg from '../../assets/Picture/background.png';
-import LOGO from '../../assets/Picture/LOGO VIKINGS 1.png';
-import Line from '../../assets/Picture/Line Border.png';
-import LineQuest from '../../assets/Picture/Line-Quest.png';
+import backg from '../assets/Picture/background.png';
+import LOGO from '../assets/Picture/LOGO VIKINGS 1.png';
+import Line from '../assets/Picture/Line Border.png';
+import LineQuest from '../assets/Picture/Line-Quest.png';
 
-export default function QuestInfo() {
+export default function Donation() {
     // State to manage which accordion item is open
     const [openIndex, setOpenIndex] = useState(null);
 
     // Updated quest data to match the image
     const quests = [
-        { title: "Daily Quest [Afterwar (Morning, Afternoon, Night)]", content: "Details for Afterwar quests..." },
-        { title: "Daily Quest [Sunday]", content: "Details for Sunday's quest..." },
-        { title: "Daily Quest [Saturday]", content: "Details for Saturday's quest..." },
-        { title: "Daily Quest [Friday]", content: "Details for Friday's quest..." },
-        { title: "Daily Quest [Thursday]", content: "Details for Thursday's quest..." },
-        { title: "Daily Quest [Wednesday]", content: "Details for Wednesday's quest..." },
-        { title: "Daily Quest [Tuesday]", content: "Details for Tuesday's quest..." },
-        { title: "Daily Quest [Monday]", content: "Details for Monday's quest..." },
+        { title: "Retail Donation", content: "Details for Retail Donation..." },
+        { title: "Service Donation", content: "Details for Service Donation..." },
+        { title: "Season Pass", content: "Details for Season Pass..." },
+        { title: "Package Donation", content: "Details for Package Donation..." },
+        { title: "How To Donation", content: "Details for How To Donation..." },
     ];
 
     // Function to handle clicking on a quest header
@@ -36,7 +33,7 @@ export default function QuestInfo() {
                 </div>
                 <div className='flex flex-col gap-8 justify-between pt-12 w-full h-full px-16 pb-8'>
                     {/* This top section can remain as you had it */}
-                    <div className='flex flex-col w-full h-full gold-border items-center p-4 gap-4'>
+                    {/* <div className='flex flex-col w-full h-full gold-border items-center p-4 gap-4'>
                         <div>QUEST INFO</div>
                         <img src={LineQuest} alt="" />
                         <div className='flex flex-row gap-4'>
@@ -44,7 +41,7 @@ export default function QuestInfo() {
                             <div>ONLINE</div>
                             <div>300 player</div>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* --- MODIFIED QUEST LIST SECTION --- */}
                     <div className='flex flex-col w-full h-full gold-border p-8'>
