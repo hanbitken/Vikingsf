@@ -1,46 +1,54 @@
-import React from "react";
+import React from 'react';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Separator from "../../assets/Picture/line full.png";
 import Line from "../../assets/Picture/Line Border.png";
 
 const DownloadSection = () => {
-  const sections = [
-    { id: 1, title: "DOWNLOAD LINK 1" },
-    { id: 2, title: "DOWNLOAD LINK 2" },
-    { id: 3, title: "DOWNLOAD LINK 3" },
-  ];
-
-  // Tambahkan fileId dari Google Drive untuk setiap file
-  const files = [
-    {
-      name: "DOWNLOAD FILE 1",
-      size: "2.0 GB",
-      fileId: "1_SSiXisOZk0IuvBo6vMAWaPkY1v69A1g",
-    },
-    {
-      name: "DOWNLOAD FILE 2",
-      size: "2.0 GB",
-      fileId: "1_SSiXisOZk0IuvBo6vMAWaPkY1v69A1g",
-    },
-    {
-      name: "DOWNLOAD FILE 3",
-      size: "2.0 GB",
-      fileId: "1_SSiXisOZk0IuvBo6vMAWaPkY1v69A1g",
-    },
-    {
-      name: "DOWNLOAD FILE 4",
-      size: "2.0 GB",
-      fileId: "1_SSiXisOZk0IuvBo6vMAWaPkY1v69A1g",
-    },
-  ];
-
+  // Fungsi untuk generate link Google Drive
   const getDownloadLink = (fileId) =>
     `https://drive.google.com/uc?export=download&id=${fileId}`;
 
+  // List section dengan file berbeda
+  const sections = [
+    {
+      id: 1,
+      title: 'Download Full Client',
+      files: [
+        {
+          name: 'Full Client - Mediafire',
+          size: '1.79 GB',
+          link: 'https://www.mediafire.com/file/8avht0jebvmdunn/Full_Client_RF_Vikings_26032025.7z/file',
+        },
+        {
+          name: 'Full Client - Google Drive',
+          size: '1.79 GB',
+          link: 'https://drive.google.com/file/d/18Ca_EfS_ok_FnNHq5avsEanbwKpo71xT/view?usp=drive_link',
+        },
+      ],
+    },
+    {
+      id: 2,
+      title: 'Download Full Patch',
+      files: [
+        {
+          name: 'Full Patch - Mediafire',
+          size: '103.45 MB',
+          link: 'https://www.mediafire.com/file/yoxblzja1nv5kj1/FullPatch_RFVikings_26032025.7z/file',
+        },
+        {
+          name: 'Full Patch - Google Drive',
+          size: '103.45 MB',
+          link: 'https://drive.google.com/file/d/1njaBlGhXNa12-SCB_l7nEIiNvVxySwk4/view?usp=drive_link',
+        },
+      ],
+    },
+  ];
+
   return (
-    <section classname="h-full">
+    <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container text-left">
+
         <div className="flex flex-col items-center justify-center mx-8">
           <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
@@ -49,39 +57,32 @@ const DownloadSection = () => {
         <div className="justify-center py-8 text-left">
           <div className="w-[1195px] mx-auto p-[2px] box-border rounded-lg gold-border bg-opacity-10">
             <div className="p-6">
-              <h2 className="text-3xl font-bold mb-6 text-white text-center mx-auto">
-                DOWNLOAD
-              </h2>
+              <h2 className="text-3xl font-bold mb-6 text-white text-center mx-auto">DOWNLOAD</h2>
               <img src={Separator} alt="separator" className="w-full my-4" />
 
-              {sections.map((section, idx) => (
+              {sections.map((section) => (
                 <div key={section.id} className="mb-10 px-8">
-                  {/* Section title */}
-                  <h3 className="text-lg font-semibold text-white mb-1">
-                    {section.title}
-                  </h3>
+                  <h3 className="text-lg font-semibold text-white mb-1">{section.title}</h3>
                   <a className="text-sm text-white mb-4 cursor-pointer transition-colors duration-300 hover:text-yellow-400">
                     README
                   </a>
 
-                  {/* Divider line */}
-                  <img
-                    src={Separator}
-                    alt="separator"
-                    className="w-full my-4"
-                  />
+                  <img src={Separator} alt="separator" className="w-full my-4" />
 
-                  {/* File list */}
-                  {files.map((file, i) => (
+                  {section.files.map((file, i) => (
                     <div
                       key={i}
-                      className="flex justify-between items-center py-2 px-4 mb-2 bg-white/10 rounded"
+                      className="relative flex justify-between items-center py-2 px-4 mb-2 bg-white/10 rounded"
                     >
                       <span className="text-white">{file.name}</span>
-                      <span className="text-white">{file.size}</span>
+
+                      {/* SIZE DITENGAH */}
+                      <div className="absolute left-1/2 transform -translate-x-1/2 text-white">
+                        {file.size}
+                      </div>
+
                       <a
-                        href={getDownloadLink(file.fileId)}
-                        download
+                        href={file.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-white font-semibold px-4 py-1 transition-colors duration-300 hover:text-yellow-400"
@@ -95,6 +96,7 @@ const DownloadSection = () => {
             </div>
           </div>
         </div>
+
         <div className="items-center justify-center pb-4">
           <img src={Line} alt="Line" className="w-full" />
           <div className="flex flex-row justify-center items-center gap-2">
