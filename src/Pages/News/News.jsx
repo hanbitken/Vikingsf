@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick';
-import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
@@ -50,10 +50,16 @@ const NewsList = ({ image, title, description, onReadMore }) => {
   return (
     <div className="relative overflow-hidden flex flex-row w-full">
       <div className="relative z-10 mx-10 mt-12 my-6 flex flex-row w-full">
-        <img src={image} alt={title} className="w-84 h-48 object-cover flex-shrink-0" />
+        <img
+          src={image}
+          alt={title}
+          className="w-84 h-48 object-cover flex-shrink-0"
+        />
         <div className="ml-4 flex flex-col justify-between flex-grow">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-3 leading-tight">{title}</h3>
+            <h3 className="text-2xl font-bold text-white mb-3 leading-tight">
+              {title}
+            </h3>
             <p className="text-white text-base">{description}</p>
           </div>
           <button
@@ -87,20 +93,23 @@ const News = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/news')
+    fetch("http://127.0.0.1:8000/api/news")
       .then((res) => res.text())
       .then((text) => {
-        const jsonString = text.replace(/^use\s+Illuminate\\Support\\Facades\\Route;\s*/, '');
+        const jsonString = text.replace(
+          /^use\s+Illuminate\\Support\\Facades\\Route;\s*/,
+          ""
+        );
         try {
           const data = JSON.parse(jsonString);
           setNewsData(data);
           setCarouselData(data.slice(0, 3));
         } catch (err) {
-          console.error('Gagal parse JSON dari response:', err);
+          console.error("Gagal parse JSON dari response:", err);
         }
       })
       .catch((err) => {
-        console.error('Gagal mengambil data dari backend:', err);
+        console.error("Gagal mengambil data dari backend:", err);
       });
   }, []);
 
@@ -153,7 +162,7 @@ const News = () => {
             <img src={Line} alt="Line" className="w-full" />
             <div className="flex flex-row justify-center items-center gap-2">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-pink-400 transition"
@@ -161,7 +170,7 @@ const News = () => {
                 <FaInstagram />
               </a>
               <a
-                href="https://tiktok.com"
+                href="https://tiktok.com/@rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-black transition"
@@ -169,7 +178,7 @@ const News = () => {
                 <FaTiktok />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61562554693454"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-500 transition"
@@ -177,7 +186,7 @@ const News = () => {
                 <FaFacebook />
               </a>
               <a
-                href="https://discord.com"
+                href="https://discord.gg/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-indigo-400 transition"
