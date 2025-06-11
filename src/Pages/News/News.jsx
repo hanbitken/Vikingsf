@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
-import img1 from '../../assets/Picture/1.jpg';
 
 const PrevArrow = ({ onClick }) => (
   <div
