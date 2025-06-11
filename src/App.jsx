@@ -66,12 +66,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Redirect dari root path "/" */}
-        <Route path="/" element={<Navigate to={redirectPath} replace />} />
-
-        {/* Halaman Home terpisah dari "/" agar redirect bekerja */}
         <Route
-          path="/home"
+          path="/"
           element={
             <MainLayout>
               <Home />
