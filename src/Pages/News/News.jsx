@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const PrevArrow = ({ onClick }) => (
   <div
@@ -89,7 +91,6 @@ const News = () => {
       .then((res) => res.text())
       .then((text) => {
         const jsonString = text.replace(/^use\s+Illuminate\\Support\\Facades\\Route;\s*/, '');
-
         try {
           const data = JSON.parse(jsonString);
           setNewsData(data);
@@ -104,17 +105,17 @@ const News = () => {
   }, []);
 
   const handleReadMore = (id) => {
-    navigate(`/news/${id}`); // navigasi ke halaman detail terpisah
+    navigate(`/news/${id}`);
   };
 
-    return (
-    <section classname="h-full">
+  return (
+    <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container text-left">
         <div className="flex flex-col items-center justify-center mx-8">
           <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
-        
+
         <div className="flex flex-col justify-center py-8">
           {/* Carousel */}
           <div className="relative w-[1195px] h-[672px] mx-auto p-[2px] box-border rounded-lg gold-border">
@@ -131,57 +132,60 @@ const News = () => {
               </Slider>
             </div>
           </div>
-        {/* List berita */}
-            <div className="mt-16 w-[1195px] mx-auto">
-              <div className="gold-border rounded-lg bg-[linear-gradient(to_bottom,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_100%),linear-gradient(to_right,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0, 0, 0, 0.2)_100%)]">
-                {newsData.map((news) => (
-                  <NewsList
-                    key={news.id}
-                    image={news.image}
-                    title={news.title}
-                    description={news.description}
-                    onReadMore={() => handleReadMore(news.id)}
-                  />
-                ))}
-              </div>
+
+          {/* List Berita */}
+          <div className="mt-16 w-[1195px] mx-auto">
+            <div className="gold-border rounded-lg bg-[linear-gradient(to_bottom,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_100%),linear-gradient(to_right,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_50%,rgba(0, 0, 0, 0.2)_100%)]">
+              {newsData.map((news) => (
+                <NewsList
+                  key={news.id}
+                  image={news.image}
+                  title={news.title}
+                  description={news.description}
+                  onReadMore={() => handleReadMore(news.id)}
+                />
+              ))}
             </div>
-            <div className="items-center justify-center pb-4">
-              <img src={Line} alt="Line" className="w-full" />
-              <div className="flex flex-row justify-center items-center gap-2">
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-pink-400 transition"
-                >
-                  <FaInstagram />
-                </a>
-                <a
-                  href="https://tiktok.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-black transition"
-                >
-                  <FaTiktok />
-                </a>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-blue-500 transition"
-                >
-                  <FaFacebook />
-                </a>
-                <a
-                  href="https://discord.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-indigo-400 transition"
-                >
-                  <FaDiscord />
-                </a>
-              </div>
+          </div>
+
+          {/* Footer Sosmed */}
+          <div className="items-center justify-center pb-4">
+            <img src={Line} alt="Line" className="w-full" />
+            <div className="flex flex-row justify-center items-center gap-2">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-pink-400 transition"
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://tiktok.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-black transition"
+              >
+                <FaTiktok />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-blue-500 transition"
+              >
+                <FaFacebook />
+              </a>
+              <a
+                href="https://discord.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-indigo-400 transition"
+              >
+                <FaDiscord />
+              </a>
             </div>
+          </div>
         </div>
       </div>
     </section>

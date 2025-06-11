@@ -51,6 +51,14 @@ function App() {
           }
         />
         <Route
+          path="/admin"
+          element={
+            <MainLayout>
+              <Admin />
+            </MainLayout>
+          }
+        />
+        <Route
           path="/gameinfo/server"
           element={
             <MainLayout>
@@ -111,14 +119,6 @@ function App() {
           element={
             <MainLayout>
               <Download />
-            </MainLayout>
-          }
-        />
-         <Route
-          path="/admin"
-          element={
-            <MainLayout>
-              <Admin />
             </MainLayout>
           }
         />
