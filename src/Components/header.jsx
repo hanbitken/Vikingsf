@@ -51,7 +51,7 @@ export default function Header() {
           <a href="/" className="hover:underline text-white">
             HOME
           </a>
-          <a href="#" className="hover:underline text-white">
+          <a href="/news" className="hover:underline text-white">
             NEWS
           </a>
           {/* Game Info Dropdown */}
@@ -87,7 +87,7 @@ export default function Header() {
               </a>
             </div>
           </div>
-          <a href="#" className="hover:underline text-white">
+          <a href="/download" className="hover:underline text-white">
             DOWNLOAD
           </a>
           {/* <a href="#" className="hover:underline text-white">
