@@ -45,15 +45,15 @@ export default function MapInfo() {
           {/* Map list section */}
           <div className="min-h-200 flex flex-col w-full h-full gold-border items-center gap-4 p-16">
             {/* Dropdown to select map */}
-            <div className="flex justify-center items-center space-x-4 w-[80%] bg-[#D9D9D9] rounded-lg">
+            <div className="flex justify-center gold-border items-center space-x-4 w-[80%] bg-[#D9D9D9] rounded-lg">
               <select
                 value={selectedMap ? selectedMap.name : ""}
                 onChange={handleMapSelect}
-                className="w-[95%] text-center bg-transparent text-[#7F7F7F] border-white py-2 focus:outline-none"
+                className="w-[95%] text-center bg-transparent text-white border-white py-2 focus:outline-none"
               >
-                <option value="">Select Map</option>
+                <option className="bg-white text-black dark:bg-black/60" value="">Select Map</option>
                 {maps.map((map) => (
-                  <option key={map.name} value={map.name}>
+                  <option className="bg-white text-black dark:text-white dark:bg-black/60" key={map.name} value={map.name}>
                     {map.name}
                   </option>
                 ))}
