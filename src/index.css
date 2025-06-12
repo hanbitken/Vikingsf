@@ -44,7 +44,11 @@ html.dark {
 
   --light-bg-image: url('./assets/Picture/background.png');
   /* Gambar terang Anda */
-  --dark-bg-image: url('./assets/Picture/background-dark.png');
+  --dark-bg-image: url('./assets/Picture/atas-gelap.png');
+  --dark-bg-image: url('./assets/Picture/tengah-gelap.png');
+  --dark-bg-image: url('./assets/Picture/bawah.gif');
+  /* --dark-bg-image: url('./assets/Picture/tengah-gelap.png');
+  --dark-bg-image: url('https://tenor.com/view/crashout-skeleteon-skeleton-meme-skeleteton-crashout-screaming-gif-2819917983570648755'); */
   /* Gambar gelap Anda */
   --current-bg-image: var(--light-bg-image);
   /* Default: gambar terang */

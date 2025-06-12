@@ -70,7 +70,12 @@ function App() {
           path="/"
           element={
             <MainLayout>
-              <Home />
+              <>
+                <div className="section-dark-atas"></div>
+                <div className="section-dark-tengah"></div>
+                <div className="section-dark-bawah"></div>
+                <Home />
+              </>
             </MainLayout>
           }
         />
