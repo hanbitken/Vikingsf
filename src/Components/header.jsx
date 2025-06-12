@@ -10,44 +10,39 @@ export default function Header() {
   const [role, setRole] = useState(null);
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("token");
-    if (user && token) {
-      setUsername(user.username);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   const token = localStorage.getItem("token");
+  //   if (user && token) {
+  //     setUsername(user.username);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
       api
         .get("/me")
         .then((res) => {
-          setUsername(res.data.username);
-          // Ambil role pertama dari array Spatie
-          const userRole = res.data.roles?.[0]?.toLowerCase();
-          setRole(userRole);
+          console.log("User data:", res.data);
+          setUsername(res.data.user?.username || null);
+
+          const roleName = res.data.role?.toLowerCase() || null;
+
+          if (roleName === "admin") {
+            setRole("admin");
+            console.log("Role is admin");
+          } else if (roleName === "user") {
+            setRole("user");
+            console.log("Role is user");
+          } else {
+            setRole(null);
+            console.log("Role not found");
+          }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Error fetching /me:", err);
           setUsername(null);
           setRole(null);
         });
@@ -79,9 +74,7 @@ export default function Header() {
           </a>
           {/* Game Info Dropdown */}
           <div className="relative group">
-            <a href="#" className="hover:text-yellow-400 text-white">
-              Game Info
-            </a>
+            <a className="hover:text-yellow-400 text-white">Game Info</a>
             <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-36 bg-black/50 text-white mt-4 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <a
                 href="/gameinfo/server"
