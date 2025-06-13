@@ -14,7 +14,7 @@ import api from "./assets/logic/api";
 import Header from "./Components/header";
 import Footer from "./Components/footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import DashboardLayout from "./Components/Admin/DashboardLayout"; // Pastikan path ini sesuai
+import DashboardLayout from "./Components/DashboardLayout"; // Pastikan path ini sesuai
 
 // Pages - Public
 import Home from "./Pages/home";
