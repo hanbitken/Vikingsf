@@ -52,13 +52,13 @@
 }
 
 .gold-border::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   padding: 2px;
   border-radius: 14px;
   /* GRADIENT UNTUK LIGHT MODE (GOLD) */
-  background: linear-gradient(315deg, #684F28 0%, #281806 47%, #FFC86E 100%);
+  background: linear-gradient(315deg, #684f28 0%, #281806 47%, #ffc86e 100%);
 
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -71,9 +71,13 @@
 /* Ketika elemen <html> memiliki kelas 'dark' DAN elemen ini memiliki 'gold-border' */
 html.dark .gold-border::before {
   /* GRADIENT UNTUK DARK MODE (BIRU, sesuai keinginan Anda) */
-  background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%); /* Menggunakan gradient dari blue-border */
+  background: linear-gradient(
+    315deg,
+    #283f68 0%,
+    #060628 47%,
+    #6e9cff 100%
+  ); /* Menggunakan gradient dari blue-border */
 }
-
 
 /* --- Definisi Blue Border (Light Mode) --- */
 .blue-border {
@@ -84,13 +88,13 @@ html.dark .gold-border::before {
 }
 
 .blue-border::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   padding: 2px;
   border-radius: 14px;
   /* GRADIENT UNTUK LIGHT MODE (BIRU) */
-  background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%);
+  background: linear-gradient(315deg, #283f68 0%, #060628 47%, #6e9cff 100%);
 
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -103,23 +107,33 @@ html.dark .gold-border::before {
 /* Ketika elemen <html> memiliki kelas 'dark' DAN elemen ini memiliki 'blue-border' */
 html.dark .blue-border::before {
   /* GRADIENT UNTUK DARK MODE (GOLD, sesuai keinginan Anda) */
-  background: linear-gradient(315deg, #684F28 0%, #281806 47%, #FFC86E 100%); /* Menggunakan gradient dari gold-border */
+  background: linear-gradient(
+    315deg,
+    #684f28 0%,
+    #281806 47%,
+    #ffc86e 100%
+  ); /* Menggunakan gradient dari gold-border */
 }
 
 /* --- Opsional: Transisi untuk Pseudo-element --- */
 /* Untuk membuat transisi lebih halus, Anda mungkin perlu menambahkan transisi pada pseudo-elementnya */
 .gold-border::before,
 .blue-border::before {
-    transition: background 0.3s ease; /* Sesuaikan durasi transisi */
+  transition: background 0.3s ease; /* Sesuaikan durasi transisi */
 }
 
 .gold-border,
 .blue-border {
-    color: white; /* Default light mode text color */
+  color: white; /* Default light mode text color */
 }
 
 .gold-tier {
-  background: linear-gradient(158.64deg, #FFFFFF 27.76%, #FFC86E 59.96%, #1D1405 87.56%);
+  background: linear-gradient(
+    158.64deg,
+    #ffffff 27.76%,
+    #ffc86e 59.96%,
+    #1d1405 87.56%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -127,7 +141,12 @@ html.dark .blue-border::before {
 }
 
 .silver-tier {
-  background: linear-gradient(158.64deg, #FFFFFF 27.76%, #9AB5F0 59.96%, #05161D 87.56%);
+  background: linear-gradient(
+    158.64deg,
+    #ffffff 27.76%,
+    #9ab5f0 59.96%,
+    #05161d 87.56%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -135,7 +154,12 @@ html.dark .blue-border::before {
 }
 
 .bronze-tier {
-  background: linear-gradient(163.63deg, #FFFFFF 11.5%, #5D1919 53.74%, #1D0505 89.95%);
+  background: linear-gradient(
+    163.63deg,
+    #ffffff 11.5%,
+    #5d1919 53.74%,
+    #1d0505 89.95%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
