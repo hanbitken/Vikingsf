@@ -2,6 +2,8 @@
 
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 .gold-border {
   position: relative;
@@ -17,10 +19,20 @@
   padding: 2px;
   border-radius: 16px;
   background: linear-gradient(45deg, #684F28 0%, #281806 47%, #FFC86E 100%);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
+  
+  /* Standard mask property */
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
+  
+  /* WebKit vendor prefixes */
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+    
+  /* Mask composite for Firefox */
   mask-composite: exclude;
+  -webkit-mask-composite: xor;
+
   pointer-events: none;
 }
