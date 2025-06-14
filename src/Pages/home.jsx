@@ -14,21 +14,9 @@ import Accretia from "../assets/Picture/Accretia.png";
 
 export default function Home() {
   const raceStats = [
-    {
-      icon: Cora, // Ganti dengan path sesuai
-      players: 100,
-      kills: 0,
-    },
-    {
-      icon: Accretia,
-      players: 100,
-      kills: 0,
-    },
-    {
-      icon: Bellato,
-      players: 100,
-      kills: 0,
-    },
+    { icon: Cora, players: 100, kills: 0 },
+    { icon: Accretia, players: 100, kills: 0 },
+    { icon: Bellato, players: 100, kills: 0 },
   ];
 
   const players = [
@@ -57,106 +45,71 @@ export default function Home() {
   const getTierColor = (tier) => {
     switch (tier.toLowerCase()) {
       case "gold tier":
-        return "gold-tier";
+        return "!gold-tier";
       case "silver tier":
-        return "silver-tier";
+        return "!silver-tier";
       case "bronze tier":
-        return "bronze-tier";
+        return "!bronze-tier";
       default:
-        return "text-gray-300";
+        return "!text-gray-300";
     }
   };
 
   const slides = [
-    {
-      id: 1,
-      title: "LOREM IPSUM",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar non ante eleifend lacinia.....",
-      image: atas,
-    },
+    { id: 1, title: "LOREM IPSUM", description: "Lorem ipsum...", image: atas },
     {
       id: 2,
       title: "DOLOR SIT AMET",
-      description:
-        "Vivamus quis ligula at mauris eleifend bibendum. Suspendisse accumsan nisi ut lacus fermentum finibus.",
+      description: "Vivamus quis...",
       image: news,
     },
     {
       id: 3,
       title: "CONSECTETUR ELIT",
-      description:
-        "Sed consequat sapien et urna lacinia, a fermentum velit commodo. Nam feugiat efficitur neque.",
+      description: "Sed consequat...",
       image: news,
     },
   ];
-  const newsData = [
-    {
-      id: 1,
-      title: "Teknologi AI Mengubah Dunia",
-      summary:
-        "Kecerdasan buatan kini telah digunakan dalam berbagai sektor industri, dari kesehatan hingga pertanian.",
-      imageUrl: atas,
-    },
-    {
-      id: 2,
-      title: "Cuaca Ekstrem Melanda Indonesia",
-      summary:
-        "BMKG memperingatkan potensi bencana alam akibat cuaca ekstrem di beberapa wilayah.",
-      imageUrl: "https://source.unsplash.com/800x600/?weather",
-    },
-    {
-      id: 3,
-      title: "Tren Kuliner 2025",
-      summary:
-        "Makanan nabati dan fermentasi alami diprediksi menjadi tren kuliner tahun ini.",
-      imageUrl: "https://source.unsplash.com/800x600/?food",
-    },
-  ];
+
   const [current, setCurrent] = useState(0);
-
-  const prevSlide = () => {
+  const prevSlide = () =>
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
-
-  const nextSlide = () => {
+  const nextSlide = () =>
     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  };
-
   const currentSlide = slides[current];
 
   return (
-    <section className="h-full">
-      <div className="bg-cover bg-no-repeat main-background-container">
-        <div className="flex flex-col items-center justify-center mx-8">
-          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
-          <img src={Line} alt="Line" className="w-full" />
+    <section className="!h-full">
+      <div className="!bg-cover !bg-no-repeat main-background-container">
+        <div className="!flex !flex-col !items-center !justify-center !mx-8">
+          <img src={LOGO} alt="Logo" className="!w-[40%] !mt-12" />
+          <img src={Line} alt="Line" className="!w-full" />
+          <div className="!text-red-500 !font-bold !underline">
+            Test Tailwind
+          </div>
         </div>
-        <div className="flex flex-col gap-8 justify-between pt-12 w-full h-full px-16">
-          <div className="flex flex-row gap-8">
-            <div className="relative w-full overflow-hidden gold-border dark:blue-border">
-              {/* Background image */}
+
+        <div className="!flex !flex-col !gap-8 !justify-between !pt-12 !w-full !h-full !px-16">
+          {/* Slide + Server Info */}
+          <div className="!flex !flex-row !gap-8">
+            {/* Slider */}
+            <div className="!relative !w-full !overflow-hidden !gold-border dark:!blue-border">
               <div
-                className="w-full h-full bg-cover transition-all duration-700"
+                className="!w-full !h-full !bg-cover !transition-all !duration-700"
                 style={{ backgroundImage: `url(${currentSlide.image})` }}
               >
-                {/* Content */}
-                <div className="font-['Bebas_Neue'] absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent px-8 py-4 text-white text-left border-t-1  border-[#FFC86E]/60">
+                <div className="!absolute !bottom-0 !w-full !h-1/3 !bg-gradient-to-t !from-black !to-transparent !px-8 !py-4 !text-white !text-left !border-t !border-[#FFC86E]/60">
                   <h2
-                    className="text-3xl text-white "
-                    style={{
-                      WebkitTextStroke: "1px #FFC86E",
-                    }}
+                    className="!text-3xl !text-white"
+                    style={{ WebkitTextStroke: "1px #FFC86E" }}
                   >
                     {currentSlide.title}
                   </h2>
-                  <p className="text-lg">{currentSlide.description}</p>
+                  <p className="!text-lg">{currentSlide.description}</p>
                 </div>
-
-                {/* Left arrow */}
                 <button
                   onClick={prevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white  hover:bg-white/30 rounded-full"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/30 rounded-full"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -173,8 +126,6 @@ export default function Home() {
                     />
                   </svg>
                 </button>
-
-                {/* Right arrow */}
                 <button
                   onClick={nextSlide}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/30 rounded-full"
@@ -196,58 +147,34 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className="w-[40%] flex flex-col h-full gap-4 rounded-lg p-8 gold-border">
-              <div className="text-center text-xl">
+
+            {/* Server Info */}
+            <div className="!w-[40%] !flex !flex-col !gap-4 !rounded-lg !p-8 !gold-border">
+              <div className="!text-center !text-xl">
                 <h2>SERVER INFO</h2>
               </div>
               <img src={InfoLine} alt="" />
-              <div className="flex items-center justify-center px-8 space-x-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 18v-6m0-6h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
-                  />
-                </svg>
-                <span className="text-green-400 font-bold text-center text-lg">
+              <div className="!flex !items-center !justify-center !px-8 !space-x-4">
+                <svg className="!w-8 !h-8 !text-white" /* ... */></svg>
+                <span className="!text-green-400 !font-bold !text-lg">
                   ONLINE
                 </span>
               </div>
-
-              <div className="flex items-center justify-center px-8 space-x-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m0-4a4 4 0 118 0 4 4 0 01-8 0zm10 0a4 4 0 118 0 4 4 0 01-8 0z"
-                  />
-                </svg>
-                <span className="font-bold text-lg">300 PLAYERS</span>
+              <div className="!flex !items-center !justify-center !px-8 !space-x-4">
+                <svg className="!w-8 !h-8 !text-white" /* ... */></svg>
+                <span className="!font-bold !text-lg">300 PLAYERS</span>
               </div>
-
-              <div className="space-y-4 px-6">
-                {raceStats.map((race, index) => (
-                  <div key={index} className="flex items-center space-x-4">
+              <div className="!space-y-4 !px-6">
+                {raceStats.map((race, i) => (
+                  <div key={i} className="!flex !items-center !space-x-4">
                     <img
                       src={race.icon}
-                      alt={`Race ${index + 1}`}
-                      className="w-12 h-12 object-cover border-2"
+                      alt={`Race ${i + 1}`}
+                      className="!w-12 !h-12 !object-cover !border-2"
                     />
-                    <div className="flex-1 flex justify-between items-center">
-                      <span className="font-bold">100 PLAYERS</span>
-                      <span className="font-bold">
+                    <div className="!flex-1 !flex !justify-between !items-center">
+                      <span className="!font-bold">{race.players} PLAYERS</span>
+                      <span className="!font-bold">
                         TOTAL KILL: {race.kills}
                       </span>
                     </div>
@@ -256,108 +183,62 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="flex flex-row gap-8">
-            {/* TOP PLAYER */}
-            <div className="flex flex-col h-full gap-4 w-1/3 p-8 gold-border">
-              <div className="text-center text-xl">
-                <h2>TOP PLAYER</h2>
-              </div>
-              <img src={InfoLine} alt="" />
-              <div className="flex flex-col justify-center gap-4 px-8">
-                {players.map((player, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row justify-between items-center align-center"
-                  >
-                    <div className="flex flex-row gap-4 items-center">
-                      <div className="w-full h-full">
-                        <img src={profile} alt="" />
-                      </div>
-                      <div className="flex flex-col text-left">
-                        <h2 className="text-xl">{player.name}r</h2>
-                        <h3 className="text-lg">{player.faction}</h3>
-                      </div>
-                    </div>
-                    {/* kill | Death */}
-                    <div className="text-xl">
-                      <span className="text-green-400">{player.win}</span>{" "}
-                      <span className="text-white">|</span>{" "}
-                      <span className="text-red-500">{player.lose}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col h-full gap-4 w-1/3 gold-border p-8">
-              <div className="text-center text-xl">
-                <h2>TOP GUILD</h2>
-              </div>
-              <img src={InfoLine} alt="" />
-              <div className="flex flex-col justify-center gap-4 px-8">
-                {Guilds.map((guild, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row justify-between items-center align-center"
-                  >
-                    <div className="flex flex-row gap-4 items-center">
-                      <div className="w-full h-full">
-                        <img src={profile} alt="" />
-                      </div>
-                      <div className="flex flex-col text-left">
-                        <h2 className="text-xl">{guild.name}r</h2>
-                        <h3 className="text-lg">{guild.faction}</h3>
-                      </div>
-                    </div>
-                    {/* kill | Death */}
-                    <div className="text-xl">
-                      <span className="text-green-400">{guild.win}</span>{" "}
-                      <span className="text-white">|</span>{" "}
-                      <span className="text-red-500">{guild.lose}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col min-h-full gap-4 w-1/3 gold-border p-8">
-              <div className="text-center text-xl">
-                <h2>VIP</h2>
-              </div>
-              <img src={InfoLine} alt="" />
-              <div className="flex flex-col justify-center gap-4 px-8">
-                {Vips.map((vip, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row justify-between items-center align-center"
-                  >
-                    <div className="flex flex-row gap-4 items-center">
-                      <div className="w-full h-full">
-                        <img src={profile} alt="" />
-                      </div>
-                      <div className="flex flex-col text-left">
-                        <h2 className="text-xl">{vip.name}r</h2>
-                        <h3 className="text-lg">{vip.faction}</h3>
-                      </div>
-                    </div>
+
+          {/* Top Player, Guild, VIP sections */}
+          <div className="!flex !flex-row !gap-8">
+            {[
+              { title: "TOP PLAYER", data: players },
+              { title: "TOP GUILD", data: Guilds },
+              { title: "VIP", data: Vips },
+            ].map((section, idx) => (
+              <div
+                key={idx}
+                className="!flex !flex-col !gap-4 !w-1/3 !p-8 !gold-border"
+              >
+                <div className="!text-center !text-xl">
+                  <h2>{section.title}</h2>
+                </div>
+                <img src={InfoLine} alt="" />
+                <div className="!flex !flex-col !gap-4 !px-8">
+                  {section.data.map((item, i) => (
                     <div
-                      className={`w-1/2 flex justify-center items-center align-center text-xl  ${getTierColor(
-                        vip.tier
-                      )}`}
+                      key={i}
+                      className="!flex !justify-between !items-center"
                     >
-                      {vip.tier.toUpperCase()}
+                      <div className="!flex !gap-4 !items-center">
+                        <img src={profile} alt="" />
+                        <div className="!flex !flex-col">
+                          <h2 className="!text-xl">{item.name}</h2>
+                          <h3 className="!text-lg">{item.faction}</h3>
+                        </div>
+                      </div>
+                      {section.title === "VIP" ? (
+                        <div className={`!text-xl ${getTierColor(item.tier)}`}>
+                          {item.tier.toUpperCase()}
+                        </div>
+                      ) : (
+                        <div className="!text-xl">
+                          <span className="!text-green-400">{item.win}</span>
+                          <span className="!text-white"> | </span>
+                          <span className="!text-red-500">{item.lose}</span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          <div className="items-center justify-center pb-4">
-            <img src={Line} alt="Line" className="w-full" />
-            <div className="flex flex-row justify-center items-center gap-2">
+
+          {/* Footer */}
+          <div className="!items-center !justify-center !pb-4">
+            <img src={Line} alt="Line" className="!w-full" />
+            <div className="!flex !justify-center !items-center !gap-2">
               <a
                 href="https://www.instagram.com/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-pink-400 transition"
+                className="hover:!text-pink-400 !transition"
               >
                 <FaInstagram />
               </a>
@@ -365,7 +246,7 @@ export default function Home() {
                 href="https://tiktok.com/@rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-black transition"
+                className="hover:!text-black !transition"
               >
                 <FaTiktok />
               </a>
@@ -373,7 +254,7 @@ export default function Home() {
                 href="https://www.facebook.com/profile.php?id=61562554693454"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-blue-500 transition"
+                className="hover:!text-blue-500 !transition"
               >
                 <FaFacebook />
               </a>
@@ -381,7 +262,7 @@ export default function Home() {
                 href="https://discord.gg/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-indigo-400 transition"
+                className="hover:!text-indigo-400 !transition"
               >
                 <FaDiscord />
               </a>

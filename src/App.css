@@ -1,143 +1,93 @@
+@import "tailwindcss";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
-#root {
-  text-align: center;
-  width: 100%;
+.transition-bg-image {
+  background-size: cover;
+  background-position: center;
+  /* Transisi untuk properti umum, tapi bukan image itu sendiri */
+  transition: background-image 0s, background-color 0.3s ease;
+  /* Transisi background-image tidak langsung, tapi properti lain bisa */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* Definisikan gambar latar belakang default (light mode) */
+.light-mode-bg {
+  background-image: var(--light-bg-image);
+  /* Menggunakan variabel CSS */
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+/* Definisikan gambar latar belakang untuk dark mode */
+.dark-mode-bg {
+  background-image: var(--dark-bg-image);
+  /* Menggunakan variabel CSS */
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Ketika dark mode aktif, timpa variabel CSS pada elemen <html> */
+html.dark {
+  /* Ini akan menimpa variabel --current-bg-image pada <html> */
+  --current-bg-image: var(--dark-bg-image);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+:root {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  @import "slick-carousel/slick/slick.css";
+  @import "slick-carousel/slick/slick-theme.css";
+  @import "bootstrap/dist/css/bootstrap.min.css";
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --light-bg-image: url("./assets/Picture/background.png");
+  /* Gambar terang Anda */
+  --dark-bg-image: url("./assets/Picture/atas-gelap.png");
+  --dark-bg-image: url("./assets/Picture/tengah-gelap.png");
+  --dark-bg-image: url("./assets/Picture/bawah.gif");
+  /* --dark-bg-image: url('./assets/Picture/tengah-gelap.png');
+  --dark-bg-image: url('https://tenor.com/view/crashout-skeleteon-skeleton-meme-skeleteton-crashout-screaming-gif-2819917983570648755'); */
+  /* Gambar gelap Anda */
+  --current-bg-image: var(--light-bg-image);
+  /* Default: gambar terang */
+}
+
+.main-background-container {
+  background-image: var(--current-bg-image);
+  transition: background-image 0s, background-color 0.3s ease; /* Transisi untuk warna, bukan gambar */
+}
+
+.bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
   }
 
-  to {
-    transform: rotate(360deg);
+  a:hover {
+    color: #747bff;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  button {
+    background-color: #f9f9f9;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-.gold-border {
-  position: relative;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.25);
-  color: white; /* Perhatikan: warna teks juga mungkin perlu dark: */
-}
-
-.gold-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: 14px;
-  /* GRADIENT UNTUK LIGHT MODE (GOLD) */
-  background: linear-gradient(315deg, #684F28 0%, #281806 47%, #FFC86E 100%);
-
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* --- Definisi Gold Border (Dark Mode) --- */
-/* Ketika elemen <html> memiliki kelas 'dark' DAN elemen ini memiliki 'gold-border' */
-html.dark .gold-border::before {
-  /* GRADIENT UNTUK DARK MODE (BIRU, sesuai keinginan Anda) */
-  background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%); /* Menggunakan gradient dari blue-border */
-}
-
-
-/* --- Definisi Blue Border (Light Mode) --- */
-.blue-border {
-  position: relative;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.25);
-  color: white; /* Perhatikan: warna teks juga mungkin perlu dark: */
-}
-
-.blue-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: 14px;
-  /* GRADIENT UNTUK LIGHT MODE (BIRU) */
-  background: linear-gradient(315deg, #283F68 0%, #060628 47%, #6E9CFF 100%);
-
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* --- Definisi Blue Border (Dark Mode) --- */
-/* Ketika elemen <html> memiliki kelas 'dark' DAN elemen ini memiliki 'blue-border' */
-html.dark .blue-border::before {
-  /* GRADIENT UNTUK DARK MODE (GOLD, sesuai keinginan Anda) */
-  background: linear-gradient(315deg, #684F28 0%, #281806 47%, #FFC86E 100%); /* Menggunakan gradient dari gold-border */
-}
-
-/* --- Opsional: Transisi untuk Pseudo-element --- */
-/* Untuk membuat transisi lebih halus, Anda mungkin perlu menambahkan transisi pada pseudo-elementnya */
-.gold-border::before,
-.blue-border::before {
-    transition: background 0.3s ease; /* Sesuaikan durasi transisi */
-}
-
-.gold-border,
-.blue-border {
-    color: white; /* Default light mode text color */
-}
-
-.gold-tier {
-  background: linear-gradient(158.64deg, #FFFFFF 27.76%, #FFC86E 59.96%, #1D1405 87.56%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.silver-tier {
-  background: linear-gradient(158.64deg, #FFFFFF 27.76%, #9AB5F0 59.96%, #05161D 87.56%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.bronze-tier {
-  background: linear-gradient(163.63deg, #FFFFFF 11.5%, #5D1919 53.74%, #1D0505 89.95%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
