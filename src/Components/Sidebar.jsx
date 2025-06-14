@@ -23,8 +23,7 @@ const Sidebar = ({ onMenuClick, activePage }) => {
 
   const menuItems = [
     { id: "news", label: "News" },
-    { id: "user", label: "User" },
-    { id: "settings", label: "Settings" },
+    { id: "info", label: "Game Info & Donation" },
     { id: "logout", label: "Logout" },
   ];
 

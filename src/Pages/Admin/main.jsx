@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../Components/Admin_Sidebar"; // Sidebar terpisah
 import NewsPage from "./MasterNews"; // Komponen konten
+import DashboardLayout from "../../Components/DashboardLayout";
 // import UserPage from './UserPage'; // Bisa ditambahkan nanti
 
 const AdminPage = () => {
@@ -14,6 +15,8 @@ const AdminPage = () => {
         return <NewsPage />;
       // case 'user':
       //   return <UserPage />;
+      case "info":
+        return <DashboardLayout />; // Ganti dengan komponen yang sesuai
       case "home":
         return navigate("/"); // Redirect ke halaman Home
       default:
