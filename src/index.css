@@ -1,8 +1,14 @@
-@import "tailwindcss";
+/* PENTING: Tailwind directives dulu */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Baru kemudian CSS external lain */
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
 
+/* Custom style kamu */
 .gold-border {
   position: relative;
   border-radius: 16px;
@@ -17,10 +23,9 @@
   padding: 2px;
   border-radius: 16px;
   background: linear-gradient(45deg, #684F28 0%, #281806 47%, #FFC86E 100%);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
+  -webkit-mask-composite: xor;
   pointer-events: none;
 }
