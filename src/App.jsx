@@ -1,3 +1,6 @@
+// Tambahkan ini di App.jsx paling atas
+import React from 'react';
+
 import { Routes, Route, Navigate } from 'react-router-dom';
 import DashboardLayout from './Components/DashboardLayout';
 import UsersTable from './Components/UserTable';
@@ -29,8 +32,6 @@ import TabGemstone from './Components/Donation/ServiceDonation/TabGemstone';
 import TabResources from './Components/Donation/ServiceDonation/TabResources';
 
 import Dashboard from './Page/Dashboard';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 function App() {
   return (
     <Routes>
