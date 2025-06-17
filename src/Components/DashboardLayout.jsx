@@ -75,10 +75,6 @@ const DashboardLayout = () => {
 
                 {submenus.gameInfo && (
                   <div className="flex flex-col pl-6 py-1">
-                    <Link to="/admin/table-list/game-info/game-data" className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline">
-                      Game Information CRUD
-                    </Link>
-
                     <div
                       onClick={() => toggleSubmenu('serverInfo')}
                       className="text-gray-300 font-light flex items-center justify-between mb-2 px-3 py-2 rounded-md hover:bg-gray-700 cursor-pointer transition-colors duration-200"
@@ -188,7 +184,7 @@ const DashboardLayout = () => {
                     )}
 
                     <Link
-                      to="/admin/table-list/game-info/mapinfo" 
+                      to="/admin/table-list/game-info/mapinfo"
                       className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline"
                     >
                       Map Info
@@ -209,10 +205,6 @@ const DashboardLayout = () => {
                 </div>
                 {submenus.donation && (
                   <div className="flex flex-col pl-6 py-1">
-                    <Link to="/admin/table-list/donation/donation-info" className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline">
-                      Donation Information
-                    </Link>
-
                     <div
                       onClick={() => toggleSubmenu('serviceDonationSubmenu')}
                       className="text-gray-300 font-light flex items-center justify-between mb-2 px-3 py-2 rounded-md hover:bg-gray-700 cursor-pointer transition-colors duration-200"
@@ -234,17 +226,46 @@ const DashboardLayout = () => {
                       </div>
                     )}
 
+                    {/* Modified section for Donation Types */}
                     {donationTypes.filter(type => type !== 'Service').map(type => (
                       <Link
                         key={type}
-                        to={`/admin/table-list/donation/${type.toLowerCase()}`}
+                        // Conditionally set the 'to' prop
+                        to={type === 'Package' ? '/admin/table-list/donation/packages' : `/admin/table-list/donation/${type.toLowerCase()}`}
                         className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline"
                       >
                         {type} Donation
                       </Link>
                     ))}
+
+                    <Link
+                      to="/admin/table-list/donation/package-categories"
+                      className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline"
+                    >
+                      Package Category
+                    </Link>
+                    <Link
+                      to="/admin/table-list/donation/item-package"
+                      className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline"
+                    >
+                      Item Package Bonus
+                    </Link>
+                    <Link
+                      to="/admin/table-list/donation/package-bonuses"
+                      className="text-gray-400 font-light mb-2 hover:bg-gray-700 px-3 py-2 rounded-md transition-colors duration-200 no-underline"
+                    >
+                      Package Bonus
+                    </Link>
                   </div>
                 )}
+
+                <Link
+                  to="/admin/table-list/game-info/items"
+                  className="text-gray-300 font-light flex items-center mb-2 px-3 py-2 rounded-md hover:bg-gray-700 cursor-pointer transition-colors duration-200 no-underline"
+                >
+                  <span>Items</span>
+                </Link>
+
               </div>
             )}
 

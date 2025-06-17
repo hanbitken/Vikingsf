@@ -1,37 +1,48 @@
-// Tambahkan ini di App.jsx paling atas
 import React from 'react';
-
 import { Routes, Route, Navigate } from 'react-router-dom';
+
+// Layout & Pages
 import DashboardLayout from './Components/DashboardLayout';
+import Dashboard from './Page/Dashboard';
+
+// Tables
 import UsersTable from './Components/UserTable';
-import GameInformation from './Components/GameInfo/GameInformation';
 import ServerRules from './Components/GameInfo/ServerRules';
 import MapInfo from './Components/MapInfo/MapInfo';
 
+// Feature Info
 import PendantInformation from './Components/ServerInfo/FeatureInformation/PendantInformation';
 import GemInformation from './Components/ServerInfo/FeatureInformation/GemInformation';
 
+// NPC & Drop
 import NpcList from './Components/ServerInfo/NPCList/NpcList';
 import DropList from './Components/ServerInfo/DropList/DropList';
+import ItemsInfo from './Components/GameInfo/ItemsInfo';
 
+// General Info
 import ServersInformation from './Components/ServerInfo/GeneralInfo/ServersInformation';
 import SystemInformation from './Components/ServerInfo/GeneralInfo/SystemInformation';
 import FeaturesDisable from './Components/ServerInfo/GeneralInfo/FeaturesDisable';
 import FeaturesEnable from './Components/ServerInfo/GeneralInfo/FeaturesEnable';
 
+// Quest Info
 import DailyQuestAfterWar from './Components/QuestInfo/DailyQuestAfterWar';
 import DailyQuest from './Components/QuestInfo/DailyQuest';
 
-import DonationInformation from './Components/Donation/DonationInformation';
+// Donation
 import RetailDonation from './Components/Donation/RetailDonation';
-import SeassonPassDonation from './Components/Donation/SeassonPassDonation'; 
-import PackageDonation from './Components/Donation/PackageDonation';
+import SeassonPassDonation from './Components/Donation/SeassonPassDonation';
 import HowToDonation from './Components/Donation/HowToDonation';
 import ServiceDonation from './Components/Donation/ServiceDonation/ServiceDonation';
 import TabGemstone from './Components/Donation/ServiceDonation/TabGemstone';
 import TabResources from './Components/Donation/ServiceDonation/TabResources';
 
-import Dashboard from './Page/Dashboard';
+import PackagesInfo from './Components/PackagesInfo';
+import PackageCategoryInfo from './Components/PackageCategoryInfo';
+import PackageBonusInfo from './Components/PackageBonusInfo';
+import ItemPackageBonusInfo from './Components/ItemPackageBonusInfo';
+
+
 function App() {
   return (
     <Routes>
@@ -42,19 +53,19 @@ function App() {
         <Route path="table-list/users" element={<UsersTable />} />
 
         <Route path="table-list/game-info">
-          <Route index element={<Navigate to="game-data" replace />} /> 
-          
-          <Route path="game-data" element={<GameInformation />} />
+          <Route path="items" element={<ItemsInfo />} />
           <Route path="server-rules" element={<ServerRules />} />
+          <Route path="mapinfo" element={<MapInfo />} />
 
           <Route path="server-info">
-            <Route path="npclist" element={<NpcList/>} />
-            <Route path="droplist" element={<DropList/>} />
+            <Route path="npclist" element={<NpcList />} />
+            <Route path="droplist" element={<DropList />} />
 
             <Route path="featureinfo">
               <Route path="pendant-information" element={<PendantInformation />} />
               <Route path="gem-information" element={<GemInformation />} />
             </Route>
+
             <Route path="GeneralInfo">
               <Route path="systeminfo" element={<SystemInformation />} />
               <Route path="serversinfo" element={<ServersInformation />} />
@@ -67,22 +78,22 @@ function App() {
             <Route path="dailyquestafterwar" element={<DailyQuestAfterWar />} />
             <Route path="dailyquest" element={<DailyQuest />} />
           </Route>
-
-          <Route path="mapinfo" element={<MapInfo />} />
         </Route>
 
         <Route path="table-list/donation">
-          <Route index element={<Navigate to="donation-info" replace />} /> 
           <Route path="service">
             <Route path="services" element={<ServiceDonation />} />
             <Route path="gemstone" element={<TabGemstone />} />
             <Route path="resources" element={<TabResources />} />
           </Route>
-          <Route path="donation-info" element={<DonationInformation />} />
           <Route path="retail" element={<RetailDonation />} />
           <Route path="seassonpass" element={<SeassonPassDonation />} />
-          <Route path="package" element={<PackageDonation />} />
+          <Route path="packages" element={<PackagesInfo />} />
           <Route path="howto" element={<HowToDonation />} />
+          <Route path='package-categories' element={<PackageCategoryInfo />} />
+          <Route path='package-bonuses' element={<PackageBonusInfo />} />
+          <Route path='item-package' element={<ItemPackageBonusInfo />} />
+
         </Route>
       </Route>
 

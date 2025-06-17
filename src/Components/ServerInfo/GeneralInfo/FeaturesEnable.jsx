@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from 'react';
-// dayjs is no longer needed as timestamps are not displayed
-// import dayjs from 'dayjs'; 
 
 const FeaturesEnable = () => {
   const [featuresEnables, setFeaturesEnables] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
-    title: '',
+    feature: '',
     description: '',
   });
   const [currentItem, setCurrentItem] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState('info'); // For different toast colors (success, error, info)
+  const [toastType, setToastType] = useState('info'); 
 
-  // Define form fields and their properties
   const formFields = [
-    { label: 'Game Info ID', name: 'game_information_id', type: 'number', required: true, placeholder: 'Enter Game Info ID (e.g., 1)' },
-    { label: 'Title', name: 'title', type: 'text', required: true },
+    { label: 'Feature', name: 'feature', type: 'text', required: true },
     { label: 'Description', name: 'description', type: 'textarea', required: false },
   ];
 
-  // Fetch Features Enable data when the component mounts
   useEffect(() => {
     fetchFeaturesEnables();
   }, []);
 
-  // Function to fetch all features enable data from the API
   const fetchFeaturesEnables = async () => {
     try {
       const response = await fetch('http://127.0.0.1:8000/api/game-info/server-information/feature-enable');
@@ -74,23 +67,19 @@ const FeaturesEnable = () => {
     };
   }, [showModal]); 
 
-  // Handler to show the add/edit modal
   const handleShowModal = () => {
-    setCurrentItem(null); // Clear current item for "add" mode
+    setCurrentItem(null); 
     setFormData({
-      game_information_id: '',
-      title: '',
+      feature: '',
       description: '',
     });
     setShowModal(true);
   };
 
-  // Handler to close the modal
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  // Handler for form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -154,18 +143,15 @@ const FeaturesEnable = () => {
     }
   };
 
-  // Handler to populate the form for editing
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
-      title: item.title,
+      feature: item.feature, // Corrected: use item.feature
       description: item.description,
     });
     setShowModal(true);
   };
 
-  // Handler for deleting a feature enable entry
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
       try {
@@ -186,7 +172,7 @@ const FeaturesEnable = () => {
         }
 
         if (response.ok) {
-          fetchFeaturesEnables(); // Refresh data
+          fetchFeaturesEnables(); 
           setToastMessage('Feature Enable berhasil dihapus.');
           setToastType('success'); 
           setShowToast(true);
@@ -206,7 +192,6 @@ const FeaturesEnable = () => {
     }
   };
 
-  // Helper function to determine toast background color based on type
   const getToastColor = (type) => {
     switch (type) {
       case 'success':
@@ -214,7 +199,7 @@ const FeaturesEnable = () => {
       case 'error':
         return 'bg-red-500';
       default:
-        return 'bg-blue-500'; // info by default
+        return 'bg-blue-500'; 
     }
   };
 
@@ -235,10 +220,8 @@ const FeaturesEnable = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Game Info ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
+              <th className="py-3 px-6 text-left">Feature</th>
               <th className="py-3 px-6 text-left">Description</th>
-              {/* Kolom Created At dan Updated At dihapus */}
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
@@ -249,10 +232,8 @@ const FeaturesEnable = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.game_information_id}</td>
-                <td className="py-3 px-6 text-left">{item.title}</td>
+                <td className="py-3 px-6 text-left">{item.feature}</td> {/* Corrected: use item.feature */}
                 <td className="py-3 px-6 text-left">{item.description}</td>
-                {/* Data Created At dan Updated At tidak ditampilkan */}
                 <td className="py-3 px-6 text-center">
                   <button
                     className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-xs mr-2 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
@@ -273,12 +254,11 @@ const FeaturesEnable = () => {
         </table>
       </div>
 
-      {/* Modal for Add/Edit */}
       {showModal && (
         <div
           className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center z-50 transition-opacity duration-300 ease-out"
           style={{ opacity: showModal ? 1 : 0 }}
-          onClick={handleCloseModal} // Close modal when clicking outside
+          onClick={handleCloseModal} 
         >
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
@@ -286,7 +266,7 @@ const FeaturesEnable = () => {
                 transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
                 opacity: showModal ? 1 : 0
             }}
-            onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
+            onClick={(e) => e.stopPropagation()} 
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
@@ -296,7 +276,7 @@ const FeaturesEnable = () => {
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
                 onClick={handleCloseModal}
               >
-                &times; {/* Close button */}
+                &times; 
               </button>
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
@@ -325,13 +305,10 @@ const FeaturesEnable = () => {
                       onChange={handleChange}
                       required={field.required}
                       placeholder={field.placeholder}
-                      // Disable 'game_information_id' input when in edit mode
-                      disabled={currentItem && field.name === 'game_information_id'} 
                       className={`
                         shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         transition duration-150 ease-in-out
-                        ${currentItem && field.name === 'game_information_id' ? 'bg-gray-100 cursor-not-allowed' : ''}
                       `}
                     />
                   )}

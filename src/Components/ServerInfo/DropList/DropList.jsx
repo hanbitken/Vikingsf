@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs'; // dayjs is still imported, but not used for display anymore
 
 const DropList = () => {
   const [dropLists, setDropLists] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     map_information_id: '',
-    droplist: '',
-    buy_with: '',
+    monster: '',
+    items_id: '', // Changed from 'item_id' to 'items_id' to match database
   });
   const [currentItem, setCurrentItem] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
@@ -16,8 +15,8 @@ const DropList = () => {
 
   const formFields = [
     { label: 'Map Info ID', name: 'map_information_id', type: 'number', required: true, placeholder: 'Enter Map Info ID (e.g., 1)' },
-    { label: 'Drop List', name: 'droplist', type: 'text', required: true, placeholder: 'Enter Drop List Name' },
-    { label: 'Buy With', name: 'buy_with', type: 'textarea', required: false, placeholder: 'Enter what can be bought with (e.g., Honor, PvP Points)' },
+    { label: 'Monster Name', name: 'monster', type: 'text', required: true, placeholder: 'Enter Monster Name' },
+    { label: 'Items ID', name: 'items_id', type: 'number', required: true, placeholder: 'Enter Items ID (e.g., 1)' }, // Changed from 'item_id' to 'items_id' to match database
   ];
 
   useEffect(() => {
@@ -91,8 +90,8 @@ const DropList = () => {
     setCurrentItem(null);
     setFormData({
       map_information_id: '',
-      droplist: '',
-      buy_with: '',
+      monster: '',
+      items_id: '', // Changed to 'items_id'
     });
     setShowModal(true);
   };
@@ -117,7 +116,12 @@ const DropList = () => {
         ? `http://127.0.0.1:8000/api/game-info/server-information/droplist/${currentItem.id}`
         : 'http://127.0.0.1:8000/api/game-info/server-information/droplist';
 
-      const payload = { ...formData };
+      // Ensure that numbers are sent as numbers, not strings
+      const payload = {
+        ...formData,
+        map_information_id: Number(formData.map_information_id),
+        items_id: Number(formData.items_id), // Ensure items_id is sent as a number
+      };
 
       const response = await fetch(url, {
         method,
@@ -135,6 +139,8 @@ const DropList = () => {
         data = await response.json();
       } catch (jsonError) {
         const rawText = await clonedResponse.text();
+        console.error("Failed to parse response as JSON:", jsonError); // Added console.error
+        console.error("Raw non-JSON response text:", rawText); // Added console.error
         throw new Error(`Respons tidak valid dari server (${response.status}): ${rawText.substring(0, 100)}...`);
       }
 
@@ -145,6 +151,7 @@ const DropList = () => {
         setToastType('success');
         setShowToast(true);
       } else {
+        console.error('Backend error response:', data); // Added console.error
         let errorMessage = 'Terjadi kesalahan.';
         if (data && data.message) {
             errorMessage = data.message;
@@ -154,6 +161,7 @@ const DropList = () => {
         throw new Error(errorMessage);
       }
     } catch (error) {
+      console.error('Error submitting Drop List:', error); // Added console.error
       setToastMessage(`Gagal menyimpan Drop List: ${error.message}`);
       setToastType('error');
       setShowToast(true);
@@ -164,8 +172,8 @@ const DropList = () => {
     setCurrentItem(item);
     setFormData({
       map_information_id: item.map_information_id,
-      droplist: item.droplist,
-      buy_with: item.buy_with,
+      monster: item.monster,
+      items_id: item.items_id, // Changed to 'items_id'
     });
     setShowModal(true);
   };
@@ -184,6 +192,8 @@ const DropList = () => {
           data = await response.json();
         } catch (jsonError) {
           const rawText = await clonedResponse.text();
+          console.error("Failed to parse delete error response as JSON:", jsonError); // Added console.error
+          console.error("Raw delete response text:", rawText); // Added console.error
           throw new Error(`Respons tidak valid dari server (${response.status}) saat menghapus: ${rawText.substring(0, 100)}...`);
         }
 
@@ -193,6 +203,7 @@ const DropList = () => {
           setToastType('success');
           setShowToast(true);
         } else {
+          console.error('Backend error response:', data); // Added console.error
           let errorMessage = 'Gagal menghapus data.';
           if (data && data.message) {
               errorMessage = data.message;
@@ -200,6 +211,7 @@ const DropList = () => {
           throw new Error(errorMessage);
         }
       } catch (error) {
+        console.error('Error deleting Drop List:', error); // Added console.error
         setToastMessage(`Terjadi kesalahan saat menghapus: ${error.message}`);
         setToastType('error');
         setShowToast(true);
@@ -236,10 +248,10 @@ const DropList = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Drop List</th>
-              <th className="py-3 px-6 text-left">Buy With</th>
+              <th className="py-3 px-6 text-left">Monster Name</th>
               <th className="py-3 px-6 text-left">Map Info ID</th>
-              <th className="py-3 px-6 text-center">Action</th> {/* Adjusted colSpan */}
+              <th className="py-3 px-6 text-left">Items ID</th>
+              <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
@@ -250,9 +262,9 @@ const DropList = () => {
                   className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
                 >
                   <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                  <td className="py-3 px-6 text-left">{item.droplist}</td>
-                  <td className="py-3 px-6 text-left">{item.buy_with}</td>
+                  <td className="py-3 px-6 text-left">{item.monster}</td>
                   <td className="py-3 px-6 text-left">{item.map_information_id}</td>
+                  <td className="py-3 px-6 text-left">{item.items_id}</td> {/* Changed to 'items_id' */}
                   <td className="py-3 px-6 text-center">
                     <button
                       className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-xs mr-2 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
@@ -271,7 +283,7 @@ const DropList = () => {
               ))
             ) : (
               <tr className="bg-white border-b border-gray-200">
-                <td colSpan="5" className="py-3 px-6 text-center text-gray-500 italic"> {/* Adjusted colSpan */}
+                <td colSpan="5" className="py-3 px-6 text-center text-gray-500 italic">
                   Tidak ada data Drop List yang tersedia.
                 </td>
               </tr>

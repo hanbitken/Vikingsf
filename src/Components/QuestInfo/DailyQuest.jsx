@@ -5,7 +5,6 @@ const DailyQuest = () => {
   const [dailyQuests, setDailyQuests] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
     day: '',
     tutorial: '',
     quest: '',
@@ -18,12 +17,11 @@ const DailyQuest = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'ID Informasi Game', name: 'game_information_id', type: 'number', required: true, placeholder: 'Masukkan ID Informasi Game (misalnya, 1)' },
-    { label: 'Hari', name: 'day', type: 'text', required: true, placeholder: 'Masukkan Hari (misalnya, Senin, Setiap Hari)' },
-    { label: 'Gambar', name: 'image', type: 'file', required: false, multiple: false },
+    { label: 'Day', name: 'day', type: 'text', required: true, placeholder: 'Masukkan Hari (misalnya, Senin, Setiap Hari)' },
+    { label: 'Image', name: 'image', type: 'file', required: false, multiple: false },
     { label: 'Tutorial', name: 'tutorial', type: 'textarea', required: true, placeholder: 'Masukkan langkah-langkah tutorial atau deskripsi lengkap.' },
     { label: 'Quest', name: 'quest', type: 'textarea', required: false, placeholder: 'Masukkan langkah-langkah quest, setiap baris baru. Contoh:\nLangkah 1\nLangkah 2' },
-    { label: 'Hadiah', name: 'reward', type: 'textarea', required: false, placeholder: 'Masukkan hadiah, setiap baris baru. Contoh:\nItem A\nItem B' },
+    { label: 'Reward', name: 'reward', type: 'textarea', required: false, placeholder: 'Masukkan hadiah, setiap baris baru. Contoh:\nItem A\nItem B' },
   ];
 
   useEffect(() => {
@@ -76,7 +74,6 @@ const DailyQuest = () => {
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      game_information_id: '',
       day: '',
       tutorial: '',
       quest: '',
@@ -164,7 +161,6 @@ const DailyQuest = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
       day: item.day,
       tutorial: item.tutorial,
       quest: item.quest,
@@ -251,13 +247,11 @@ const DailyQuest = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">ID Informasi Game</th>
-              <th className="py-3 px-6 text-left">Hari</th>
-              <th className="py-3 px-6 text-left">Gambar</th>
+              <th className="py-3 px-6 text-left">Day</th>
+              <th className="py-3 px-6 text-left">Image</th>
               <th className="py-3 px-6 text-left">Tutorial</th>
               <th className="py-3 px-6 text-left">Quest</th>
-              <th className="py-3 px-6 text-left">Hadiah</th>
-              <th className="py-3 px-6 text-center">Aksi</th>
+              <th className="py-3 px-6 text-left">Reward</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
@@ -267,7 +261,6 @@ const DailyQuest = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.game_information_id}</td>
                 <td className="py-3 px-6 text-left">{item.day}</td>
                 <td className="py-3 px-6 text-left">
                   {typeof item.image === 'string' && item.image ? (
@@ -310,7 +303,6 @@ const DailyQuest = () => {
         </table>
       </div>
 
-      {/* Modal Tambah/Edit Daily Quest */}
       {showModal && (
         <div
           className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center z-50 transition-opacity duration-300 ease-out"

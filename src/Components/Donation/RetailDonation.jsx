@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 const RetailDonation = () => {
-  const [retailDonations, setRetailDonations] = useState([]);
+  const [retailDonations, setRetailDonations] = useState([]); // Changed state variable name
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    donation_informations_id: '',
-    title: '',
-    description: '',
+    donation_title: '',
     pricing: '',
   });
   const [currentItem, setCurrentItem] = useState(null);
@@ -15,28 +13,34 @@ const RetailDonation = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'Donation ID', name: 'donation_informations_id', type: 'number', required: true, placeholder: 'Enter Donation Info ID (e.g., 1)' },
-    { label: 'Judul', name: 'title', type: 'text', required: true, placeholder: 'Enter retail item title' },
-    { label: 'Deskripsi', name: 'description', type: 'textarea', required: false, placeholder: 'Enter retail item description' },
-    { label: 'Harga', name: 'pricing', type: 'text', required: true, placeholder: 'Enter pricing (e.g., 50000 IDR)' },
+    { label: 'Donation Title', name: 'donation_title', type: 'text', required: true, placeholder: 'Enter Donation Title' },
+    { label: 'Pricing', name: 'pricing', type: 'text', required: true, placeholder: 'Enter Pricing (e.g., Rp. 50.000)' },
   ];
 
   useEffect(() => {
-    fetchRetailDonations();
+    fetchRetailDonations(); // Changed function name
   }, []);
 
-  const fetchRetailDonations = async () => {
+  const fetchRetailDonations = async () => { // Changed function name
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/donation/retail');
+      const response = await fetch('http://127.0.0.1:8000/api/donation/retail'); // Changed API endpoint
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Gagal mengambil data Retail Donation.');
+        const errorText = await response.text();
+        console.error('HTTP Error response (raw text):', errorText);
+        let errorMessage = 'Failed to fetch Retail Donation data.'; // Changed message
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.message || (errorJson.errors ? Object.values(errorJson.errors).flat().join('; ') : errorMessage);
+        } catch (e) {
+          // If response is not JSON, use raw text as error message
+        }
+        throw new Error(errorMessage);
       }
       const data = await response.json();
-      setRetailDonations(data);
+      setRetailDonations(data); // Changed set state
     } catch (error) {
-      console.error('Error fetching retail donations:', error);
-      setToastMessage(`Gagal mengambil Retail Donation: ${error.message}`);
+      console.error('Error fetching retail donations:', error); // Changed message
+      setToastMessage(`Failed to fetch Retail Donation data: ${error.message}`); // Changed message
       setToastType('error');
       setShowToast(true);
     }
@@ -73,9 +77,7 @@ const RetailDonation = () => {
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      donation_informations_id: '',
-      title: '',
-      description: '',
+      donation_title: '',
       pricing: '',
     });
     setShowModal(true);
@@ -98,8 +100,13 @@ const RetailDonation = () => {
     try {
       const method = currentItem ? 'PUT' : 'POST';
       const url = currentItem
-        ? `http://127.0.0.1:8000/api/donation/retail/${currentItem.id}`
-        : 'http://127.0.0.1:8000/api/donation/retail';
+        ? `http://127.0.0.1:8000/api/donation/retail/${currentItem.id}` // Changed API endpoint
+        : 'http://127.0.0.1:8000/api/donation/retail'; // Changed API endpoint
+
+      const dataToSend = {
+        donation_title: formData.donation_title,
+        pricing: formData.pricing,
+      };
 
       const response = await fetch(url, {
         method,
@@ -107,37 +114,38 @@ const RetailDonation = () => {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       if (!response.ok) {
         let errorData;
+        const errorText = await response.text();
         try {
-          errorData = await response.json();
+          errorData = JSON.parse(errorText);
         } catch (jsonError) {
-          errorData = response.statusText;
-          console.error("Gagal parse respons error sebagai JSON:", jsonError);
+          console.error('Failed to parse error response as JSON:', jsonError);
+          errorData = { message: errorText };
         }
 
-        let errorMessage = 'Terjadi kesalahan.';
-        if (typeof errorData === 'string') {
-            errorMessage = errorData;
-        } else if (errorData && errorData.message) {
-            errorMessage = errorData.message;
+        let errorMessage = 'An error occurred.';
+        if (errorData && errorData.message) {
+          errorMessage = errorData.message;
         } else if (errorData && errorData.errors) {
-            errorMessage = Object.values(errorData.errors).flat().join('; ');
+          errorMessage = Object.values(errorData.errors).flat().join('; ');
+        } else if (typeof errorData === 'string') {
+          errorMessage = errorData;
         }
         throw new Error(errorMessage);
       }
 
-      fetchRetailDonations();
+      fetchRetailDonations(); // Changed function call
       handleCloseModal();
-      setToastMessage(currentItem ? 'Retail Donation berhasil diperbarui.' : 'Retail Donation berhasil ditambahkan.');
+      setToastMessage(currentItem ? 'Retail Donation data updated successfully.' : 'Retail Donation data added successfully.'); // Changed message
       setToastType('success');
       setShowToast(true);
     } catch (error) {
-      console.error('Error submitting retail donation:', error);
-      setToastMessage(`Gagal menyimpan Retail Donation: ${error.message}`);
+      console.error('Error submitting retail donation data:', error); // Changed message
+      setToastMessage(`Failed to save Retail Donation data: ${error.message}`); // Changed message
       setToastType('error');
       setShowToast(true);
     }
@@ -146,41 +154,40 @@ const RetailDonation = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      donation_informations_id: item.donation_informations_id,
-      title: item.title,
-      description: item.description,
+      donation_title: item.donation_title,
       pricing: item.pricing,
     });
     setShowModal(true);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+    if (window.confirm('Are you sure you want to delete this data?')) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/donation/retail/${id}`, { method: 'DELETE' });
+        const response = await fetch(`http://127.0.0.1:8000/api/donation/retail/${id}`, { method: 'DELETE' }); // Changed API endpoint
         if (!response.ok) {
           let errorData;
+          const errorText = await response.text();
           try {
-            errorData = await response.json();
+            errorData = JSON.parse(errorText);
           } catch (jsonError) {
-            errorData = response.statusText;
-            console.error("Gagal parse respons error hapus sebagai JSON:", jsonError);
+            console.error('Failed to parse delete error response as JSON:', jsonError);
+            errorData = { message: errorText };
           }
-          let errorMessage = 'Gagal menghapus Retail Donation.';
-          if (typeof errorData === 'string') {
-              errorMessage = errorData;
-          } else if (errorData && errorData.message) {
-              errorMessage = errorData.message;
+          let errorMessage = 'Failed to delete Retail Donation data.'; // Changed message
+          if (errorData && errorData.message) {
+            errorMessage = errorData.message;
+          } else if (typeof errorData === 'string') {
+            errorMessage = errorData;
           }
           throw new Error(errorMessage);
         }
-        fetchRetailDonations();
-        setToastMessage('Retail Donation berhasil dihapus.');
+        fetchRetailDonations(); // Changed function call
+        setToastMessage('Retail Donation data deleted successfully.'); // Changed message
         setToastType('success');
         setShowToast(true);
       } catch (error) {
-        console.error('Error deleting retail donation:', error);
-        setToastMessage(`Terjadi kesalahan saat menghapus: ${error.message}`);
+        console.error('Error deleting retail donation data:', error); // Changed message
+        setToastMessage(`An error occurred while deleting Retail Donation data: ${error.message}`); // Changed message
         setToastType('error');
         setShowToast(true);
       }
@@ -199,15 +206,15 @@ const RetailDonation = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-6xl">
+    <div className="container mx-auto p-4 max-w-5xl">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Retail Donation</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-0">Retail Donation Data</h2> {/* Changed title */}
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
         >
-          Tambah Retail Donation
-        </button>
+          Add Retail Donation
+        </button> {/* Changed button text */}
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg">
@@ -215,23 +222,19 @@ const RetailDonation = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Donation ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
-              <th className="py-3 px-6 text-left">Description</th>
+              <th className="py-3 px-6 text-left">Donation Title</th>
               <th className="py-3 px-6 text-left">Pricing</th>
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
-            {retailDonations.map((item, index) => (
+            {retailDonations.map((item, index) => ( // Iterating over retailDonations
               <tr
                 key={item.id}
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.donation_informations_id}</td>
-                <td className="py-3 px-6 text-left">{item.title}</td>
-                <td className="py-3 px-6 text-left">{item.description}</td>
+                <td className="py-3 px-6 text-left">{item.donation_title}</td>
                 <td className="py-3 px-6 text-left">{item.pricing}</td>
                 <td className="py-3 px-6 text-center">
                   <button
@@ -244,7 +247,7 @@ const RetailDonation = () => {
                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                     onClick={() => handleDelete(item.id)}
                   >
-                    Hapus
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -253,23 +256,24 @@ const RetailDonation = () => {
         </table>
       </div>
 
+      {/* Modal Form */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center z-50 transition-opacity duration-300 ease-out"
+          className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center z-50 transition-opacity duration-300 ease-out"
           style={{ opacity: showModal ? 1 : 0 }}
           onClick={handleCloseModal}
         >
           <div
-            className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
+            className="relative p-6 bg-white w-full max-w-lg mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out my-8 max-h-[90vh] overflow-y-auto"
             style={{
-                transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-                opacity: showModal ? 1 : 0
+              transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
+              opacity: showModal ? 1 : 0
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit Retail Donation' : 'Tambah Retail Donation'}
+                {currentItem ? 'Edit Retail Donation' : 'Add Retail Donation'} {/* Changed title */}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -292,19 +296,19 @@ const RetailDonation = () => {
                       onChange={handleChange}
                       rows={3}
                       required={field.required}
-                      placeholder={field.placeholder}
                       className="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
-                    ></textarea>
+                      placeholder={field.placeholder}
+                    />
                   ) : (
                     <input
-                      id={field.name}
                       type={field.type}
+                      id={field.name}
                       name={field.name}
                       value={formData[field.name]}
                       onChange={handleChange}
                       required={field.required}
-                      placeholder={field.placeholder}
                       className="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
+                      placeholder={field.placeholder}
                     />
                   )}
                 </div>
@@ -314,7 +318,7 @@ const RetailDonation = () => {
                   type="submit"
                   className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {currentItem ? 'Perbarui' : 'Simpan'}
+                  {currentItem ? 'Update' : 'Save'}
                 </button>
               </div>
             </form>
@@ -322,6 +326,7 @@ const RetailDonation = () => {
         </div>
       )}
 
+      {/* Toast Notification */}
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-slideInFromRight">
           <div className={`${getToastColor(toastType)} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}>

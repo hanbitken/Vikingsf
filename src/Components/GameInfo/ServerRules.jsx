@@ -5,9 +5,9 @@ const ServerRules = () => {
   const [serverRules, setServerRules] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
-    title: '',
+    rules: '',
     description: '',
+    category: '', // Added category to formData
   });
   const [currentRule, setCurrentRule] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
@@ -15,9 +15,9 @@ const ServerRules = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'Game Info ID', name: 'game_information_id', type: 'number', required: true, placeholder: 'Enter Game Info ID (e.g., 1)' },
-    { label: 'Title', name: 'title', type: 'text', required: true, placeholder: 'Enter rule title' },
+    { label: 'Rules', name: 'rules', type: 'text', required: true, placeholder: 'Enter rule title' },
     { label: 'Description', name: 'description', type: 'textarea', required: false, placeholder: 'Write each list item on a new line. Example:\nFirst item\nSecond item' },
+    { label: 'Category', name: 'category', type: 'text', required: true, placeholder: 'Enter rule category' }, // Added category form field
   ];
 
   useEffect(() => {
@@ -72,9 +72,9 @@ const ServerRules = () => {
   const handleShowModal = () => {
     setCurrentRule(null);
     setFormData({
-      game_information_id: '',
-      title: '',
+      rules: '',
       description: '',
+      category: '', // Reset category when opening for add
     });
     setShowModal(true);
   };
@@ -155,9 +155,9 @@ const ServerRules = () => {
   const handleEdit = (rule) => {
     setCurrentRule(rule);
     setFormData({
-      game_information_id: rule.game_information_id,
-      title: rule.title,
+      rules: rule.rules,
       description: rule.description,
+      category: rule.category, // Populate category when editing
     });
     setShowModal(true);
   };
@@ -230,8 +230,8 @@ const ServerRules = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Game Info ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
+              <th className="py-3 px-6 text-left">Rules</th>
+              <th className="py-3 px-6 text-left">Category</th> {/* Added Category column header */}
               <th className="py-3 px-6 text-left">Description</th>
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
@@ -243,8 +243,8 @@ const ServerRules = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{rule.id}</td>
-                <td className="py-3 px-6 text-left">{rule.game_information_id}</td>
-                <td className="py-3 px-6 text-left">{rule.title}</td>
+                <td className="py-3 px-6 text-left">{rule.rules}</td>
+                <td className="py-3 px-6 text-left">{rule.category}</td> {/* Display category */}
                 <td className="py-3 px-6 text-left">
                   {rule.description && (
                     <ol className="list-decimal list-inside pl-4 m-0">
@@ -325,12 +325,10 @@ const ServerRules = () => {
                       onChange={handleChange}
                       required={field.required}
                       placeholder={field.placeholder}
-                      disabled={currentRule && field.name === 'game_information_id'}
                       className={`
                         shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         transition duration-150 ease-in-out
-                        ${currentRule && field.name === 'game_information_id' ? 'bg-gray-100 cursor-not-allowed' : ''}
                       `}
                     />
                   )}

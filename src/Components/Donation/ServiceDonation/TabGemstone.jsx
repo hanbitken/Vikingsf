@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
 
 const TabGemstone = () => {
   const [gemstones, setGemstones] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    donation_informations_id: '',
-    title: '',
-    description: '',
+    donation_title: '', // Changed to donation_title
     pricing: '',
   });
   const [currentItem, setCurrentItem] = useState(null);
@@ -16,9 +13,7 @@ const TabGemstone = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'Donation Info ID', name: 'donation_informations_id', type: 'number', required: true, placeholder: 'Enter Donation Info ID' },
-    { label: 'Title', name: 'title', type: 'text', required: true, placeholder: 'Enter Title' },
-    { label: 'Description', name: 'description', type: 'textarea', required: true, placeholder: 'Enter Description' },
+    { label: 'Donation Title', name: 'donation_title', type: 'text', required: true, placeholder: 'Enter Donation Title' }, // Label and name changed
     { label: 'Pricing', name: 'pricing', type: 'text', required: true, placeholder: 'Enter Pricing (e.g., Rp. 50.000)' },
   ];
 
@@ -32,11 +27,12 @@ const TabGemstone = () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('HTTP Error response (raw text):', errorText);
-        let errorMessage = 'Gagal mengambil data Gemstone.';
+        let errorMessage = 'Failed to fetch Gemstone data.';
         try {
           const errorJson = JSON.parse(errorText);
           errorMessage = errorJson.message || (errorJson.errors ? Object.values(errorJson.errors).flat().join('; ') : errorMessage);
         } catch (e) {
+          // If response is not JSON, use raw text as error message
         }
         throw new Error(errorMessage);
       }
@@ -44,7 +40,7 @@ const TabGemstone = () => {
       setGemstones(data);
     } catch (error) {
       console.error('Error fetching gemstones:', error);
-      setToastMessage(`Gagal mengambil data Gemstone: ${error.message}`);
+      setToastMessage(`Failed to fetch Gemstone data: ${error.message}`);
       setToastType('error');
       setShowToast(true);
     }
@@ -78,13 +74,10 @@ const TabGemstone = () => {
     };
   }, [showModal]);
 
-
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      donation_informations_id: '',
-      title: '',
-      description: '',
+      donation_title: '', 
       pricing: '',
     });
     setShowModal(true);
@@ -110,13 +103,18 @@ const TabGemstone = () => {
         ? `http://127.0.0.1:8000/api/donation/service/gemstone/${currentItem.id}`
         : 'http://127.0.0.1:8000/api/donation/service/gemstone';
 
+      const dataToSend = {
+        donation_title: formData.donation_title, // Using donation_title
+        pricing: formData.pricing,
+      };
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       if (!response.ok) {
@@ -125,11 +123,11 @@ const TabGemstone = () => {
         try {
           errorData = JSON.parse(errorText);
         } catch (jsonError) {
-          console.error('Gagal parse respons error sebagai JSON:', jsonError);
+          console.error('Failed to parse error response as JSON:', jsonError);
           errorData = { message: errorText };
         }
 
-        let errorMessage = 'Terjadi kesalahan.';
+        let errorMessage = 'An error occurred.';
         if (errorData && errorData.message) {
           errorMessage = errorData.message;
         } else if (errorData && errorData.errors) {
@@ -142,12 +140,12 @@ const TabGemstone = () => {
 
       fetchGemstones();
       handleCloseModal();
-      setToastMessage(currentItem ? 'Data Gemstone berhasil diperbarui.' : 'Data Gemstone berhasil ditambahkan.');
+      setToastMessage(currentItem ? 'Gemstone data updated successfully.' : 'Gemstone data added successfully.');
       setToastType('success');
       setShowToast(true);
     } catch (error) {
       console.error('Error submitting gemstone data:', error);
-      setToastMessage(`Gagal menyimpan data Gemstone: ${error.message}`);
+      setToastMessage(`Failed to save Gemstone data: ${error.message}`);
       setToastType('error');
       setShowToast(true);
     }
@@ -156,16 +154,14 @@ const TabGemstone = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      donation_informations_id: item.donation_informations_id,
-      title: item.title,
-      description: item.description,
+      donation_title: item.donation_title, 
       pricing: item.pricing,
     });
     setShowModal(true);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+    if (window.confirm('Are you sure you want to delete this data?')) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/donation/service/gemstone/${id}`, { method: 'DELETE' });
         if (!response.ok) {
@@ -174,10 +170,10 @@ const TabGemstone = () => {
           try {
             errorData = JSON.parse(errorText);
           } catch (jsonError) {
-            console.error('Gagal parse respons error hapus sebagai JSON:', jsonError);
+            console.error('Failed to parse delete error response as JSON:', jsonError);
             errorData = { message: errorText };
           }
-          let errorMessage = 'Gagal menghapus data Gemstone.';
+          let errorMessage = 'Failed to delete Gemstone data.';
           if (errorData && errorData.message) {
             errorMessage = errorData.message;
           } else if (typeof errorData === 'string') {
@@ -186,12 +182,12 @@ const TabGemstone = () => {
           throw new Error(errorMessage);
         }
         fetchGemstones();
-        setToastMessage('Data Gemstone berhasil dihapus.');
+        setToastMessage('Gemstone data deleted successfully.');
         setToastType('success');
         setShowToast(true);
       } catch (error) {
         console.error('Error deleting gemstone data:', error);
-        setToastMessage(`Terjadi kesalahan saat menghapus data Gemstone: ${error.message}`);
+        setToastMessage(`An error occurred while deleting Gemstone data: ${error.message}`);
         setToastType('error');
         setShowToast(true);
       }
@@ -217,7 +213,7 @@ const TabGemstone = () => {
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
         >
-          Tambah Gemstone
+          Add Gemstone
         </button>
       </div>
 
@@ -226,11 +222,8 @@ const TabGemstone = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Donation Info ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
-              <th className="py-3 px-6 text-left">Description</th>
+              <th className="py-3 px-6 text-left">Donation Title</th>
               <th className="py-3 px-6 text-left">Pricing</th>
-              {/* Kolom Timestamp dihapus dari header */}
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
@@ -241,9 +234,7 @@ const TabGemstone = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.donation_informations_id}</td>
-                <td className="py-3 px-6 text-left">{item.title}</td>
-                <td className="py-3 px-6 text-left">{item.description}</td>
+                <td className="py-3 px-6 text-left">{item.donation_title}</td> 
                 <td className="py-3 px-6 text-left">{item.pricing}</td>
                 <td className="py-3 px-6 text-center">
                   <button
@@ -256,7 +247,7 @@ const TabGemstone = () => {
                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                     onClick={() => handleDelete(item.id)}
                   >
-                    Hapus
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -268,7 +259,7 @@ const TabGemstone = () => {
       {/* Modal Form */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center z-50 transition-opacity duration-300 ease-out"
+          className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex justify-center items-center z-50 transition-opacity duration-300 ease-out"
           style={{ opacity: showModal ? 1 : 0 }}
           onClick={handleCloseModal}
         >
@@ -282,7 +273,7 @@ const TabGemstone = () => {
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit Gemstone' : 'Tambah Gemstone'}
+                {currentItem ? 'Edit Gemstone' : 'Add Gemstone'}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -313,7 +304,7 @@ const TabGemstone = () => {
                       type={field.type}
                       id={field.name}
                       name={field.name}
-                      value={field.type === 'number' && formData[field.name] !== '' ? Number(formData[field.name]) : formData[field.name]}
+                      value={formData[field.name]}
                       onChange={handleChange}
                       required={field.required}
                       className="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
@@ -327,7 +318,7 @@ const TabGemstone = () => {
                   type="submit"
                   className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {currentItem ? 'Perbarui' : 'Simpan'}
+                  {currentItem ? 'Update' : 'Save'}
                 </button>
               </div>
             </form>

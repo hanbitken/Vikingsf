@@ -4,8 +4,7 @@ const ServersInformation = () => {
   const [serversInformation, setServersInformation] = useState([]); 
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
-    title: '',
+    server_info: '',
     description: '',
   });
   const [currentItem, setCurrentItem] = useState(null);
@@ -14,8 +13,7 @@ const ServersInformation = () => {
   const [toastType, setToastType] = useState('info'); 
 
   const formFields = [
-    { label: 'Game Info ID', name: 'game_information_id', type: 'number', required: true, placeholder: 'Enter Game Info ID (e.g., 1)' },
-    { label: 'Title', name: 'title', type: 'text', required: true },
+    { label: 'Server Information', name: 'server_info', type: 'text', required: true },
     { label: 'Description', name: 'description', type: 'textarea', required: false },
   ];
 
@@ -70,8 +68,7 @@ const ServersInformation = () => {
   const handleShowModal = () => {
     setCurrentItem(null); 
     setFormData({
-      game_information_id: '',
-      title: '',
+      server_info: '',
       description: '',
     });
     setShowModal(true);
@@ -145,8 +142,7 @@ const ServersInformation = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
-      title: item.title,
+      server_info: item.server_info,
       description: item.description,
     });
     setShowModal(true);
@@ -220,8 +216,7 @@ const ServersInformation = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Game Info ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
+              <th className="py-3 px-6 text-left">Server Information</th>
               <th className="py-3 px-6 text-left">Description</th>
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
@@ -233,8 +228,7 @@ const ServersInformation = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.game_information_id}</td>
-                <td className="py-3 px-6 text-left">{item.title}</td>
+                <td className="py-3 px-6 text-left">{item.server_info}</td> {/* Changed from item.title to item.server_info */}
                 <td className="py-3 px-6 text-left">{item.description}</td>
                 <td className="py-3 px-6 text-center">
                   <button
@@ -307,12 +301,10 @@ const ServersInformation = () => {
                       onChange={handleChange}
                       required={field.required}
                       placeholder={field.placeholder}
-                      disabled={currentItem && field.name === 'game_information_id'} 
                       className={`
                         shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         transition duration-150 ease-in-out
-                        ${currentItem && field.name === 'game_information_id' ? 'bg-gray-100 cursor-not-allowed' : ''}
                       `}
                     />
                   )}

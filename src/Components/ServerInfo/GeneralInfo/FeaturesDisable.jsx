@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// dayjs is no longer needed if timestamps are not displayed
-// import dayjs from 'dayjs';
 
 const FeaturesDisable = () => {
   const [featuresDisables, setFeaturesDisables] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
     title: '',
     description: '',
   });
@@ -16,12 +13,10 @@ const FeaturesDisable = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'Game Info ID', name: 'game_information_id', type: 'number', required: true, placeholder: 'Enter Game Info ID (e.g., 1)' },
-    { label: 'Title', name: 'title', type: 'text', required: true },
+    { label: 'Feature', name: 'feature', type: 'text', required: true },
     { label: 'Description', name: 'description', type: 'textarea', required: false },
   ];
 
-  // Fetch Features Disable data on component mount
   useEffect(() => {
     fetchFeaturesDisables();
   }, []);
@@ -75,8 +70,7 @@ const FeaturesDisable = () => {
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      game_information_id: '',
-      title: '',
+      feature: '',
       description: '',
     });
     setShowModal(true);
@@ -150,8 +144,7 @@ const FeaturesDisable = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
-      title: item.title,
+      feature: item.feature,
       description: item.description,
     });
     setShowModal(true);
@@ -225,10 +218,8 @@ const FeaturesDisable = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Game Info ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
+              <th className="py-3 px-6 text-left">Feature</th>
               <th className="py-3 px-6 text-left">Description</th>
-              {/* Kolom Created At dan Updated At dihapus */}
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
@@ -239,10 +230,8 @@ const FeaturesDisable = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.game_information_id}</td>
-                <td className="py-3 px-6 text-left">{item.title}</td>
+                <td className="py-3 px-6 text-left">{item.feature}</td>
                 <td className="py-3 px-6 text-left">{item.description}</td>
-                {/* Data Created At dan Updated At tidak ditampilkan */}
                 <td className="py-3 px-6 text-center">
                   <button
                     className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-xs mr-2 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-200 ease-in-out"

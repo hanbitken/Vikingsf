@@ -7,7 +7,6 @@ const GemInformation = () => {
     name_item: '',
     type: '',
     trade: '',
-    game_information_id: '',
   });
   const [imageFile, setImageFile] = useState(null);
   const [currentItem, setCurrentItem] = useState(null);
@@ -68,7 +67,7 @@ const GemInformation = () => {
       name_item: '',
       type: '',
       trade: '',
-      game_information_id: '',
+
     });
     setImageFile(null);
     setShowModal(true);
@@ -107,7 +106,6 @@ const GemInformation = () => {
       formDataToSend.append('name_item', formData.name_item);
       formDataToSend.append('type', formData.type);
       formDataToSend.append('trade', formData.trade);
-      formDataToSend.append('game_information_id', formData.game_information_id);
       
       if (isUpdate) {
         formDataToSend.append('_method', 'PUT');
@@ -156,7 +154,6 @@ const GemInformation = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
       name_item: item.name_item,
       type: item.type,
       trade: item.trade,
@@ -216,12 +213,12 @@ const GemInformation = () => {
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Informasi Gem</h2>
+        <h2 className="text-3xl font-bold text-gray-800">Gem Information</h2>
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
         >
-          Tambah Informasi Gem
+          Tambah Gem Information
         </button>
       </div>
 
@@ -230,12 +227,11 @@ const GemInformation = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">ID Info Game</th>
-              <th className="py-3 px-6 text-left">Gambar</th>
-              <th className="py-3 px-6 text-left">Nama Item</th>
-              <th className="py-3 px-6 text-left">Tipe</th>
-              <th className="py-3 px-6 text-left">Perdagangan</th>
-              <th className="py-3 px-6 text-center">Aksi</th>
+              <th className="py-3 px-6 text-left">Image</th>
+              <th className="py-3 px-6 text-left">Item Name</th>
+              <th className="py-3 px-6 text-left">Type</th>
+              <th className="py-3 px-6 text-left">Trade</th>
+              <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
@@ -245,7 +241,6 @@ const GemInformation = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.game_information_id}</td>
                 <td className="py-3 px-6 text-left">
                   {item.image ? (
                     <img
@@ -301,7 +296,7 @@ const GemInformation = () => {
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit Informasi Gem' : 'Tambah Informasi Gem'}
+                {currentItem ? 'Edit Gem Information' : 'Tambah Gem Information'}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -312,22 +307,8 @@ const GemInformation = () => {
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
               <div className="mb-4">
-                <label htmlFor="game_information_id" className="block text-gray-700 text-sm font-bold mb-2">
-                  ID Info Game
-                </label>
-                <input
-                  type="number"
-                  id="game_information_id"
-                  name="game_information_id"
-                  value={formData.game_information_id}
-                  onChange={handleChange}
-                  className="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out"
-                  required
-                />
-              </div>
-              <div className="mb-4">
                 <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
-                  Gambar
+                  Image
                 </label>
                 <input
                   type="file"
@@ -339,7 +320,7 @@ const GemInformation = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="name_item" className="block text-gray-700 text-sm font-bold mb-2">
-                  Nama Item
+                  Item Name
                 </label>
                 <input
                   type="text"
@@ -353,7 +334,7 @@ const GemInformation = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="type" className="block text-gray-700 text-sm font-bold mb-2">
-                  Tipe
+                  Type
                 </label>
                 <input
                   type="text"
@@ -367,7 +348,7 @@ const GemInformation = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="trade" className="block text-gray-700 text-sm font-bold mb-2">
-                  Perdagangan
+                  Trade
                 </label>
                 <input
                   type="text"

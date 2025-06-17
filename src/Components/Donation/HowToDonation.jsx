@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
 
 const HowToDonation = () => {
   const [howToDonations, setHowToDonations] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    donation_informations_id: '',
-    title: '',
+    donation_guide: '',
     description: '',
   });
   const [currentItem, setCurrentItem] = useState(null);
@@ -15,8 +13,7 @@ const HowToDonation = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'Donation ID', name: 'donation_informations_id', type: 'number', required: true, placeholder: 'Enter Donation Info ID (e.g., 1)' },
-    { label: 'Title', name: 'title', type: 'text', required: true, placeholder: 'Enter title for how-to guide' },
+    { label: 'Donation Guide', name: 'donation_guide', type: 'text', required: true, placeholder: 'Enter title for how-to guide' },
     { label: 'Description', name: 'description', type: 'textarea', required: false, placeholder: 'Enter description steps, each on a new line. Example:\n1. Open donation menu\n2. Select amount' },
   ];
 
@@ -72,8 +69,7 @@ const HowToDonation = () => {
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      donation_informations_id: '',
-      title: '',
+      donation_guide: '',
       description: '',
     });
     setShowModal(true);
@@ -144,8 +140,7 @@ const HowToDonation = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      donation_informations_id: item.donation_informations_id,
-      title: item.title,
+      donation_guide: item.donation_guide,
       description: item.description,
     });
     setShowModal(true);
@@ -226,8 +221,7 @@ const HowToDonation = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Donation ID</th>
-              <th className="py-3 px-6 text-left">Title</th>
+              <th className="py-3 px-6 text-left">Donation Guide</th>
               <th className="py-3 px-6 text-left">Description</th>
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
@@ -239,8 +233,7 @@ const HowToDonation = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.donation_informations_id}</td>
-                <td className="py-3 px-6 text-left">{item.title}</td>
+                <td className="py-3 px-6 text-left">{item.donation_guide}</td>
                 <td className="py-3 px-6 text-left">
                     {renderAsOrderedList(item.description)}
                 </td>

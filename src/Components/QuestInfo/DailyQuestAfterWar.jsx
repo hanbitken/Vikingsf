@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
 
 const DailyQuestAfterWar = () => {
   const [dailyQuestAfterWars, setDailyQuestAfterWars] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
     category: '',
     daily_quest: '',
     map: '',
@@ -19,13 +17,12 @@ const DailyQuestAfterWar = () => {
   const [toastType, setToastType] = useState('info');
 
   const formFields = [
-    { label: 'ID Informasi Game', name: 'game_information_id', type: 'number', required: true, placeholder: 'Masukkan ID Informasi Game (misalnya, 1)' },
-    { label: 'Kategori', name: 'category', type: 'text', required: true, placeholder: 'Masukkan Kategori (misalnya, Harian)' },
-    { label: 'Gambar', name: 'image', type: 'file', required: false, multiple: false },
-    { label: 'Quest Harian', name: 'daily_quest', type: 'text', required: true, placeholder: 'Masukkan nama quest harian' },
-    { label: 'Peta', name: 'map', type: 'text', required: true, placeholder: 'Masukkan nama peta' },
+    { label: 'Category', name: 'category', type: 'text', required: true, placeholder: 'Masukkan Kategori (misalnya, Harian)' },
+    { label: 'Image', name: 'image', type: 'file', required: false, multiple: false },
+    { label: 'Daily Quest', name: 'daily_quest', type: 'text', required: true, placeholder: 'Masukkan nama quest harian' },
+    { label: 'Map', name: 'map', type: 'text', required: true, placeholder: 'Masukkan nama peta' },
     { label: 'Quest', name: 'quest', type: 'textarea', required: false, placeholder: 'Masukkan langkah-langkah quest, setiap baris baru. Contoh:\nLangkah 1\nLangkah 2' },
-    { label: 'Hadiah', name: 'reward', type: 'textarea', required: false, placeholder: 'Masukkan hadiah, setiap baris baru. Contoh:\nItem A\nItem B' },
+    { label: 'Reward', name: 'reward', type: 'textarea', required: false, placeholder: 'Masukkan hadiah, setiap baris baru. Contoh:\nItem A\nItem B' },
   ];
 
   useEffect(() => {
@@ -78,7 +75,6 @@ const DailyQuestAfterWar = () => {
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      game_information_id: '',
       category: '',
       daily_quest: '',
       map: '',
@@ -166,7 +162,6 @@ const DailyQuestAfterWar = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
       category: item.category,
       daily_quest: item.daily_quest,
       map: item.map,
@@ -254,14 +249,13 @@ const DailyQuestAfterWar = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">ID Informasi Game</th>
-              <th className="py-3 px-6 text-left">Kategori</th>
-              <th className="py-3 px-6 text-left">Gambar</th>
-              <th className="py-3 px-6 text-left">Quest Harian</th>
-              <th className="py-3 px-6 text-left">Peta</th>
+              <th className="py-3 px-6 text-left">Category</th>
+              <th className="py-3 px-6 text-left">Image</th>
+              <th className="py-3 px-6 text-left">Daily Quest</th>
+              <th className="py-3 px-6 text-left">Map</th>
               <th className="py-3 px-6 text-left">Quest</th>
-              <th className="py-3 px-6 text-left">Hadiah</th>
-              <th className="py-3 px-6 text-center">Aksi</th>
+              <th className="py-3 px-6 text-left">Reward</th>
+              <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
@@ -271,7 +265,6 @@ const DailyQuestAfterWar = () => {
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
                 <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.game_information_id}</td>
                 <td className="py-3 px-6 text-left">{item.category}</td>
                 <td className="py-3 px-6 text-left">
                   {typeof item.image === 'string' && item.image ? (

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs'; // dayjs is still imported, but not used for display anymore
-
 const NpcList = () => {
   const [npcLists, setNpcLists] = useState([]);
   const [showModal, setShowModal] = useState(false);

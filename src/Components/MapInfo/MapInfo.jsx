@@ -5,7 +5,6 @@ const MapInfo = () => {
   const [mapData, setMapData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    game_information_id: '',
     map_name: '',
   });
   const [imageFile, setImageFile] = useState(null);
@@ -16,9 +15,8 @@ const MapInfo = () => {
   const [imageRemoved, setImageRemoved] = useState(false);
 
   const formFields = [
-    { label: 'ID Informasi Game', name: 'game_information_id', type: 'number', required: true, placeholder: 'Masukkan ID Informasi Game (misalnya, 1)' },
-    { label: 'Nama Map', name: 'map_name', type: 'text', required: true, placeholder: 'Masukkan Nama Map (misalnya, Elan Plateau)' },
-    { label: 'Gambar', name: 'image', type: 'file', required: false, multiple: false },
+    { label: 'Map Name', name: 'map_name', type: 'text', required: true, placeholder: 'Masukkan Nama Map (misalnya, Elan Plateau)' },
+    { label: 'Image', name: 'image', type: 'file', required: false, multiple: false },
   ];
 
   const BASE_API_URL = 'http://127.0.0.1:8000/api/game-info/mapinfo';
@@ -110,7 +108,6 @@ const MapInfo = () => {
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      game_information_id: '',
       map_name: '',
     });
     setImageFile(null);
@@ -225,7 +222,6 @@ const MapInfo = () => {
   const handleEdit = (item) => {
     setCurrentItem(item);
     setFormData({
-      game_information_id: item.game_information_id,
       map_name: item.map_name,
     });
     setImageFile(null);
@@ -316,10 +312,9 @@ const MapInfo = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">ID Informasi Game</th>
-              <th className="py-3 px-6 text-left">Nama Map</th>
-              <th className="py-3 px-6 text-left">Gambar</th>
-              <th className="py-3 px-6 text-center">Aksi</th>
+              <th className="py-3 px-6 text-left">Map Name</th>
+              <th className="py-3 px-6 text-left">Image</th>
+              <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
@@ -330,7 +325,6 @@ const MapInfo = () => {
                   className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
                 >
                   <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                  <td className="py-3 px-6 text-left">{item.game_information_id}</td>
                   <td className="py-3 px-6 text-left">{item.map_name}</td>
                   <td className="py-3 px-6 text-left">
                     {typeof item.image === 'string' && item.image ? (
