@@ -42,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen w-screen bg-black flex items-center justify-center overflow-x-hidden">
       {/* Bungkus dengan border */}
       <div className="border border-yellow-300 rounded-lg p-8 w-full max-w-md shadow-[0_0_15px_#facc15] flex flex-col items-center">
         {/* Logo */}

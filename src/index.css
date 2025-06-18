@@ -1,7 +1,19 @@
 @import "tailwindcss";
-
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
+
+/* Tambahkan fix ini: */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 
 .gold-border {
   position: relative;
@@ -10,7 +22,6 @@
   color: white;
 }
 
-<<<<<<< HEAD
 .gold-border::before {
   content: '';
   position: absolute;
@@ -25,87 +36,3 @@
   mask-composite: exclude;
   pointer-events: none;
 }
-=======
-/* Definisikan gambar latar belakang default (light mode) */
-.light-mode-bg {
-  background-image: var(--light-bg-image);
-  /* Menggunakan variabel CSS */
-}
-
-/* Definisikan gambar latar belakang untuk dark mode */
-.dark-mode-bg {
-  background-image: var(--dark-bg-image);
-  /* Menggunakan variabel CSS */
-}
-
-/* Ketika dark mode aktif, timpa variabel CSS pada elemen <html> */
-html.dark {
-  /* Ini akan menimpa variabel --current-bg-image pada <html> */
-  --current-bg-image: var(--dark-bg-image);
-}
-
-:root {
-  font-family: "Bebas Neue", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  --light-bg-image: url('./assets/Picture/background.png');
-  /* Gambar terang Anda */
-  --dark-bg-image: url('./assets/Picture/atas-gelap.png');
-  --dark-bg-image: url('./assets/Picture/tengah-gelap.png');
-  --dark-bg-image: url('./assets/Picture/bawah.gif');
-  /* --dark-bg-image: url('./assets/Picture/tengah-gelap.png');
-  --dark-bg-image: url('https://tenor.com/view/crashout-skeleteon-skeleton-meme-skeleteton-crashout-screaming-gif-2819917983570648755'); */
-  /* Gambar gelap Anda */
-  --current-bg-image: var(--light-bg-image);
-  /* Default: gambar terang */
-}
-
-.main-background-container {
-  background-image: var(--current-bg-image);
-  transition: background-image 0s, background-color 0.3s ease; /* Transisi untuk warna, bukan gambar */
-}
-
-.bebas-neue-regular {
-  font-family: "Bebas Neue", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
-}
->>>>>>> parent of 8f8abd6 (Merge branch 'admin-dashboard' into Homepage)
