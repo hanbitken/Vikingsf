@@ -25,7 +25,6 @@ const Admin_Sidebar = ({ onMenuClick, activePage }) => {
     { id: "news", label: "News" },
     { id: "user", label: "User" },
     { id: "settings", label: "Settings" },
-    { id: "home", label: "Home" },
     { id: "logout", label: "Logout" },
   ];
 
