@@ -84,9 +84,6 @@ export default function Home() {
         <div className="!flex !flex-col !items-center !justify-center !mx-8">
           <img src={LOGO} alt="Logo" className="!w-[40%] !mt-12" />
           <img src={Line} alt="Line" className="!w-full" />
-          <div className="!text-red-500 !font-bold !underline">
-            Test Tailwind
-          </div>
         </div>
 
         <div className="!flex !flex-col !gap-8 !justify-between !pt-12 !w-full !h-full !px-16">
