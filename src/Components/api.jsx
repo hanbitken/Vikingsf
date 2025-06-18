@@ -1,10 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:8000/users'; 
+const api = axios.create({
+  baseURL: "http://localhost:8000/api", // ganti sesuai backend-mu
+  withCredentials: true, // jika pakai Sanctum untuk login
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
 
-export const getUsers = () => axios.get(API_URL);
-export const getUser = (id) => axios.get(`${API_URL}/${id}`);
-export const createUser = (data) => axios.post(API_URL, data);
-export const updateUser = (id, data) => axios.put(`${API_URL}/${id}`, data);
-export const deleteUser = (id) => axios.delete(`${API_URL}/${id}`);
-
+export default api;

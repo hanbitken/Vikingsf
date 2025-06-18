@@ -1,5 +1,6 @@
 import React from 'react';
-import Logo from '../assets/LOGO VIKINGS 1.png'; 
+import Logo from '../assets/LOGO VIKINGS 1.png'; // Pastikan nama file dan ekstensi sesuai
+
 const AdminPage = () => {
   return (
     <div className="h-screen flex">

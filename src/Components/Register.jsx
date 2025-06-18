@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 import Tree from "../assets/Picture/Tree Celtic.png";
-import api from "../assets/logic/api";
+import api from "./api";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -48,7 +48,6 @@ export default function Register() {
       const { token, user } = response.data;
       setMessage("Register Successful! Please login.");
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
       navigate("/");
     } catch (error) {
       if (error.response?.data?.errors) {
