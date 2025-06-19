@@ -14,7 +14,6 @@ import LineQuest from "../assets/Picture/Line-Quest.png";
 export default function Donation() {
   const [openIndex, setOpenIndex] = useState(null);
 
-  // State masing-masing
   const [howToDonationList, setHowToDonationList] = useState([]);
   const [loadingHowTo, setLoadingHowTo] = useState(false);
 
@@ -27,12 +26,17 @@ export default function Donation() {
   const [retailDonations, setRetailDonations] = useState([]);
   const [loadingRetail, setLoadingRetail] = useState(false);
 
+  const [serviceDonations, setServiceDonations] = useState([]);
+  const [gemstoneDonations, setGemstoneDonations] = useState([]);
+  const [resourcesDonations, setResourcesDonations] = useState([]);
+  const [loadingService, setLoadingService] = useState(false);
+
   const quests = [
-    { title: "Retail Donation" }, // ambil dari API
-    { title: "Service Donation", content: "Details for Service Donation..." },
-    { title: "Season Pass" }, // ambil dari API
-    { title: "Package Donation" }, // ambil dari API
-    { title: "How To Donation" }, // ambil dari API
+    { title: "Retail Donation" },
+    { title: "Service Donation" },
+    { title: "Season Pass" },
+    { title: "Package Donation" },
+    { title: "How To Donation" },
   ];
 
   const handleToggle = (index) => {
@@ -47,25 +51,48 @@ export default function Donation() {
         fetch("http://127.0.0.1:8000/api/donation/retail")
           .then((res) => res.json())
           .then((data) => {
-            if (Array.isArray(data)) {
-              setRetailDonations(data);
-            }
+            if (Array.isArray(data)) setRetailDonations(data);
           })
-          .catch((err) => console.error(err))
+          .catch(console.error)
           .finally(() => setLoadingRetail(false));
       }
 
+      // SERVICE + GEMSTONE + RESOURCE
+      if (index === 1 && !loadingService) {
+        setLoadingService(true);
+        Promise.all([
+          fetch("http://127.0.0.1:8000/api/donation/service/services").then((r) =>
+            r.json()
+          ),
+          fetch("http://127.0.0.1:8000/api/donation/service/gemstone").then((r) =>
+            r.json()
+          ),
+          fetch("http://127.0.0.1:8000/api/donation/service/resources").then((r) =>
+            r.json()
+          ),
+        ])
+          .then(([serviceData, gemstoneData, resourceData]) => {
+            if (Array.isArray(serviceData)) setServiceDonations(serviceData);
+            if (Array.isArray(gemstoneData)) setGemstoneDonations(gemstoneData);
+            if (Array.isArray(resourceData)) setResourcesDonations(resourceData);
+          })
+          .catch(console.error)
+          .finally(() => setLoadingService(false));
+      }
+
       // SEASON PASS
-      if (index === 2 && seasonPassDonations.length === 0 && !loadingSeasonPass) {
+      if (
+        index === 2 &&
+        seasonPassDonations.length === 0 &&
+        !loadingSeasonPass
+      ) {
         setLoadingSeasonPass(true);
         fetch("http://127.0.0.1:8000/api/donation/seassonpass")
           .then((res) => res.json())
           .then((data) => {
-            if (Array.isArray(data)) {
-              setSeasonPassDonations(data);
-            }
+            if (Array.isArray(data)) setSeasonPassDonations(data);
           })
-          .catch((err) => console.error(err))
+          .catch(console.error)
           .finally(() => setLoadingSeasonPass(false));
       }
 
@@ -75,11 +102,9 @@ export default function Donation() {
         fetch("http://127.0.0.1:8000/api/donation/packages")
           .then((res) => res.json())
           .then((data) => {
-            if (Array.isArray(data)) {
-              setPackageDonations(data);
-            }
+            if (Array.isArray(data)) setPackageDonations(data);
           })
-          .catch((err) => console.error(err))
+          .catch(console.error)
           .finally(() => setLoadingPackages(false));
       }
 
@@ -89,11 +114,9 @@ export default function Donation() {
         fetch("http://127.0.0.1:8000/api/donation/howto")
           .then((res) => res.json())
           .then((data) => {
-            if (Array.isArray(data)) {
-              setHowToDonationList(data);
-            }
+            if (Array.isArray(data)) setHowToDonationList(data);
           })
-          .catch((err) => console.error(err))
+          .catch(console.error)
           .finally(() => setLoadingHowTo(false));
       }
     }
@@ -138,22 +161,18 @@ export default function Donation() {
                       loadingRetail ? (
                         <p>Loading...</p>
                       ) : retailDonations.length > 0 ? (
-                        <div className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-0">
                           {retailDonations.map((item) => (
                             <div
                               key={item.id}
-                              className="flex flex-row justify-between items-center border-t border-white pt-4"
+                              className="grid grid-cols-2 border-b border-white"
                             >
-                              <div className="flex flex-col">
-                                <div className="text-white font-bold text-lg">
-                                  {item.donation_title}
-                                </div>
-                                <div className="text-yellow-400 font-semibold">
-                                  {item.pricing}
-                                </div>
+                              <div className="text-white font-medium p-2 text-left border-r border-white">
+                                {item.donation_title}
                               </div>
-                              {/* Kalau punya gambar Retail bisa ditambahkan disini */}
-                              {/* <img src={`http://127.0.0.1:8000/storage/retail/${item.image}`} alt="" /> */}
+                              <div className="text-yellow-400 font-semibold p-2 text-left">
+                                {item.pricing}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -162,7 +181,74 @@ export default function Donation() {
                       )
                     ) : // SERVICE
                     index === 1 ? (
-                      <p>{quest.content}</p>
+                      loadingService ? (
+                        <p>Loading...</p>
+                      ) : (
+                        <div className="flex flex-col gap-8">
+                          {/* SERVICE */}
+                          <div className="text-center font-bold text-white">
+                            SERVICE DONATION
+                          </div>
+                          <div className="h-[2px] bg-yellow-400 w-full mb-2"></div>
+                          <div className="flex flex-col gap-0">
+                            {serviceDonations.map((item) => (
+                              <div
+                                key={item.id}
+                                className="grid grid-cols-2 border-b border-white"
+                              >
+                                <div className="text-white font-medium p-2 text-left border-r border-white">
+                                  {item.donation_title}
+                                </div>
+                                <div className="text-yellow-400 font-semibold p-2 text-left">
+                                  {item.pricing}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* GEMSTONE */}
+                          <div className="text-center font-bold text-white mt-8">
+                            TAB GEMSTONE
+                          </div>
+                          <div className="h-[2px] bg-yellow-400 w-full mb-2"></div>
+                          <div className="flex flex-col gap-0">
+                            {gemstoneDonations.map((item) => (
+                              <div
+                                key={item.id}
+                                className="grid grid-cols-2 border-b border-white"
+                              >
+                                <div className="text-white font-medium p-2 text-left border-r border-white">
+                                  {item.donation_title}
+                                </div>
+                                <div className="text-yellow-400 font-semibold p-2 text-left">
+                                  {item.pricing}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* RESOURCE */}
+                          <div className="text-center font-bold text-white mt-8">
+                            TAB RESOURCE
+                          </div>
+                          <div className="h-[2px] bg-yellow-400 w-full mb-2"></div>
+                          <div className="flex flex-col gap-0">
+                            {resourcesDonations.map((item) => (
+                              <div
+                                key={item.id}
+                                className="grid grid-cols-2 border-b border-white"
+                              >
+                                <div className="text-white font-medium p-2 text-left border-r border-white">
+                                  {item.donation_title}
+                                </div>
+                                <div className="text-yellow-400 font-semibold p-2 text-left">
+                                  {item.pricing}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )
                     ) : // SEASON PASS
                     index === 2 ? (
                       loadingSeasonPass ? (
