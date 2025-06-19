@@ -62,12 +62,12 @@ const Admin_Sidebar = ({ onMenuClick, activePage }) => {
 
         {open.table && (
           <div className="ml-4 space-y-2">
-            <button
+            {/* <button
               onClick={() => handleMenuClick("userTable")}
               className="hover:bg-gray-700 p-2 rounded w-full text-left"
             >
               User Table
-            </button>
+            </button> */}
 
             {/* Game Info */}
             <button
