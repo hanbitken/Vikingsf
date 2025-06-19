@@ -23,7 +23,7 @@ const Admin_Sidebar = ({ onMenuClick, activePage }) => {
   const handleMenuClick = async (id) => {
     if (id === "logout") {
       try {
-        await api.get("/logout");
+        await api.post("/logout");
         localStorage.removeItem("token");
         delete api.defaults.headers.common["Authorization"];
         navigate("/login");
@@ -321,10 +321,11 @@ const Admin_Sidebar = ({ onMenuClick, activePage }) => {
         )}
 
         <button
-          onClick={() => handleMenuClick("logout")}
+          // onClick={() => handleMenuClick("logout")}
+          onClick={() => navigate("/")}
           className="text-left hover:bg-gray-700 p-2 rounded"
         >
-          Logout
+          Back to Home
         </button>
       </nav>
     </aside>
