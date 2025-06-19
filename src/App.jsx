@@ -27,6 +27,7 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import api from "./assets/logic/api";
 
 // --- Admin Dashboard
+import Admin from "../src/Pages/Admin/main";
 import DashboardLayout from "./Components/DashboardLayout";
 import Dashboard from "./Page/Dashboard";
 
@@ -200,7 +201,7 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute roleRequired="admin">
-              <DashboardLayout />
+              <Admin />
             </ProtectedRoute>
           }
         >
