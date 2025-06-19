@@ -1,8 +1,13 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import "./App.css";
 
-// Components & Pages
+// --- Components & Pages (Public)
 import Home from "./Pages/home";
 import Header from "./Components/header";
 import Footer from "./Components/footer";
@@ -15,12 +20,52 @@ import QuestInfo from "./Pages/GameInfo/questinfo";
 import Rules from "./Pages/GameInfo/rules";
 import MapInfo from "./Pages/GameInfo/mapinfo";
 import Donation from "./Pages/donation";
-import NewsDetail from './Pages/News/NewsDetail';
-import News from './Pages/News/News';
-import Download from './Pages/Download/Download';
-import Admin from './Pages/Admin/main';
+import News from "./Pages/News/News";
+import NewsDetail from "./Pages/News/NewsDetail";
+import Download from "./Pages/Download/Download";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import api from "./assets/logic/api";
+
+// --- Admin Dashboard
+import DashboardLayout from "./Components/DashboardLayout";
+import Dashboard from "./Page/Dashboard";
+
+// Tables
+import UsersTable from "./Components/UserTable";
+import ServerRules from "./Components/GameInfo/ServerRules";
+import MapInfoAdmin from "./Components/MapInfo/MapInfo";
+
+// Feature Info
+import PendantInformation from "./Components/ServerInfo/FeatureInformation/PendantInformation";
+import GemInformation from "./Components/ServerInfo/FeatureInformation/GemInformation";
+
+// NPC & Drop
+import NpcList from "./Components/ServerInfo/NPCList/NpcList";
+import DropList from "./Components/ServerInfo/DropList/DropList";
+import ItemsInfo from "./Components/GameInfo/ItemsInfo";
+
+// General Info
+import ServersInformation from "./Components/ServerInfo/GeneralInfo/ServersInformation";
+import SystemInformation from "./Components/ServerInfo/GeneralInfo/SystemInformation";
+import FeaturesDisable from "./Components/ServerInfo/GeneralInfo/FeaturesDisable";
+import FeaturesEnable from "./Components/ServerInfo/GeneralInfo/FeaturesEnable";
+
+// Quest Info
+import DailyQuestAfterWar from "./Components/QuestInfo/DailyQuestAfterWar";
+import DailyQuest from "./Components/QuestInfo/DailyQuest";
+
+// Donation
+import RetailDonation from "./Components/Donation/RetailDonation";
+import SeassonPassDonation from "./Components/Donation/SeassonPassDonation";
+import HowToDonation from "./Components/Donation/HowToDonation";
+import ServiceDonation from "./Components/Donation/ServiceDonation/ServiceDonation";
+import TabGemstone from "./Components/Donation/ServiceDonation/TabGemstone";
+import TabResources from "./Components/Donation/ServiceDonation/TabResources";
+
+import PackagesInfo from "./Components/PackagesInfo";
+import PackageCategoryInfo from "./Components/PackageCategoryInfo";
+import PackageBonusInfo from "./Components/PackageBonusInfo";
+import ItemPackageBonusInfo from "./Components/ItemPackageBonusInfo";
 
 // Layout utama dengan Header dan Footer
 function MainLayout({ children }) {
@@ -46,11 +91,12 @@ function App() {
     }
 
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    api.get("/me")
+    api
+      .get("/me")
       .then((res) => {
         const role = res.data.role?.toLowerCase();
         if (role === "admin") {
-          setRedirectPath("/Admin");
+          setRedirectPath("/admin");
         } else {
           setRedirectPath("/");
         }
@@ -66,6 +112,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* PUBLIC ROUTES */}
         <Route
           path="/"
           element={
@@ -79,55 +126,148 @@ function App() {
             </MainLayout>
           }
         />
-
-        {/* Admin hanya untuk role admin */}
-        <Route
-          path="/Admin"
-          element={
-            <ProtectedRoute roleRequired="admin">
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Halaman login, register, dll */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* Game Info & lainnya */}
         <Route
           path="/gameinfo/server"
-          element={<MainLayout><ServerInfo /></MainLayout>}
+          element={
+            <MainLayout>
+              <ServerInfo />
+            </MainLayout>
+          }
         />
         <Route
           path="/gameinfo/quest"
-          element={<MainLayout><QuestInfo /></MainLayout>}
+          element={
+            <MainLayout>
+              <QuestInfo />
+            </MainLayout>
+          }
         />
         <Route
           path="/gameinfo/map"
-          element={<MainLayout><MapInfo /></MainLayout>}
+          element={
+            <MainLayout>
+              <MapInfo />
+            </MainLayout>
+          }
         />
         <Route
           path="/gameinfo/rules"
-          element={<MainLayout><Rules /></MainLayout>}
+          element={
+            <MainLayout>
+              <Rules />
+            </MainLayout>
+          }
         />
         <Route
           path="/donation"
-          element={<MainLayout><Donation /></MainLayout>}
+          element={
+            <MainLayout>
+              <Donation />
+            </MainLayout>
+          }
         />
         <Route
           path="/news"
-          element={<MainLayout><News /></MainLayout>}
+          element={
+            <MainLayout>
+              <News />
+            </MainLayout>
+          }
         />
         <Route
           path="/news/:id"
-          element={<MainLayout><NewsDetail /></MainLayout>}
+          element={
+            <MainLayout>
+              <NewsDetail />
+            </MainLayout>
+          }
         />
         <Route
           path="/download"
-          element={<MainLayout><Download /></MainLayout>}
+          element={
+            <MainLayout>
+              <Download />
+            </MainLayout>
+          }
+        />
+
+        {/* PROTECTED ADMIN ROUTE */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute roleRequired="admin">
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="table-list/users" element={<UsersTable />} />
+
+          <Route path="table-list/game-info">
+            <Route path="items" element={<ItemsInfo />} />
+            <Route path="server-rules" element={<ServerRules />} />
+            <Route path="mapinfo" element={<MapInfoAdmin />} />
+
+            <Route path="server-info">
+              <Route path="npclist" element={<NpcList />} />
+              <Route path="droplist" element={<DropList />} />
+
+              <Route path="featureinfo">
+                <Route
+                  path="pendant-information"
+                  element={<PendantInformation />}
+                />
+                <Route path="gem-information" element={<GemInformation />} />
+              </Route>
+
+              <Route path="GeneralInfo">
+                <Route path="systeminfo" element={<SystemInformation />} />
+                <Route path="serversinfo" element={<ServersInformation />} />
+                <Route path="feature-disable" element={<FeaturesDisable />} />
+                <Route path="feature-enable" element={<FeaturesEnable />} />
+              </Route>
+            </Route>
+
+            <Route path="quest-info">
+              <Route
+                path="dailyquestafterwar"
+                element={<DailyQuestAfterWar />}
+              />
+              <Route path="dailyquest" element={<DailyQuest />} />
+            </Route>
+          </Route>
+
+          <Route path="table-list/donation">
+            <Route path="service">
+              <Route path="services" element={<ServiceDonation />} />
+              <Route path="gemstone" element={<TabGemstone />} />
+              <Route path="resources" element={<TabResources />} />
+            </Route>
+            <Route path="retail" element={<RetailDonation />} />
+            <Route path="seassonpass" element={<SeassonPassDonation />} />
+            <Route path="packages" element={<PackagesInfo />} />
+            <Route path="howto" element={<HowToDonation />} />
+            <Route
+              path="package-categories"
+              element={<PackageCategoryInfo />}
+            />
+            <Route path="package-bonuses" element={<PackageBonusInfo />} />
+            <Route path="item-package" element={<ItemPackageBonusInfo />} />
+          </Route>
+        </Route>
+
+        {/* 404 fallback */}
+        <Route
+          path="*"
+          element={
+            <h4 className="text-center mt-5 text-white">
+              Halaman Tidak Ditemukan
+            </h4>
+          }
         />
       </Routes>
     </Router>

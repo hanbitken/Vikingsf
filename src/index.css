@@ -3,7 +3,8 @@
 @import "slick-carousel/slick/slick-theme.css";
 
 /* Tambahkan fix ini: */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -11,7 +12,9 @@ html, body {
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -23,15 +26,13 @@ html, body {
 }
 
 .gold-border::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   padding: 2px;
   border-radius: 16px;
-  background: linear-gradient(45deg, #684F28 0%, #281806 47%, #FFC86E 100%);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+  background: linear-gradient(45deg, #684f28 0%, #281806 47%, #ffc86e 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
