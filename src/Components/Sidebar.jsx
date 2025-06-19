@@ -1,12 +1,11 @@
-import React from 'react';
-import Logo from '../assets/Picture/LOGO VIKINGS 1.png';
+import React from "react";
+import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 
 const Sidebar = ({ onMenuClick, activePage }) => {
   const menuItems = [
-    { id: 'news', label: 'News' },
-    { id: 'user', label: 'User' },
-    { id: 'settings', label: 'Settings' },
-    { id: 'logout', label: 'Logout' },
+    { id: "news", label: "News" },
+    { id: "table", label: "Table List" },
+    { id: "logout", label: "Logout" },
   ];
 
   return (
@@ -20,7 +19,7 @@ const Sidebar = ({ onMenuClick, activePage }) => {
             key={item.id}
             onClick={() => onMenuClick(item.id)}
             className={`text-left hover:bg-gray-700 p-2 rounded ${
-              activePage === item.id ? 'bg-gray-700' : ''
+              activePage === item.id ? "bg-gray-700" : ""
             }`}
           >
             {item.label}

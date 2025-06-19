@@ -13,7 +13,7 @@ const AdminPage = () => {
           <a href="#news" className="hover:bg-gray-700 p-2 rounded">
             News
           </a>
-          <a href="#table" className="hover:bg-gray-700 p-2 rounded">
+          <a href="#table list" className="hover:bg-gray-700 p-2 rounded">
             Tables
           </a>
           <a href="#logout" className="hover:bg-gray-700 p-2 rounded">
