@@ -87,7 +87,10 @@ export default function Login() {
           />
 
           {/* Forgot Password */}
-          <a className="no-underline text-[12px] cursor-pointer !text-yellow-500 text-left -mt-2">
+          <a
+            href="/forgot"
+            className="no-underline text-[12px] cursor-pointer !text-yellow-500 text-left -mt-2"
+          >
             FORGOT PASSWORD
           </a>
 
