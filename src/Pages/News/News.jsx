@@ -118,8 +118,8 @@ const News = () => {
   };
 
   return (
-    <section className="h-full">
-      <div className="bg-cover bg-no-repeat main-background-container text-left">
+    <section className="h-full w-full">
+      <div className="w-full bg-cover bg-no-repeat main-background-container text-left overflow-x-hidden">
         <div className="flex flex-col items-center justify-center mx-8">
           <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />

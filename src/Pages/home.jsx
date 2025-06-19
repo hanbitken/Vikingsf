@@ -45,13 +45,13 @@ export default function Home() {
   const getTierColor = (tier) => {
     switch (tier.toLowerCase()) {
       case "gold tier":
-        return "!gold-tier";
+        return "gold-tier";
       case "silver tier":
-        return "!silver-tier";
+        return "silver-tier";
       case "bronze tier":
-        return "!bronze-tier";
+        return "bronze-tier";
       default:
-        return "!text-gray-300";
+        return "text-gray-300";
     }
   };
 
@@ -79,30 +79,28 @@ export default function Home() {
   const currentSlide = slides[current];
 
   return (
-    <section className="!h-full">
-      <div className="!bg-cover !bg-no-repeat main-background-container">
-        <div className="!flex !flex-col !items-center !justify-center !mx-8">
-          <img src={LOGO} alt="Logo" className="!w-[40%] !mt-12" />
-          <img src={Line} alt="Line" className="!w-full" />
+    <section className="h-full">
+      <div className="bg-cover bg-no-repeat main-background-container">
+        <div className="flex flex-col items-center justify-center mx-8">
+          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={Line} alt="Line" className="w-full" />
         </div>
 
-        <div className="!flex !flex-col !gap-8 !justify-between !pt-12 !w-full !h-full !px-16">
-          {/* Slide + Server Info */}
-          <div className="!flex !flex-row !gap-8">
-            {/* Slider */}
-            <div className="!relative !w-full !overflow-hidden !gold-border dark:!blue-border">
+        <div className="flex flex-col gap-8 justify-between pt-12 w-full h-full px-16">
+          <div className="flex flex-row gap-8">
+            <div className="relative w-full overflow-hidden gold-border dark:blue-border">
               <div
-                className="!w-full !h-full !bg-cover !transition-all !duration-700"
+                className="w-full h-full bg-cover transition-all duration-700"
                 style={{ backgroundImage: `url(${currentSlide.image})` }}
               >
-                <div className="!absolute !bottom-0 !w-full !h-1/3 !bg-gradient-to-t !from-black !to-transparent !px-8 !py-4 !text-white !text-left !border-t !border-[#FFC86E]/60">
+                <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent px-8 py-4 text-white text-left border-t border-[#FFC86E]/60">
                   <h2
-                    className="!text-3xl !text-white"
+                    className="text-3xl text-white"
                     style={{ WebkitTextStroke: "1px #FFC86E" }}
                   >
                     {currentSlide.title}
                   </h2>
-                  <p className="!text-lg">{currentSlide.description}</p>
+                  <p className="text-lg">{currentSlide.description}</p>
                 </div>
                 <button
                   onClick={prevSlide}
@@ -145,33 +143,30 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Server Info */}
-            <div className="!w-[40%] !flex !flex-col !gap-4 !rounded-lg !p-8 !gold-border">
-              <div className="!text-center !text-xl">
+            <div className="w-[40%] flex flex-col gap-4 rounded-lg p-8 gold-border">
+              <div className="text-center text-xl">
                 <h2>SERVER INFO</h2>
               </div>
               <img src={InfoLine} alt="" />
-              <div className="!flex !items-center !justify-center !px-8 !space-x-4">
-                <svg className="!w-8 !h-8 !text-white" /* ... */></svg>
-                <span className="!text-green-400 !font-bold !text-lg">
-                  ONLINE
-                </span>
+              <div className="flex items-center justify-center px-8 space-x-4">
+                <svg className="w-8 h-8 text-white" />
+                <span className="text-green-400 font-bold text-lg">ONLINE</span>
               </div>
-              <div className="!flex !items-center !justify-center !px-8 !space-x-4">
-                <svg className="!w-8 !h-8 !text-white" /* ... */></svg>
-                <span className="!font-bold !text-lg">300 PLAYERS</span>
+              <div className="flex items-center justify-center px-8 space-x-4">
+                <svg className="w-8 h-8 text-white" />
+                <span className="font-bold text-lg">300 PLAYERS</span>
               </div>
-              <div className="!space-y-4 !px-6">
+              <div className="space-y-4 px-6">
                 {raceStats.map((race, i) => (
-                  <div key={i} className="!flex !items-center !space-x-4">
+                  <div key={i} className="flex items-center space-x-4">
                     <img
                       src={race.icon}
                       alt={`Race ${i + 1}`}
-                      className="!w-12 !h-12 !object-cover !border-2"
+                      className="w-12 h-12 object-cover border-2"
                     />
-                    <div className="!flex-1 !flex !justify-between !items-center">
-                      <span className="!font-bold">{race.players} PLAYERS</span>
-                      <span className="!font-bold">
+                    <div className="flex-1 flex justify-between items-center">
+                      <span className="font-bold">{race.players} PLAYERS</span>
+                      <span className="font-bold">
                         TOTAL KILL: {race.kills}
                       </span>
                     </div>
@@ -181,8 +176,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Top Player, Guild, VIP sections */}
-          <div className="!flex !flex-row !gap-8">
+          <div className="flex flex-row gap-8">
             {[
               { title: "TOP PLAYER", data: players },
               { title: "TOP GUILD", data: Guilds },
@@ -190,34 +184,31 @@ export default function Home() {
             ].map((section, idx) => (
               <div
                 key={idx}
-                className="!flex !flex-col !gap-4 !w-1/3 !p-8 !gold-border"
+                className="flex flex-col gap-4 w-1/3 p-8 gold-border"
               >
-                <div className="!text-center !text-xl">
+                <div className="text-center text-xl">
                   <h2>{section.title}</h2>
                 </div>
                 <img src={InfoLine} alt="" />
-                <div className="!flex !flex-col !gap-4 !px-8">
+                <div className="flex flex-col gap-4 px-8">
                   {section.data.map((item, i) => (
-                    <div
-                      key={i}
-                      className="!flex !justify-between !items-center"
-                    >
-                      <div className="!flex !gap-4 !items-center">
+                    <div key={i} className="flex justify-between items-center">
+                      <div className="flex gap-4 items-center">
                         <img src={profile} alt="" />
-                        <div className="!flex !flex-col">
-                          <h2 className="!text-xl">{item.name}</h2>
-                          <h3 className="!text-lg">{item.faction}</h3>
+                        <div className="flex flex-col">
+                          <h2 className="text-xl">{item.name}</h2>
+                          <h3 className="text-lg">{item.faction}</h3>
                         </div>
                       </div>
                       {section.title === "VIP" ? (
-                        <div className={`!text-xl ${getTierColor(item.tier)}`}>
+                        <div className={`text-xl ${getTierColor(item.tier)}`}>
                           {item.tier.toUpperCase()}
                         </div>
                       ) : (
-                        <div className="!text-xl">
-                          <span className="!text-green-400">{item.win}</span>
-                          <span className="!text-white"> | </span>
-                          <span className="!text-red-500">{item.lose}</span>
+                        <div className="text-xl">
+                          <span className="text-green-400">{item.win}</span>
+                          <span className="text-white"> | </span>
+                          <span className="text-red-500">{item.lose}</span>
                         </div>
                       )}
                     </div>
@@ -227,15 +218,14 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Footer */}
-          <div className="!items-center !justify-center !pb-4">
-            <img src={Line} alt="Line" className="!w-full" />
-            <div className="!flex !justify-center !items-center !gap-2">
+          <div className="items-center justify-center pb-4">
+            <img src={Line} alt="Line" className="w-full" />
+            <div className="flex justify-center items-center gap-2">
               <a
                 href="https://www.instagram.com/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:!text-pink-400 !transition"
+                className="hover:text-pink-400 transition"
               >
                 <FaInstagram />
               </a>
@@ -243,7 +233,7 @@ export default function Home() {
                 href="https://tiktok.com/@rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:!text-black !transition"
+                className="hover:text-black transition"
               >
                 <FaTiktok />
               </a>
@@ -251,7 +241,7 @@ export default function Home() {
                 href="https://www.facebook.com/profile.php?id=61562554693454"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:!text-blue-500 !transition"
+                className="hover:text-blue-500 transition"
               >
                 <FaFacebook />
               </a>
@@ -259,7 +249,7 @@ export default function Home() {
                 href="https://discord.gg/rfvikings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:!text-indigo-400 !transition"
+                className="hover:text-indigo-400 transition"
               >
                 <FaDiscord />
               </a>
