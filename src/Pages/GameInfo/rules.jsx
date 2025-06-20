@@ -1,29 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
 
 export default function Rules() {
-  const Rules = [
-    {
-      RulesID: "RULES 1",
-      Rules:
-        " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo,  eros non dignissim tincidunt, tortor sem ultricies lectus, ut efficitur  lorem nulla at ante. osuere erat sed tortor bibendum, eget  sagittis sapien auctor. Maecenas ultrices mi nec ipsum feugiat congue.  Nulla pellentesque ac lacus id suscipit. Cras varius a nisi a rutrum.  Morbi placerat massa sit amet leo malesuada mattis. Vestibulum eget  sagittis ante. ",
-    },
+  const [rulesData, setRulesData] = useState([]);
 
-    {
-      RulesID: "RULES 2",
-      Rules:
-        " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo,  eros non dignissim tincidunt, tortor sem ultricies lectus, ut efficitur  lorem nulla at ante. osuere erat sed tortor bibendum, eget  sagittis sapien auctor. Maecenas ultrices mi nec ipsum feugiat congue.  Nulla pellentesque ac lacus id suscipit. Cras varius a nisi a rutrum.  Morbi placerat massa sit amet leo malesuada mattis. Vestibulum eget  sagittis ante. ",
-    },
+  useEffect(() => {
+    // Ambil data dari ServerRulesController
+    fetch("http://127.0.0.1:8000/api/game-info/server-rules")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setRulesData(data);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
-    {
-      RulesID: "RULES 3",
-      Rules:
-        " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo,  eros non dignissim tincidunt, tortor sem ultricies lectus, ut efficitur  lorem nulla at ante. osuere erat sed tortor bibendum, eget  sagittis sapien auctor. Maecenas ultrices mi nec ipsum feugiat congue.  Nulla pellentesque ac lacus id suscipit. Cras varius a nisi a rutrum.  Morbi placerat massa sit amet leo malesuada mattis. Vestibulum eget  sagittis ante. ",
-    },
-  ];
+  // Group rules by category
+  const groupedRules = rulesData.reduce((acc, rule) => {
+    const category = rule.category || "Uncategorized";
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(rule);
+    return acc;
+  }, {});
 
   return (
     <section className="h-full">
@@ -32,26 +36,49 @@ export default function Rules() {
           <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
+
         <div className="flex flex-col gap-8 justify-between pt-12 w-full h-full px-16 pb-8">
           <div className="flex flex-col w-full h-full gold-border items-center p-4 gap-4">
-            <div>SERVER RULES</div>
-            <img src={LineQuest} alt="" />
+            <div className="text-yellow-400 font-bold text-3xl text-center">
+              SERVER RULES
+            </div>
+            <img src={LineQuest} alt="Line" />
             <div className="flex flex-row gap-4">
               <div>SERVER INFO</div>
               <div>ONLINE</div>
               <div>300 player</div>
             </div>
           </div>
-          <div className="flex flex-col w-full h-full gold-border items-center gap-4 p-12">
-            {Rules.map((rules, index) => (
-              <div key={index} className="flex flex-col gap-2">
-                <div>{rules.RulesID}</div>
-                <img src={LineQuest} alt="" />
-                <div className="text-lg px-16">{rules.Rules}</div>
-              </div>
-            ))}
+
+          <div className="flex flex-col w-full h-full gold-border items-center gap-8 p-12">
+            {Object.entries(groupedRules).length === 0 ? (
+              <p className="text-white">Loading...</p>
+            ) : (
+              Object.entries(groupedRules).map(([category, rules], index) => (
+                <div key={index} className="w-full flex flex-col gap-6 items-center">
+                  <div className="text-yellow-400 font-bold text-2xl text-center">
+                    {category}
+                  </div>
+                  {rules.map((rule) => (
+                    <div
+                      key={rule.id}
+                      className="flex flex-col gap-2 w-full items-center"
+                    >
+                      <div className="text-left font-semibold text-white w-full">
+                        {rule.rules}
+                      </div>
+                      <img src={LineQuest} alt="LineQuest" className="w-full" />
+                      <div className="text-center text-gray-300 px-8">
+                        {rule.description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))
+            )}
           </div>
         </div>
+
         <div className="items-center justify-center pb-4">
           <img src={Line} alt="Line" className="w-full" />
           <div className="flex flex-row justify-center items-center gap-2">
