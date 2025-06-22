@@ -17,16 +17,16 @@ export default function Header() {
       api
         .get("/me")
         .then((res) => {
-          console.log("User data:", res.data);
+          // console.log("User data:", res.data);
           setUsername(res.data.user?.username || null);
           const roleName = res.data.role?.toLowerCase() || null;
 
           if (roleName === "admin") {
             setRole("admin");
-            console.log("Role is admin");
+            // console.log("Role is admin");
           } else if (roleName === "user") {
             setRole("user");
-            console.log("Role is user");
+            // console.log("Role is user");
           } else {
             setRole(null);
             console.log("Role not found");
