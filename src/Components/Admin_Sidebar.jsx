@@ -317,6 +317,12 @@ const Admin_Sidebar = ({ onMenuClick, activePage }) => {
                 </button>
               </div>
             )}
+            <button
+              onClick={() => handleMenuClick("item")}
+              className="hover:bg-gray-700 p-2 rounded w-full text-left"
+            >
+              items
+            </button>
           </div>
         )}
 

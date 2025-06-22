@@ -17,6 +17,7 @@ import DailyQuestAfterWar from "../../Components/QuestInfo/DailyQuestAfterWar";
 import DailyQuest from "../../Components/QuestInfo/DailyQuest";
 import MapInfo from "../../Components/MapInfo/MapInfo";
 import ServerRules from "../../Components/GameInfo/ServerRules";
+import ItemsInfo from "../../Components/GameInfo/ItemsInfo";
 
 import ServiceDonation from "../../Components/Donation/ServiceDonation/ServiceDonation";
 import TabGemstone from "../../Components/Donation/ServiceDonation/TabGemstone";
@@ -83,6 +84,8 @@ const AdminPage = () => {
         return <ItemPackageBonusInfo />;
       case "package-bonuses":
         return <PackageBonusInfo />;
+      case "item":
+        return <ItemsInfo />;
 
       default:
         return (
