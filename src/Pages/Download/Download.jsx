@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Separator from "../../assets/Picture/line full.png";
@@ -13,33 +13,33 @@ const DownloadSection = () => {
   const sections = [
     {
       id: 1,
-      title: 'Download Full Client',
+      title: "Download Full Client",
       files: [
         {
-          name: 'Full Client - Mediafire',
-          size: '1.79 GB',
-          link: 'https://www.mediafire.com/file/8avht0jebvmdunn/Full_Client_RF_Vikings_26032025.7z/file',
+          name: "Full Client - Mediafire",
+          size: "1.79 GB",
+          link: "https://www.mediafire.com/file/8avht0jebvmdunn/Full_Client_RF_Vikings_26032025.7z/file",
         },
         {
-          name: 'Full Client - Google Drive',
-          size: '1.79 GB',
-          link: 'https://drive.google.com/file/d/18Ca_EfS_ok_FnNHq5avsEanbwKpo71xT/view?usp=drive_link',
+          name: "Full Client - Google Drive",
+          size: "1.79 GB",
+          link: "https://drive.google.com/file/d/18Ca_EfS_ok_FnNHq5avsEanbwKpo71xT/view?usp=drive_link",
         },
       ],
     },
     {
       id: 2,
-      title: 'Download Full Patch',
+      title: "Download Full Patch",
       files: [
         {
-          name: 'Full Patch - Mediafire',
-          size: '103.45 MB',
-          link: 'https://www.mediafire.com/file/yoxblzja1nv5kj1/FullPatch_RFVikings_26032025.7z/file',
+          name: "Full Patch - Mediafire",
+          size: "103.45 MB",
+          link: "https://www.mediafire.com/file/yoxblzja1nv5kj1/FullPatch_RFVikings_26032025.7z/file",
         },
         {
-          name: 'Full Patch - Google Drive',
-          size: '103.45 MB',
-          link: 'https://drive.google.com/file/d/1njaBlGhXNa12-SCB_l7nEIiNvVxySwk4/view?usp=drive_link',
+          name: "Full Patch - Google Drive",
+          size: "103.45 MB",
+          link: "https://drive.google.com/file/d/1njaBlGhXNa12-SCB_l7nEIiNvVxySwk4/view?usp=drive_link",
         },
       ],
     },
@@ -48,26 +48,33 @@ const DownloadSection = () => {
   return (
     <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container text-left">
-
         <div className="flex flex-col items-center justify-center mx-8">
-          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={LOGO} alt="Logo" className="w-[25%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
 
         <div className="justify-center py-8 text-left">
           <div className="w-[1195px] mx-auto p-[2px] box-border rounded-lg gold-border bg-opacity-10">
             <div className="p-6">
-              <h2 className="text-3xl font-bold mb-6 text-white text-center mx-auto">DOWNLOAD</h2>
+              <h2 className="text-3xl font-bold mb-6 text-white text-center mx-auto">
+                DOWNLOAD
+              </h2>
               <img src={Separator} alt="separator" className="w-full my-4" />
 
               {sections.map((section) => (
                 <div key={section.id} className="mb-10 px-8">
-                  <h3 className="text-lg font-semibold text-white mb-1">{section.title}</h3>
+                  <h3 className="text-lg font-semibold text-white mb-1">
+                    {section.title}
+                  </h3>
                   <a className="text-sm text-white mb-4 cursor-pointer transition-colors duration-300 hover:text-yellow-400">
                     README
                   </a>
 
-                  <img src={Separator} alt="separator" className="w-full my-4" />
+                  <img
+                    src={Separator}
+                    alt="separator"
+                    className="w-full my-4"
+                  />
 
                   {section.files.map((file, i) => (
                     <div

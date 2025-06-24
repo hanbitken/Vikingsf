@@ -61,20 +61,21 @@ export default function Donation() {
       if (index === 1 && !loadingService) {
         setLoadingService(true);
         Promise.all([
-          fetch("http://127.0.0.1:8000/api/donation/service/services").then((r) =>
-            r.json()
+          fetch("http://127.0.0.1:8000/api/donation/service/services").then(
+            (r) => r.json()
           ),
-          fetch("http://127.0.0.1:8000/api/donation/service/gemstone").then((r) =>
-            r.json()
+          fetch("http://127.0.0.1:8000/api/donation/service/gemstone").then(
+            (r) => r.json()
           ),
-          fetch("http://127.0.0.1:8000/api/donation/service/resources").then((r) =>
-            r.json()
+          fetch("http://127.0.0.1:8000/api/donation/service/resources").then(
+            (r) => r.json()
           ),
         ])
           .then(([serviceData, gemstoneData, resourceData]) => {
             if (Array.isArray(serviceData)) setServiceDonations(serviceData);
             if (Array.isArray(gemstoneData)) setGemstoneDonations(gemstoneData);
-            if (Array.isArray(resourceData)) setResourcesDonations(resourceData);
+            if (Array.isArray(resourceData))
+              setResourcesDonations(resourceData);
           })
           .catch(console.error)
           .finally(() => setLoadingService(false));
@@ -126,7 +127,7 @@ export default function Donation() {
     <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container">
         <div className="flex flex-col items-center justify-center mx-8">
-          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={LOGO} alt="Logo" className="w-[25%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
 
@@ -294,13 +295,11 @@ export default function Donation() {
                                 {pkg.title}
                               </div>
                               <div className="flex flex-col gap-1 pl-2">
-                                {pkg.description
-                                  .split("\n")
-                                  .map((line, i) => (
-                                    <div key={i} className="text-gray-300">
-                                      {line}
-                                    </div>
-                                  ))}
+                                {pkg.description.split("\n").map((line, i) => (
+                                  <div key={i} className="text-gray-300">
+                                    {line}
+                                  </div>
+                                ))}
                               </div>
                               <div className="text-yellow-400 font-bold">
                                 PRICE : {pkg.pricing}

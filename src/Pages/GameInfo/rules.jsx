@@ -33,7 +33,7 @@ export default function Rules() {
     <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container">
         <div className="flex flex-col items-center justify-center mx-8">
-          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={LOGO} alt="Logo" className="w-[25%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
 
@@ -55,7 +55,10 @@ export default function Rules() {
               <p className="text-white">Loading...</p>
             ) : (
               Object.entries(groupedRules).map(([category, rules], index) => (
-                <div key={index} className="w-full flex flex-col gap-6 items-center">
+                <div
+                  key={index}
+                  className="w-full flex flex-col gap-6 items-center"
+                >
                   <div className="text-yellow-400 font-bold text-2xl text-center">
                     {category}
                   </div>

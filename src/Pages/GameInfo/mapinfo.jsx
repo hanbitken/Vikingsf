@@ -39,7 +39,7 @@ export default function MapInfo() {
       <div className="bg-cover bg-no-repeat main-background-container">
         {/* Logo & Border Line */}
         <div className="flex flex-col items-center justify-center mx-8">
-          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={LOGO} alt="Logo" className="w-[25%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
 
@@ -64,7 +64,10 @@ export default function MapInfo() {
                 onChange={handleMapSelect}
                 className="w-[95%] text-center bg-transparent text-white border-white py-2 focus:outline-none"
               >
-                <option className="bg-white text-black dark:bg-black/60" value="">
+                <option
+                  className="bg-white text-black dark:bg-black/60"
+                  value=""
+                >
                   {loading ? "Loading Maps..." : "Select Map"}
                 </option>
                 {maps.map((map) => (

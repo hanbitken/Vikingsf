@@ -12,9 +12,10 @@ import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
 
-const AFTERWAR_QUEST_URL = "http://localhost:8000/api/game-info/quest-information/dailyquestafterwar";
-const DAILY_QUEST_URL = "http://localhost:8000/api/game-info/quest-information/dailyquest";
-
+const AFTERWAR_QUEST_URL =
+  "http://localhost:8000/api/game-info/quest-information/dailyquestafterwar";
+const DAILY_QUEST_URL =
+  "http://localhost:8000/api/game-info/quest-information/dailyquest";
 
 export default function QuestInfo() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -33,7 +34,7 @@ export default function QuestInfo() {
         if (!afterWarResponse.ok || !dailyResponse.ok) {
           throw new Error("Failed to fetch quest data from the server.");
         }
-        
+
         const afterWarData = await afterWarResponse.json();
         const dailyData = await dailyResponse.json();
 
@@ -53,42 +54,64 @@ export default function QuestInfo() {
                 </div>
                 <div className="flex flex-col">
                   {afterWarData.map((item, index) => (
-                    <div key={index} className="flex p-2 border-b border-gray-700 last:border-b-0">
-                      <div className="w-1/4 font-semibold">{item.daily_quest}</div>
+                    <div
+                      key={index}
+                      className="flex p-2 border-b border-gray-700 last:border-b-0"
+                    >
+                      <div className="w-1/4 font-semibold">
+                        {item.daily_quest}
+                      </div>
                       <div className="w-1/4">{item.map}</div>
                       <div className="w-1/4">
-                        {item.quest.split(',').map((q, i) => (<p key={i}>{q.trim()}</p>))}
+                        {item.quest.split(",").map((q, i) => (
+                          <p key={i}>{q.trim()}</p>
+                        ))}
                       </div>
                       <div className="w-1/4">
                         <ul className="list-none">
-                          {item.reward.split(',').map((r, i) => (<li key={i}>▸ {r.trim()}</li>))}
+                          {item.reward.split(",").map((r, i) => (
+                            <li key={i}>▸ {r.trim()}</li>
+                          ))}
                         </ul>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-            )
+            ),
           });
         }
 
         // --- UPDATED: Logic to display ALL quests per day ---
-        const dayOrder = ["Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"];
-        const sortedDailyQuests = dayOrder.map(day => {
-          
+        const dayOrder = [
+          "Sunday",
+          "Saturday",
+          "Friday",
+          "Thursday",
+          "Wednesday",
+          "Tuesday",
+          "Monday",
+        ];
+        const sortedDailyQuests = dayOrder.map((day) => {
           // CHANGED: Use .filter() to get ALL quests for a specific day, not just the first one.
-          const questsForDay = dailyData.filter(q => q.day && q.day.toLowerCase() === day.toLowerCase());
+          const questsForDay = dailyData.filter(
+            (q) => q.day && q.day.toLowerCase() === day.toLowerCase()
+          );
 
           return {
             title: `Daily Quest [${day}]`,
             // Check if the 'questsForDay' array has any items in it.
-            content: questsForDay.length > 0 ? (
+            content:
+              questsForDay.length > 0 ? (
                 // If quests exist, create a container to stack them vertically
                 <div className="flex flex-col gap-4">
                   {/* NEW: Loop over every quest found for that day */}
                   {questsForDay.map((questItem, itemIndex) => (
                     // Create a table for each quest item
-                    <div key={itemIndex} className="w-full text-sm border border-gray-700 rounded-md">
+                    <div
+                      key={itemIndex}
+                      className="w-full text-sm border border-gray-700 rounded-md"
+                    >
                       {/* Table Header */}
                       <div className="flex bg-gray-800/50 font-bold p-2 rounded-t-md">
                         <div className="w-1/3">Tutorial</div>
@@ -99,24 +122,31 @@ export default function QuestInfo() {
                       <div className="flex p-2">
                         {/* Use 'questItem' to access the data for the current quest in the loop */}
                         <div className="w-1/3 pr-2">
-                          {questItem.tutorial.split(',').map((t, i) => <p key={i}>{t.trim()}</p>)}
+                          {questItem.tutorial.split(",").map((t, i) => (
+                            <p key={i}>{t.trim()}</p>
+                          ))}
                         </div>
                         <div className="w-1/3 px-2 border-l border-r border-gray-700">
-                          {questItem.quest.split(',').map((q, i) => <p key={i}>{q.trim()}</p>)}
+                          {questItem.quest.split(",").map((q, i) => (
+                            <p key={i}>{q.trim()}</p>
+                          ))}
                         </div>
                         <div className="w-1/3 pl-2">
-                          {questItem.reward.split(',').map((r, i) => <p key={i}>{r.trim()}</p>)}
+                          {questItem.reward.split(",").map((r, i) => (
+                            <p key={i}>{r.trim()}</p>
+                          ))}
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-            ) : `Details for ${day}'s quest not available.` // Fallback message if no quests are found
+              ) : (
+                `Details for ${day}'s quest not available.`
+              ), // Fallback message if no quests are found
           };
         });
 
         setAllQuests([...questsToSet, ...sortedDailyQuests]);
-
       } catch (err) {
         setError(err.message);
         console.error("Error fetching quest data:", err);
@@ -131,12 +161,20 @@ export default function QuestInfo() {
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-  
+
   if (loading) {
-      return <div className="flex justify-center items-center h-screen text-white">Loading quest information...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-white">
+        Loading quest information...
+      </div>
+    );
   }
   if (error) {
-      return <div className="flex justify-center items-center h-screen text-red-500">Error: {error}</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        Error: {error}
+      </div>
+    );
   }
 
   return (
@@ -144,7 +182,7 @@ export default function QuestInfo() {
       <div className="bg-cover bg-no-repeat main-background-container">
         {/* Header and server info */}
         <div className="flex flex-col items-center justify-center mx-8">
-          <img src={LOGO} alt="Logo" className="w-[40%] mt-12" />
+          <img src={LOGO} alt="Logo" className="w-[25%] mt-12" />
           <img src={Line} alt="Line" className="w-full" />
         </div>
         <div className="flex flex-col gap-8 justify-between pt-12 w-full h-full px-16 pb-8">
@@ -157,7 +195,7 @@ export default function QuestInfo() {
               <div>300 player</div>
             </div>
           </div>
-        
+
           {/* Main Quest Accordion Section */}
           <div className="flex flex-col w-full h-full gold-border p-8">
             <div className="flex text-center align-center justify-center items-center text-xl font-bold">
@@ -181,7 +219,7 @@ export default function QuestInfo() {
                     }`}
                   />
                 </div>
-                
+
                 {openIndex === index && (
                   <div className="pl-6 pr-4 py-4 text-gray-300">
                     {quest.content}
@@ -198,16 +236,36 @@ export default function QuestInfo() {
         <div className="items-center justify-center pb-4">
           <img src={Line} alt="Line" className="w-full" />
           <div className="flex flex-row justify-center items-center gap-2">
-            <a href="https://www.instagram.com/rfvikings" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition">
+            <a
+              href="https://www.instagram.com/rfvikings"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-pink-400 transition"
+            >
               <FaInstagram />
             </a>
-            <a href="https://tiktok.com/@rfvikings" target="_blank" rel="noopener noreferrer" className="hover:text-black transition">
+            <a
+              href="https://tiktok.com/@rfvikings"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-black transition"
+            >
               <FaTiktok />
             </a>
-            <a href="https://www.facebook.com/profile.php?id=61562554693454" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition">
+            <a
+              href="https://www.facebook.com/profile.php?id=61562554693454"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-500 transition"
+            >
               <FaFacebook />
             </a>
-            <a href="https://discord.gg/rfvikings" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-400 transition">
+            <a
+              href="https://discord.gg/rfvikings"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-indigo-400 transition"
+            >
               <FaDiscord />
             </a>
           </div>
