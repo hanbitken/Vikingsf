@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import api from '../Components/api'; // Pastikan path ini sesuai dengan lokasi file api.js kamu
 
 const PackageBonusInfo = () => {
   const [bonuses, setBonuses] = useState([]);
-  // Adjusted formData to only include package_id and bonus_package_id
   const [formData, setFormData] = useState({ package_id: '', bonus_package_id: '' });
   const [currentItem, setCurrentItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -12,7 +12,6 @@ const PackageBonusInfo = () => {
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form fields now reflect only package_id and bonus_package_id
   const formFields = [
     { label: 'Main Package ID', name: 'package_id', type: 'number', required: true, placeholder: 'Enter Main Package ID' },
     { label: 'Bonus Package ID', name: 'bonus_package_id', type: 'number', required: true, placeholder: 'Enter Bonus Package ID' },
@@ -21,29 +20,22 @@ const PackageBonusInfo = () => {
   const fetchBonuses = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/donation/package-bonuses');
-      if (!response.ok) {
-        if (response.status === 404) {
-          setBonuses([]);
-          setToastMessage('No package bonus data found.'); // More specific message
-          setToastType('info');
-        } else {
-          const errorText = await response.text();
-          throw new Error(`Failed to fetch Package Bonus data: Status ${response.status} - ${errorText}`);
-        }
-      } else {
-        const data = await response.json();
-        setBonuses(Array.isArray(data) ? data : []);
-        setToastMessage('Package Bonus data loaded successfully.');
-        setToastType('success');
-      }
-      setShowToast(true);
+      const response = await api.get('/donation/package-bonuses');
+      setBonuses(Array.isArray(response.data) ? response.data : []);
+      setToastMessage('Package Bonus data loaded successfully.');
+      setToastType('success');
     } catch (error) {
-      setToastMessage(`Failed to fetch Package Bonus data: ${error.message}`);
-      setToastType('error');
-      setShowToast(true);
-      setBonuses([]);
+      if (error.response?.status === 404) {
+        setBonuses([]);
+        setToastMessage('No package bonus data found.');
+        setToastType('info');
+      } else {
+        setBonuses([]);
+        setToastMessage(`Failed to fetch Package Bonus data: ${error.message}`);
+        setToastType('error');
+      }
     } finally {
+      setShowToast(true);
       setLoading(false);
     }
   };
@@ -55,90 +47,54 @@ const PackageBonusInfo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const method = currentItem ? 'PUT' : 'POST';
-    const url = currentItem
-      ? `http://127.0.0.1:8000/api/donation/package-bonuses/${currentItem.id}`
-      : 'http://127.0.0.1:8000/api/donation/package-bonuses';
 
-    // Payload now only includes package_id and bonus_package_id
     const payload = {
       package_id: Number(formData.package_id),
       bonus_package_id: Number(formData.bonus_package_id),
-      // No items_id here, as it's not a direct column on package_bonuses
     };
 
     try {
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const clonedResponse = response.clone();
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        throw new Error(`Invalid response from server (${response.status}): ${rawText.substring(0, 100)}...`);
-      }
-
-      if (response.ok) {
-        fetchBonuses();
-        handleCloseModal();
-        setToastMessage(currentItem ? 'Package Bonus updated successfully.' : 'Package Bonus added successfully.');
-        setToastType('success');
-        setShowToast(true);
+      if (currentItem) {
+        await api.put(`/donation/package-bonuses/${currentItem.id}`, payload);
       } else {
-        let errorMessage = 'An error occurred.';
-        if (data && data.message) {
-            errorMessage = data.message;
-        } else if (data && data.errors) {
-            errorMessage = Object.values(data.errors).flat().join('; ');
-        }
-        throw new Error(errorMessage);
+        await api.post('/donation/package-bonuses', payload);
       }
+
+      fetchBonuses();
+      handleCloseModal();
+      setToastMessage(currentItem ? 'Package Bonus updated successfully.' : 'Package Bonus added successfully.');
+      setToastType('success');
     } catch (error) {
-      setToastMessage(`Failed to save Package Bonus: ${error.message}`);
+      let errMsg = 'Failed to save Package Bonus.';
+      if (error.response?.data?.message) {
+        errMsg = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        errMsg = Object.values(error.response.data.errors).flat().join('; ');
+      }
+      setToastMessage(errMsg);
       setToastType('error');
-      setShowToast(true);
     } finally {
       setIsSubmitting(false);
+      setShowToast(true);
     }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this package bonus?')) return;
+
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/donation/package-bonuses/${id}`, {
-        method: 'DELETE',
-        headers: { 'Accept': 'application/json' },
-      });
-
-      const clonedResponse = response.clone();
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        throw new Error(`Invalid response from server (${response.status}) on delete: ${rawText.substring(0, 100)}...`);
-      }
-
-      if (response.ok) {
-        fetchBonuses();
-        setToastMessage('Package Bonus deleted successfully.');
-        setToastType('success');
-        setShowToast(true);
-      } else {
-        let errorMessage = 'Failed to delete data.';
-        if (data && data.message) {
-            errorMessage = data.message;
-        }
-        throw new Error(errorMessage);
-      }
+      await api.delete(`/donation/package-bonuses/${id}`);
+      fetchBonuses();
+      setToastMessage('Package Bonus deleted successfully.');
+      setToastType('success');
     } catch (error) {
-      setToastMessage(`An error occurred while deleting: ${error.message}`);
+      let errMsg = 'An error occurred while deleting.';
+      if (error.response?.data?.message) {
+        errMsg = error.response.data.message;
+      }
+      setToastMessage(errMsg);
       setToastType('error');
+    } finally {
       setShowToast(true);
     }
   };
@@ -146,32 +102,21 @@ const PackageBonusInfo = () => {
   useEffect(() => {
     let timer;
     if (showToast) {
-      timer = setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      timer = setTimeout(() => setShowToast(false), 3000);
     }
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [showToast]);
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === 'Escape') {
-        handleCloseModal();
-      }
+      if (event.key === 'Escape') handleCloseModal();
     };
-    if (showModal) {
-      window.addEventListener('keydown', handleEsc);
-    }
-    return () => {
-      window.removeEventListener('keydown', handleEsc);
-    };
+    if (showModal) window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
   }, [showModal]);
 
   const handleShowModal = () => {
     setCurrentItem(null);
-    // Reset formData to only package_id and bonus_package_id
     setFormData({ package_id: '', bonus_package_id: '' });
     setShowModal(true);
   };
@@ -186,20 +131,16 @@ const PackageBonusInfo = () => {
 
   const handleEdit = (item) => {
     setCurrentItem(item);
-    // Set formData for editing based on package_id and bonus_package_id
     setFormData({ package_id: item.package_id, bonus_package_id: item.bonus_package_id });
     setShowModal(true);
   };
 
   const getToastColor = (type) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-500';
-      case 'error':
-        return 'bg-red-500';
+      case 'success': return 'bg-green-500';
+      case 'error': return 'bg-red-500';
       case 'info':
-      default:
-        return 'bg-blue-500';
+      default: return 'bg-blue-500';
     }
   };
 
@@ -210,7 +151,9 @@ const PackageBonusInfo = () => {
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
-        >Add Package Bonus</button>
+        >
+          Add Package Bonus
+        </button>
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg">
@@ -218,8 +161,8 @@ const PackageBonusInfo = () => {
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
-              <th className="py-3 px-6 text-left">Main Package ID</th> {/* Changed label */}
-              <th className="py-3 px-6 text-left">Bonus Package ID</th> {/* Changed label */}
+              <th className="py-3 px-6 text-left">Main Package ID</th>
+              <th className="py-3 px-6 text-left">Bonus Package ID</th>
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
@@ -234,16 +177,20 @@ const PackageBonusInfo = () => {
                 >
                   <td className="py-3 px-6 text-left whitespace-nowrap">{bonus.id}</td>
                   <td className="py-3 px-6 text-left">{bonus.package_id}</td>
-                  <td className="py-3 px-6 text-left">{bonus.bonus_package_id}</td> {/* Display bonus_package_id */}
+                  <td className="py-3 px-6 text-left">{bonus.bonus_package_id}</td>
                   <td className="py-3 px-6 text-center">
                     <button
                       className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-xs mr-2 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                       onClick={() => handleEdit(bonus)}
-                    >Edit</button>
+                    >
+                      Edit
+                    </button>
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus="
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                       onClick={() => handleDelete(bonus.id)}
-                    >Delete</button>
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))
@@ -257,15 +204,10 @@ const PackageBonusInfo = () => {
       {showModal && (
         <div
           className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center z-50 transition-opacity duration-300 ease-out"
-          style={{ opacity: showModal ? 1 : 0 }}
           onClick={handleCloseModal}
         >
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
-            style={{
-              transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-              opacity: showModal ? 1 : 0
-            }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
