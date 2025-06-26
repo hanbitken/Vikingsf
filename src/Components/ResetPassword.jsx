@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../assets/logic/api";
+import api from "./api";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");

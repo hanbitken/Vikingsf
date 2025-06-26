@@ -24,7 +24,7 @@ import News from "./Pages/News/News";
 import NewsDetail from "./Pages/News/NewsDetail";
 import Download from "./Pages/Download/Download";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import api from "./assets/logic/api";
+import api from "./Components/api";
 
 // --- Admin Dashboard
 import Admin from "../src/Pages/Admin/main";

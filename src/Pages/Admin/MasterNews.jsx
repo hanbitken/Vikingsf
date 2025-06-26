@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import api from 'api';
 import Swal from 'sweetalert2';
-
-const API_URL = 'http://127.0.0.1:8000/api/news';
+import api from '../../Components/api';
+const API_URL = '/news';
 
 const NewsPage = () => {
   const [news, setNews] = useState([]);
@@ -21,7 +21,7 @@ const NewsPage = () => {
 
   const fetchNews = async () => {
     try {
-      const res = await axios.get(API_URL, { responseType: 'text' });
+      const res = await api.get(API_URL, { responseType: 'text' });
       let rawData = [];
 
       try {
@@ -89,12 +89,12 @@ const NewsPage = () => {
       if (newImage) formData.append('image', newImage);
 
       if (isEditingId) {
-        await axios.post(`${API_URL}/${isEditingId}?_method=PUT`, formData, {
+        await api.post(`${API_URL}/${isEditingId}?_method=PUT`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         Swal.fire('Sukses', 'Berita berhasil diperbarui', 'success');
       } else {
-        await axios.post(API_URL, formData, {
+        await api.post(API_URL, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         Swal.fire('Sukses', 'Berita berhasil ditambahkan', 'success');
@@ -119,7 +119,7 @@ const NewsPage = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`${API_URL}/${id}`);
+        await api.delete(`${API_URL}/${id}`);
         Swal.fire('Berhasil', 'Berita dihapus', 'success');
         fetchNews();
       } catch (error) {

@@ -10,24 +10,24 @@ import {
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
-
+import api from "../../Components/api";
 // Definisikan semua URL API
 const PENDANT_URL =
-  "http://localhost:8000/api/game-info/server-information/pendant-information";
+  "/game-info/server-information/pendant-information";
 const GEM_URL =
-  "http://localhost:8000/api/game-info/server-information/gem-information";
+  "/game-info/server-information/gem-information";
 const SERVERS_INFO_URL =
-  "http://localhost:8000/api/game-info/server-information/serversinfo";
+  "/game-info/server-information/serversinfo";
 const SYSTEM_INFO_URL =
-  "http://localhost:8000/api/game-info/server-information/systeminfo";
+  "/game-info/server-information/systeminfo";
 const FEATURE_DISABLE_URL =
-  "http://localhost:8000/api/game-info/server-information/feature-disable";
+  "/game-info/server-information/feature-disable";
 const FEATURE_ENABLE_URL =
-  "http://localhost:8000/api/game-info/server-information/feature-enable";
+  "/game-info/server-information/feature-enable";
 const NPC_LIST_URL =
-  "http://localhost:8000/api/game-info/server-information/npclist";
+  "/game-info/server-information/npclist";
 const DROP_LIST_URL =
-  "http://localhost:8000/api/game-info/server-information/droplist";
+  "/game-info/server-information/droplist";
 
 export default function ServerInfo() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -46,14 +46,14 @@ export default function ServerInfo() {
     const fetchAllServerData = async () => {
       try {
         const responses = await Promise.all([
-          fetch(PENDANT_URL), // 0
-          fetch(GEM_URL), // 1
-          fetch(SERVERS_INFO_URL), // 2
-          fetch(SYSTEM_INFO_URL), // 3
-          fetch(FEATURE_DISABLE_URL), // 4
-          fetch(FEATURE_ENABLE_URL), // 5
-          fetch(NPC_LIST_URL), // 6
-          fetch(DROP_LIST_URL), // 7
+          api.get(PENDANT_URL), // 0
+          api.get(GEM_URL), // 1
+          api.get(SERVERS_INFO_URL), // 2
+          api.get(SYSTEM_INFO_URL), // 3
+          api.get(FEATURE_DISABLE_URL), // 4
+          api.get(FEATURE_ENABLE_URL), // 5
+          api.get(NPC_LIST_URL), // 6
+          api.get(DROP_LIST_URL), // 7
         ]);
 
         for (const res of responses) {

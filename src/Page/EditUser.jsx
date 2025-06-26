@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../Components/api';
 
 const EditUser = () => {
   const { id } = useParams();
@@ -8,12 +8,12 @@ const EditUser = () => {
   const [formData, setFormData] = useState({ nama: '', email: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const apiUrl = `http://localhost:8000/api/users/${id}`;
+  const apiUrl = `/users/${id}`;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(apiUrl);
+        const res = await api.get(apiUrl);
         setFormData({ nama: res.data.nama, email: res.data.email });
       } catch (err) {
         console.error('Error loading user:', err);
@@ -32,7 +32,7 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(apiUrl, formData);
+      await api.put(apiUrl, formData);
       navigate('/admin/users');
     } catch (err) {
       console.error('Error updating user:', err);

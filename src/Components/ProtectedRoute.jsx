@@ -1,7 +1,7 @@
 // components/ProtectedRoute.jsx
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import api from "../assets/logic/api";
+import api from "./api";
 // Pastikan path ini sesuai dengan struktur project Anda
 const ProtectedRoute = ({ children, roleRequired }) => {
   const [auth, setAuth] = useState({

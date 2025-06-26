@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import SwitchMode from "./switchMode";
 import line from "../assets/Picture/Line-header.png";
-import api from "../assets/logic/api";
+import api from "./api";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);

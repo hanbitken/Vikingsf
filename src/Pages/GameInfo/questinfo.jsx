@@ -7,15 +7,15 @@ import {
   FaChevronDown,
   FaChevronRight,
 } from "react-icons/fa";
-import backg from "../../assets/Picture/background.png";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
+import api from "../../Components/api";
 
 const AFTERWAR_QUEST_URL =
-  "http://localhost:8000/api/game-info/quest-information/dailyquestafterwar";
+  "/game-info/quest-information/dailyquestafterwar";
 const DAILY_QUEST_URL =
-  "http://localhost:8000/api/game-info/quest-information/dailyquest";
+  "/game-info/quest-information/dailyquest";
 
 export default function QuestInfo() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -27,16 +27,16 @@ export default function QuestInfo() {
     const fetchQuestData = async () => {
       try {
         const [afterWarResponse, dailyResponse] = await Promise.all([
-          fetch(AFTERWAR_QUEST_URL),
-          fetch(DAILY_QUEST_URL),
+          api.get(AFTERWAR_QUEST_URL),
+          api.get(DAILY_QUEST_URL),
         ]);
 
         if (!afterWarResponse.ok || !dailyResponse.ok) {
           throw new Error("Failed to fetch quest data from the server.");
         }
 
-        const afterWarData = await afterWarResponse.json();
-        const dailyData = await dailyResponse.json();
+        const afterWarData = await afterWarResponse.data();
+        const dailyData = await dailyResponse.data();
 
         let questsToSet = [];
 

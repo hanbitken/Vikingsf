@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 import Tree from "../assets/Picture/Tree Celtic.png";
-import api from "../assets/logic/api";
+import api from "./api";
 
 export default function forgot() {
   const [username, setUsername] = useState("");

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../assets/logic/api";
+import api from "./api";
 import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 
 const Admin_Sidebar = ({ onMenuClick, activePage }) => {
