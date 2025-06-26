@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import api from "../../api";
 
 const PendantInformation = () => {
   const [pendants, setPendants] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    name_item: '',
-    type: '',
-    trade: '',
+    name_item: "",
+    type: "",
+    trade: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [currentItem, setCurrentItem] = useState(null);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState('info');
+  const [toastType, setToastType] = useState("info");
 
   useEffect(() => {
     fetchPendants();
@@ -20,15 +21,13 @@ const PendantInformation = () => {
 
   const fetchPendants = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/game-info/server-information/pendant-information');
-      if (!response.ok) {
-        throw new Error('Gagal mengambil data Pendant: ' + response.statusText);
-      }
-      const data = await response.json();
-      setPendants(data);
+      const response = await api.get(
+        "/game-info/server-information/pendant-information"
+      );
+      setPendants(response.data);
     } catch (error) {
       setToastMessage(`Gagal mengambil data Pendant: ${error.message}`);
-      setToastType('error');
+      setToastType("error");
       setShowToast(true);
     }
   };
@@ -47,26 +46,26 @@ const PendantInformation = () => {
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         handleCloseModal();
       }
     };
 
     if (showModal) {
-      window.addEventListener('keydown', handleEsc);
+      window.addEventListener("keydown", handleEsc);
     }
 
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener("keydown", handleEsc);
     };
   }, [showModal]);
 
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      name_item: '',
-      type: '',
-      trade: '',
+      name_item: "",
+      type: "",
+      trade: "",
     });
     setImageFile(null);
     setShowModal(true);
@@ -78,7 +77,7 @@ const PendantInformation = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image' && files && files.length > 0) {
+    if (name === "image" && files && files.length > 0) {
       setImageFile(files[0]);
     } else {
       setFormData((prev) => ({
@@ -91,58 +90,57 @@ const PendantInformation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const method = currentItem ? 'POST' : 'POST';
-      const url = currentItem
-        ? `http://127.0.0.1:8000/api/game-info/server-information/pendant-information/${currentItem.id}`
-        : 'http://127.0.0.1:8000/api/game-info/server-information/pendant-information';
+      const isUpdate = !!currentItem;
+      const url = isUpdate
+        ? `/game-info/server-information/pendant-information/${currentItem.id}`
+        : "/game-info/server-information/pendant-information";
 
       const formDataToSend = new FormData();
+
       if (imageFile) {
-        formDataToSend.append('image', imageFile);
-      }
-      formDataToSend.append('name_item', formData.name_item);
-      formDataToSend.append('type', formData.type);
-      formDataToSend.append('trade', formData.trade);
-
-      if (currentItem) {
-        formDataToSend.append('_method', 'PUT');
+        formDataToSend.append("image", imageFile);
       }
 
-      const response = await fetch(url, {
-        method: 'POST',
+      formDataToSend.append("name_item", formData.name_item);
+      formDataToSend.append("type", formData.type);
+      formDataToSend.append("trade", formData.trade);
+
+      if (isUpdate) {
+        formDataToSend.append("_method", "PUT"); // Laravel method spoofing
+      }
+
+      await api.post(url, formDataToSend, {
         headers: {
-          'Accept': 'application/json',
+          "Content-Type": "multipart/form-data",
         },
-        body: formDataToSend,
       });
 
-      if (!response.ok) {
-        let errorData;
-        try {
-          errorData = await response.json();
-        } catch (jsonError) {
-          errorData = response.statusText;
-        }
-
-        let errorMessage = 'Terjadi kesalahan.';
-        if (typeof errorData === 'string') {
-            errorMessage = errorData;
-        } else if (errorData && errorData.message) {
-            errorMessage = errorData.message;
-        } else if (errorData && errorData.errors) {
-            errorMessage = Object.values(errorData.errors).flat().join('; ');
-        }
-        throw new Error(errorMessage);
-      }
-
+      // Tangani sukses
       fetchPendants();
       handleCloseModal();
-      setToastMessage(currentItem ? 'Pendant berhasil diperbarui.' : 'Pendant berhasil ditambahkan.');
-      setToastType('success');
+      setToastMessage(
+        isUpdate
+          ? "Pendant Information berhasil diperbarui."
+          : "Pendant Information berhasil ditambahkan."
+      );
+      setToastType("success");
       setShowToast(true);
     } catch (error) {
-      setToastMessage(`Gagal menyimpan pendant: ${error.message}`);
-      setToastType('error');
+      // Tangani error respons
+      let errorMessage = "Gagal menyimpan Pendant Information.";
+      if (error.response) {
+        const data = error.response.data;
+        if (data.message) {
+          errorMessage = data.message;
+        } else if (data.errors) {
+          errorMessage = Object.values(data.errors).flat().join("; ");
+        }
+      } else {
+        errorMessage = error.message;
+      }
+
+      setToastMessage(errorMessage);
+      setToastType("error");
       setShowToast(true);
     }
   };
@@ -159,34 +157,25 @@ const PendantInformation = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/game-info/server-information/pendant-information/${id}`, {
-          method: 'DELETE',
-        });
-        if (response.ok) {
-          fetchPendants();
-          setToastMessage('Pendant berhasil dihapus.');
-          setToastType('success');
-          setShowToast(true);
-        } else {
-          let errorData;
-          try {
-            errorData = await response.json();
-          } catch (jsonError) {
-            errorData = response.statusText;
-          }
-          let errorMessage = 'Gagal menghapus pendant.';
-          if (typeof errorData === 'string') {
-              errorMessage = errorData;
-          } else if (errorData && errorData.message) {
-              errorMessage = errorData.message;
-          }
-          throw new Error(errorMessage);
+        await api.delete(
+          `/game-info/server-information/pendant-information/${id}`
+        );
+        fetchPendants();
+        setToastMessage("Pendant berhasil dihapus.");
+        setToastType("success");
+        setShowToast(true);
+        let errorMessage = "Gagal menghapus data.";
+        if (data && data.message) {
+          errorMessage = data.message;
         }
+        throw new Error(errorMessage);
       } catch (error) {
-        setToastMessage(`Terjadi kesalahan saat menghapus pendant: ${error.message}`);
-        setToastType('error');
+        setToastMessage(
+          `Terjadi kesalahan saat menghapus pendant: ${error.message}`
+        );
+        setToastType("error");
         setShowToast(true);
       }
     }
@@ -194,19 +183,21 @@ const PendantInformation = () => {
 
   const getToastColor = (type) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-500';
-      case 'error':
-        return 'bg-red-500';
+      case "success":
+        return "bg-green-500";
+      case "error":
+        return "bg-red-500";
       default:
-        return 'bg-blue-500';
+        return "bg-blue-500";
     }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Pendant Information</h2>
+        <h2 className="text-3xl font-bold text-gray-800">
+          Pendant Information
+        </h2>
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
@@ -231,15 +222,23 @@ const PendantInformation = () => {
             {pendants.map((item, index) => (
               <tr
                 key={item.id}
-                className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
-                <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
+                <td className="py-3 px-6 text-left whitespace-nowrap">
+                  {item.id}
+                </td>
                 <td className="py-3 px-6 text-left">
                   <img
                     src={`http://127.0.0.1:8000/storage/${item.image}`}
                     alt={item.name_item}
                     className="w-12 h-12 object-cover rounded-full"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/48x48/cccccc/000000?text=No+Image'; }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/48x48/cccccc/000000?text=No+Image";
+                    }}
                   />
                 </td>
                 <td className="py-3 px-6 text-left">{item.name_item}</td>
@@ -274,14 +273,18 @@ const PendantInformation = () => {
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
             style={{
-                transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-                opacity: showModal ? 1 : 0
+              transform: showModal
+                ? "translateY(0) scale(1)"
+                : "translateY(-50px) scale(0.95)",
+              opacity: showModal ? 1 : 0,
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit  Pendant Information' : 'Tambah Pendant Information'}
+                {currentItem
+                  ? "Edit  Pendant Information"
+                  : "Tambah Pendant Information"}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -292,7 +295,10 @@ const PendantInformation = () => {
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
               <div className="mb-4">
-                <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="image"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Image
                 </label>
                 <input
@@ -304,7 +310,10 @@ const PendantInformation = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="name_item" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="name_item"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Item Name
                 </label>
                 <input
@@ -318,7 +327,10 @@ const PendantInformation = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="type" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="type"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Type
                 </label>
                 <input
@@ -332,7 +344,10 @@ const PendantInformation = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="trade" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="trade"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Trade
                 </label>
                 <input
@@ -350,7 +365,7 @@ const PendantInformation = () => {
                   type="submit"
                   className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {currentItem ? 'Perbarui' : 'Simpan'}
+                  {currentItem ? "Perbarui" : "Simpan"}
                 </button>
               </div>
             </form>
@@ -360,7 +375,11 @@ const PendantInformation = () => {
 
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-slideInFromRight">
-          <div className={`${getToastColor(toastType)} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}>
+          <div
+            className={`${getToastColor(
+              toastType
+            )} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}
+          >
             <span>{toastMessage}</span>
             <button
               onClick={() => setShowToast(false)}
