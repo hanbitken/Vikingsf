@@ -3,17 +3,16 @@ import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
-
+import api from "../../Components/api";
 export default function Rules() {
   const [rulesData, setRulesData] = useState([]);
 
   useEffect(() => {
     // Ambil data dari ServerRulesController
-    fetch("http://127.0.0.1:8000/api/game-info/server-rules")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setRulesData(data);
+    api.get("/game-info/server-rules")
+      .then((res) => {
+        if (Array.isArray(res.data)) {
+          setRulesData(res.data);
         }
       })
       .catch((err) => console.error(err));

@@ -8,7 +8,7 @@ import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import api from "../../Components/api";
 const PrevArrow = ({ onClick }) => (
   <div
     className="absolute left-4 z-20 top-1/2 -translate-y-1/2 cursor-pointer"
@@ -93,20 +93,10 @@ const News = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/news")
-      .then((res) => res.text())
-      .then((text) => {
-        const jsonString = text.replace(
-          /^use\s+Illuminate\\Support\\Facades\\Route;\s*/,
-          ""
-        );
-        try {
-          const data = JSON.parse(jsonString);
-          setNewsData(data);
-          setCarouselData(data.slice(0, 3));
-        } catch (err) {
-          console.error("Gagal parse JSON dari response:", err);
-        }
+    api.get("/news")
+      .then((res) => {
+        setNewsData(res.data);
+        setCarouselData(res.data.slice(0, 3));
       })
       .catch((err) => {
         console.error("Gagal mengambil data dari backend:", err);

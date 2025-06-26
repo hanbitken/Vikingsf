@@ -3,21 +3,18 @@ import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
-
+import api from "../../Components/api";
 export default function MapInfo() {
   const [maps, setMaps] = useState([]); // List dari backend
   const [selectedMap, setSelectedMap] = useState(null); // Map yang dipilih
   const [loading, setLoading] = useState(true);
 
-  const BACKEND_URL = "http://localhost:8000";
-
   // Ambil data maps dari API saat halaman load
   useEffect(() => {
     const fetchMaps = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/game-info/mapinfo`);
-        const data = await response.json();
-        setMaps(data);
+        const response = await api.get("/game-info/mapinfo");
+        setMaps(response.data);
       } catch (error) {
         console.error("Failed to fetch maps:", error);
       } finally {

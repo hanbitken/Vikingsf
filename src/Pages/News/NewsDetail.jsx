@@ -3,25 +3,15 @@ import { useParams } from "react-router-dom";
 import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import { FaInstagram, FaTiktok, FaFacebook, FaDiscord } from "react-icons/fa";
-
+import api from "../../Components/api";
 const NewsDetail = () => {
   const { id } = useParams();
   const [news, setNews] = useState(null);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/news/${id}`)
-      .then((res) => res.text())
-      .then((text) => {
-        const jsonString = text.replace(
-          /^use\s+Illuminate\\Support\\Facades\\Route;\s*/,
-          ""
-        );
-        try {
-          const data = JSON.parse(jsonString);
-          setNews(data);
-        } catch (err) {
-          console.error("Gagal parse JSON:", err);
-        }
+    api.get(`/news/${id}`)
+      .then((res) => {
+        setNews(res.data);
       })
       .catch((err) => console.error("Gagal fetch detail news:", err));
   }, [id]);
@@ -30,7 +20,7 @@ const NewsDetail = () => {
     return <div className="text-center mt-10 text-white">Loading...</div>;
 
   return (
-    <section classname="h-full">
+    <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container text-left">
         <div className="flex flex-col items-center justify-center mx-8">
           <img src={LOGO} alt="Logo" className="w-[25%] mt-12" />

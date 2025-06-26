@@ -10,7 +10,7 @@ import {
 import LOGO from "../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../assets/Picture/Line Border.png";
 import LineQuest from "../assets/Picture/Line-Quest.png";
-
+import api from "../Components/api";
 export default function Donation() {
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -48,10 +48,9 @@ export default function Donation() {
       // RETAIL
       if (index === 0 && retailDonations.length === 0 && !loadingRetail) {
         setLoadingRetail(true);
-        fetch("http://127.0.0.1:8000/api/donation/retail")
-          .then((res) => res.json())
-          .then((data) => {
-            if (Array.isArray(data)) setRetailDonations(data);
+        api.get("/donation/retail")
+          .then((res) => {
+            if (Array.isArray(res.data)) setRetailDonations(res.data);
           })
           .catch(console.error)
           .finally(() => setLoadingRetail(false));
@@ -61,15 +60,9 @@ export default function Donation() {
       if (index === 1 && !loadingService) {
         setLoadingService(true);
         Promise.all([
-          fetch("http://127.0.0.1:8000/api/donation/service/services").then(
-            (r) => r.json()
-          ),
-          fetch("http://127.0.0.1:8000/api/donation/service/gemstone").then(
-            (r) => r.json()
-          ),
-          fetch("http://127.0.0.1:8000/api/donation/service/resources").then(
-            (r) => r.json()
-          ),
+          api.get("/donation/service/services"),
+          api.get("/donation/service/gemstone"),
+          api.get("/donation/service/resources"),
         ])
           .then(([serviceData, gemstoneData, resourceData]) => {
             if (Array.isArray(serviceData)) setServiceDonations(serviceData);
@@ -88,10 +81,9 @@ export default function Donation() {
         !loadingSeasonPass
       ) {
         setLoadingSeasonPass(true);
-        fetch("http://127.0.0.1:8000/api/donation/seassonpass")
-          .then((res) => res.json())
-          .then((data) => {
-            if (Array.isArray(data)) setSeasonPassDonations(data);
+        api.get("/donation/seasonpass")
+          .then((res) => {
+            if (Array.isArray(res.data)) setSeasonPassDonations(res.data);
           })
           .catch(console.error)
           .finally(() => setLoadingSeasonPass(false));
@@ -100,10 +92,9 @@ export default function Donation() {
       // PACKAGE
       if (index === 3 && packageDonations.length === 0 && !loadingPackages) {
         setLoadingPackages(true);
-        fetch("http://127.0.0.1:8000/api/donation/packages")
-          .then((res) => res.json())
-          .then((data) => {
-            if (Array.isArray(data)) setPackageDonations(data);
+        api.get("/donation/packages")
+          .then((res) => {
+            if (Array.isArray(res.data)) setPackageDonations(res.data);
           })
           .catch(console.error)
           .finally(() => setLoadingPackages(false));
@@ -112,10 +103,9 @@ export default function Donation() {
       // HOW TO
       if (index === 4 && howToDonationList.length === 0 && !loadingHowTo) {
         setLoadingHowTo(true);
-        fetch("http://127.0.0.1:8000/api/donation/howto")
-          .then((res) => res.json())
-          .then((data) => {
-            if (Array.isArray(data)) setHowToDonationList(data);
+        api.get("/donation/howto")
+          .then((res) => {
+            if (Array.isArray(res.data)) setHowToDonationList(res.data);
           })
           .catch(console.error)
           .finally(() => setLoadingHowTo(false));
