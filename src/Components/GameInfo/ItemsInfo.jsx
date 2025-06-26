@@ -1,45 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import api from "../api";
 
 const ItemsInfo = () => {
   const [items, setItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ items_name: '' });
+  const [formData, setFormData] = useState({ items_name: "" });
   const [currentItem, setCurrentItem] = useState(null);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState('info'); // success, error, info
+  const [toastType, setToastType] = useState("info"); // success, error, info
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formFields = [
-    { label: 'Item Name', name: 'items_name', type: 'text', required: true, placeholder: 'Enter Item Name (e.g., Diamond)' },
+    {
+      label: "Item Name",
+      name: "items_name",
+      type: "text",
+      required: true,
+      placeholder: "Enter Item Name (e.g., Diamond)",
+    },
   ];
 
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/game-info/items');
-      if (!response.ok) {
-        if (response.status === 404) {
-          setItems([]);
-          setToastMessage('Tidak ada data Item.');
-          setToastType('info');
-        } else {
-          const errorText = await response.text();
-          throw new Error(`Gagal mengambil data Item: Status ${response.status} - ${errorText}`);
-        }
-      } else {
-        const data = await response.json();
-        setItems(Array.isArray(data) ? data : []);
-        setToastMessage('Data Item berhasil dimuat.');
-        setToastType('success');
-      }
+      const response = await api.get("/game-info/items");
+      const data = response.data;
+
+      setItems(Array.isArray(data) ? data : []);
+      setToastMessage("Data Item berhasil dimuat.");
+      setToastType("success");
       setShowToast(true);
     } catch (error) {
-      setToastMessage(`Gagal mengambil data Item: ${error.message}`);
-      setToastType('error');
+      console.error("Error fetching items:", error);
+
+      const errorMessage =
+        error.response?.data?.message || "Gagal mengambil data Item.";
+      setToastMessage(errorMessage);
+      setToastType("error");
       setShowToast(true);
-      setItems([]); // Clear items on error
+      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -52,45 +53,37 @@ const ItemsInfo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const method = currentItem ? 'PUT' : 'POST';
+    const method = currentItem ? "PUT" : "POST";
     const url = currentItem
-      ? `http://127.0.0.1:8000/api/game-info/items/${currentItem.id}`
-      : 'http://127.0.0.1:8000/api/game-info/items';
+      ? `/game-info/items/${currentItem.id}`
+      : "/game-info/items";
+
+    // console.log("Data yang akan dikirim:", formData); // ✅ Tambahkan ini
+    // console.log("Method:", method);
+    // console.log("URL:", url);
 
     try {
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const response = currentItem
+        ? await api.put(url, formData)
+        : await api.post(url, formData);
 
-      const clonedResponse = response.clone();
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        throw new Error(`Invalid response from server (${response.status}): ${rawText.substring(0, 100)}...`);
-      }
+      // console.log("Response dari server:", response.data);
 
-      if (response.ok) {
-        fetchItems();
-        handleCloseModal();
-        setToastMessage(currentItem ? 'Item berhasil diperbarui.' : 'Item berhasil ditambahkan.');
-        setToastType('success');
-        setShowToast(true);
-      } else {
-        let errorMessage = 'Terjadi kesalahan.';
-        if (data && data.message) {
-            errorMessage = data.message;
-        } else if (data && data.errors) {
-            errorMessage = Object.values(data.errors).flat().join('; ');
-        }
-        throw new Error(errorMessage);
-      }
+      fetchItems();
+      handleCloseModal();
+      setToastMessage(
+        currentItem ? "Item berhasil diperbarui." : "Item berhasil ditambahkan."
+      );
+      setToastType("success");
+      setShowToast(true);
     } catch (error) {
-      setToastMessage(`Gagal menyimpan Item: ${error.message}`);
-      setToastType('error');
+      console.error("Error submitting form:", error);
+      setToastMessage(
+        `Terjadi kesalahan saat ${
+          currentItem ? "memperbarui" : "menambahkan"
+        } data: ${error.message}`
+      );
+      setToastType("error");
       setShowToast(true);
     } finally {
       setIsSubmitting(false);
@@ -98,38 +91,23 @@ const ItemsInfo = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+    if (!window.confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/game-info/items/${id}`, {
-        method: 'DELETE',
-        headers: { 'Accept': 'application/json' },
-      });
-
-      const clonedResponse = response.clone();
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        throw new Error(`Invalid response from server (${response.status}) on delete: ${rawText.substring(0, 100)}...`);
-      }
-
-      if (response.ok) {
-        fetchItems();
-        setToastMessage('Item berhasil dihapus.');
-        setToastType('success');
-        setShowToast(true);
-      } else {
-        let errorMessage = 'Gagal menghapus data.';
-        if (data && data.message) {
-            errorMessage = data.message;
-        }
-        throw new Error(errorMessage);
-      }
-    } catch (error) {
-      setToastMessage(`Terjadi kesalahan saat menghapus: ${error.message}`);
-      setToastType('error');
+      const response = await api.delete(`/game-info/items/${id}`);
+      fetchItems();
+      setToastMessage("Item berhasil dihapus.");
+      setToastType("success");
       setShowToast(true);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      setToastMessage(
+        `Gagal menghapus item: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+      setToastType("error");
+      setShowToast(true);
+      return;
     }
   };
 
@@ -147,21 +125,21 @@ const ItemsInfo = () => {
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         handleCloseModal();
       }
     };
     if (showModal) {
-      window.addEventListener('keydown', handleEsc);
+      window.addEventListener("keydown", handleEsc);
     }
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener("keydown", handleEsc);
     };
   }, [showModal]);
 
   const handleShowModal = () => {
     setCurrentItem(null);
-    setFormData({ items_name: '' });
+    setFormData({ items_name: "" });
     setShowModal(true);
   };
 
@@ -181,13 +159,13 @@ const ItemsInfo = () => {
 
   const getToastColor = (type) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-500';
-      case 'error':
-        return 'bg-red-500';
-      case 'info':
+      case "success":
+        return "bg-green-500";
+      case "error":
+        return "bg-red-500";
+      case "info":
       default:
-        return 'bg-blue-500';
+        return "bg-blue-500";
     }
   };
 
@@ -198,7 +176,9 @@ const ItemsInfo = () => {
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
-        >Tambah Item</button>
+        >
+          Tambah Item
+        </button>
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg">
@@ -212,29 +192,48 @@ const ItemsInfo = () => {
           </thead>
           <tbody className="text-gray-700 text-sm">
             {loading ? (
-              <tr><td colSpan="3" className="text-center py-4 text-gray-500">Loading...</td></tr>
+              <tr>
+                <td colSpan="3" className="text-center py-4 text-gray-500">
+                  Loading...
+                </td>
+              </tr>
             ) : items.length > 0 ? (
               items.map((item, index) => (
                 <tr
                   key={item.id}
-                  className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
+                  className={`${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
                 >
-                  <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    {item.id}
+                  </td>
                   <td className="py-3 px-6 text-left">{item.items_name}</td>
                   <td className="py-3 px-6 text-center">
                     <button
                       className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-xs mr-2 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                       onClick={() => handleEdit(item)}
-                    >Edit</button>
+                    >
+                      Edit
+                    </button>
                     <button
                       className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                       onClick={() => handleDelete(item.id)}
-                    >Hapus</button>
+                    >
+                      Hapus
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
-              <tr><td colSpan="3" className="text-center py-4 text-gray-500 italic">Tidak ada data item yang tersedia.</td></tr>
+              <tr>
+                <td
+                  colSpan="3"
+                  className="text-center py-4 text-gray-500 italic"
+                >
+                  Tidak ada data item yang tersedia.
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
@@ -249,14 +248,16 @@ const ItemsInfo = () => {
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
             style={{
-              transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-              opacity: showModal ? 1 : 0
+              transform: showModal
+                ? "translateY(0) scale(1)"
+                : "translateY(-50px) scale(0.95)",
+              opacity: showModal ? 1 : 0,
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit Item' : 'Tambah Item'}
+                {currentItem ? "Edit Item" : "Tambah Item"}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -268,7 +269,10 @@ const ItemsInfo = () => {
             <form onSubmit={handleSubmit} className="mt-4">
               {formFields.map((field, index) => (
                 <div className="mb-4" key={index}>
-                  <label htmlFor={field.name} className="block text-gray-700 text-sm font-bold mb-2">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
                     {field.label}
                   </label>
                   <input
@@ -296,7 +300,11 @@ const ItemsInfo = () => {
                   disabled={isSubmitting}
                   className="ml-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {isSubmitting ? 'Menyimpan...' : (currentItem ? 'Perbarui' : 'Simpan')}
+                  {isSubmitting
+                    ? "Menyimpan..."
+                    : currentItem
+                    ? "Perbarui"
+                    : "Simpan"}
                 </button>
               </div>
             </form>
@@ -306,7 +314,11 @@ const ItemsInfo = () => {
 
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-slideInFromRight">
-          <div className={`${getToastColor(toastType)} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}>
+          <div
+            className={`${getToastColor(
+              toastType
+            )} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}
+          >
             <span>{toastMessage}</span>
             <button
               onClick={() => setShowToast(false)}

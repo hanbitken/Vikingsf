@@ -1,23 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
+import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import api from "../api";
 
 const ServerRules = () => {
   const [serverRules, setServerRules] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    rules: '',
-    description: '',
-    category: '', // Added category to formData
+    rules: "",
+    description: "",
+    category: "", // Added category to formData
   });
   const [currentRule, setCurrentRule] = useState(null);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState('info');
+  const [toastType, setToastType] = useState("info");
 
   const formFields = [
-    { label: 'Rules', name: 'rules', type: 'text', required: true, placeholder: 'Enter rule title' },
-    { label: 'Description', name: 'description', type: 'textarea', required: false, placeholder: 'Write each list item on a new line. Example:\nFirst item\nSecond item' },
-    { label: 'Category', name: 'category', type: 'text', required: true, placeholder: 'Enter rule category' }, // Added category form field
+    {
+      label: "Rules",
+      name: "rules",
+      type: "text",
+      required: true,
+      placeholder: "Enter rule title",
+    },
+    {
+      label: "Description",
+      name: "description",
+      type: "textarea",
+      required: false,
+      placeholder:
+        "Write each list item on a new line. Example:\nFirst item\nSecond item",
+    },
+    {
+      label: "Category",
+      name: "category",
+      type: "text",
+      required: true,
+      placeholder: "Enter rule category",
+    }, // Added category form field
   ];
 
   useEffect(() => {
@@ -26,18 +46,24 @@ const ServerRules = () => {
 
   const fetchServerRules = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/game-info/server-rules');
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Gagal mengambil data aturan server.');
-      }
-      const data = await response.json();
-      setServerRules(data);
-    } catch (error) {
-      console.error('Error fetching server rules:', error);
-      setToastMessage(`Gagal mengambil aturan server: ${error.message}`);
-      setToastType('error');
+      const response = await api.get("/game-info/server-rules");
+      const data = response.data;
+
+      setServerRules(Array.isArray(data) ? data : []);
+      setToastMessage("Data Server berhasil dimuat.");
+      setToastType("success");
       setShowToast(true);
+    } catch (error) {
+      console.error("Error fetching:", error);
+
+      const errorMessage =
+        error.response?.data?.message || "Gagal mengambil data Server.";
+      setToastMessage(errorMessage);
+      setToastType("error");
+      setShowToast(true);
+      setItems([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,26 +81,26 @@ const ServerRules = () => {
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         handleCloseModal();
       }
     };
 
     if (showModal) {
-      window.addEventListener('keydown', handleEsc);
+      window.addEventListener("keydown", handleEsc);
     }
 
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener("keydown", handleEsc);
     };
   }, [showModal]);
 
   const handleShowModal = () => {
     setCurrentRule(null);
     setFormData({
-      rules: '',
-      description: '',
-      category: '', // Reset category when opening for add
+      rules: "",
+      description: "",
+      category: "", // Reset category when opening for add
     });
     setShowModal(true);
   };
@@ -94,61 +120,35 @@ const ServerRules = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const method = currentRule ? 'PUT' : 'POST';
+      const method = currentRule ? "PUT" : "POST";
       const url = currentRule
-        ? `http://127.0.0.1:8000/api/game-info/server-rules/${currentRule.id}`
-        : 'http://127.0.0.1:8000/api/game-info/server-rules';
+        ? `/game-info/server-rules/${currentRule.id}`
+        : "/game-info/server-rules";
 
-      const payload = {
-        ...formData,
-      };
+      const response = currentRule
+        ? await api.put(url, formData)
+        : await api.post(url, formData);
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const clonedResponse = response.clone();
-      let data;
-
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        console.error("Failed to parse response as JSON:", jsonError);
-        console.error("Raw non-JSON response text:", rawText);
-        throw new Error(`Invalid response from server (${response.status}): ${rawText.substring(0, 100)}...`);
-      }
-
-      if (response.ok) {
-        fetchServerRules();
-        handleCloseModal();
-        setToastMessage(
-          currentRule
-            ? 'Server rule updated successfully.'
-            : 'Server rule added successfully.'
-        );
-        setToastType('success');
-        setShowToast(true);
-      } else {
-        console.error('Backend error response:', data);
-        let errorMessage = 'An error occurred.';
-        if (data && data.message) {
-          errorMessage = data.message;
-        } else if (data && data.errors) {
-          errorMessage = Object.values(data.errors).flat().join('; ');
-        }
-        throw new Error(errorMessage);
-      }
-    } catch (error) {
-      console.error('Error submitting server rule:', error);
-      setToastMessage(`Failed to save server rule: ${error.message}`);
-      setToastType('error');
+      fetchServerRules();
+      handleCloseModal();
+      setToastMessage(
+        currentItem
+          ? "Rules berhasil diperbarui."
+          : "Rules berhasil ditambahkan."
+      );
+      setToastType("success");
       setShowToast(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setToastMessage(
+        `Terjadi kesalahan saat ${
+          currentItem ? "memperbarui" : "menambahkan"
+        } data: ${error.message}`
+      );
+      setToastType("error");
+      setShowToast(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -163,53 +163,34 @@ const ServerRules = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this rule?')) {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/game-info/server-rules/${id}`, {
-          method: 'DELETE',
-        });
-
-        const clonedResponse = response.clone();
-        let data;
-
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          const rawText = await clonedResponse.text();
-          console.error("Failed to parse delete error response as JSON:", jsonError);
-          console.error("Raw delete response text:", rawText);
-          throw new Error(`Invalid response from server (${response.status}) when deleting: ${rawText.substring(0, 100)}...`);
-        }
-
-        if (response.ok) {
-          fetchServerRules();
-          setToastMessage('Server rule deleted successfully.');
-          setToastType('success');
-          setShowToast(true);
-        } else {
-          let errorMessage = 'Failed to delete data.';
-          if (data && data.message) {
-            errorMessage = data.message;
-          }
-          throw new Error(errorMessage);
-        }
-      } catch (error) {
-        console.error('Error deleting rule:', error);
-        setToastMessage(`An error occurred while deleting: ${error.message}`);
-        setToastType('error');
-        setShowToast(true);
-      }
+    if (!window.confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
+    try {
+      const response = await api.delete(`/game-info/server-rules/${id}`);
+      fetchServerRules();
+      setToastMessage("Rules berhasil dihapus.");
+      setToastType("success");
+      setShowToast(true);
+    } catch (error) {
+      console.error("Error deleting rules:", error);
+      setToastMessage(
+        `Gagal menghapus rules: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+      setToastType("error");
+      setShowToast(true);
+      return;
     }
   };
 
   const getToastColor = (type) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-500';
-      case 'error':
-        return 'bg-red-500';
+      case "success":
+        return "bg-green-500";
+      case "error":
+        return "bg-red-500";
       default:
-        return 'bg-blue-500';
+        return "bg-blue-500";
     }
   };
 
@@ -231,7 +212,8 @@ const ServerRules = () => {
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">ID</th>
               <th className="py-3 px-6 text-left">Rules</th>
-              <th className="py-3 px-6 text-left">Category</th> {/* Added Category column header */}
+              <th className="py-3 px-6 text-left">Category</th>{" "}
+              {/* Added Category column header */}
               <th className="py-3 px-6 text-left">Description</th>
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
@@ -240,17 +222,27 @@ const ServerRules = () => {
             {serverRules.map((rule, index) => (
               <tr
                 key={rule.id}
-                className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
-                <td className="py-3 px-6 text-left whitespace-nowrap">{rule.id}</td>
+                <td className="py-3 px-6 text-left whitespace-nowrap">
+                  {rule.id}
+                </td>
                 <td className="py-3 px-6 text-left">{rule.rules}</td>
-                <td className="py-3 px-6 text-left">{rule.category}</td> {/* Display category */}
+                <td className="py-3 px-6 text-left">{rule.category}</td>{" "}
+                {/* Display category */}
                 <td className="py-3 px-6 text-left">
                   {rule.description && (
                     <ol className="list-decimal list-inside pl-4 m-0">
-                      {rule.description.split('\n').map((item, descIndex) => (
-                        item.trim() !== '' && <li key={descIndex}>{item}</li>
-                      ))}
+                      {rule.description
+                        .split("\n")
+                        .map(
+                          (item, descIndex) =>
+                            item.trim() !== "" && (
+                              <li key={descIndex}>{item}</li>
+                            )
+                        )}
                     </ol>
                   )}
                 </td>
@@ -283,14 +275,16 @@ const ServerRules = () => {
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
             style={{
-              transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-              opacity: showModal ? 1 : 0
+              transform: showModal
+                ? "translateY(0) scale(1)"
+                : "translateY(-50px) scale(0.95)",
+              opacity: showModal ? 1 : 0,
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentRule ? 'Edit Server Rule' : 'Add Server Rule'}
+                {currentRule ? "Edit Server Rule" : "Add Server Rule"}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -302,10 +296,13 @@ const ServerRules = () => {
             <form onSubmit={handleSubmit} className="mt-4">
               {formFields.map((field, index) => (
                 <div className="mb-4" key={index}>
-                  <label htmlFor={field.name} className="block text-gray-700 text-sm font-bold mb-2">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
                     {field.label}
                   </label>
-                  {field.type === 'textarea' ? (
+                  {field.type === "textarea" ? (
                     <textarea
                       id={field.name}
                       name={field.name}
@@ -339,7 +336,7 @@ const ServerRules = () => {
                   type="submit"
                   className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {currentRule ? 'Update' : 'Save'}
+                  {currentRule ? "Update" : "Save"}
                 </button>
               </div>
             </form>
@@ -350,7 +347,11 @@ const ServerRules = () => {
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-slideInFromRight">
-          <div className={`${getToastColor(toastType)} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}>
+          <div
+            className={`${getToastColor(
+              toastType
+            )} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}
+          >
             <span>{toastMessage}</span>
             <button
               onClick={() => setShowToast(false)}
