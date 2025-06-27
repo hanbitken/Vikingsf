@@ -11,23 +11,16 @@ import LOGO from "../../assets/Picture/LOGO VIKINGS 1.png";
 import Line from "../../assets/Picture/Line Border.png";
 import LineQuest from "../../assets/Picture/Line-Quest.png";
 import api from "../../Components/api";
-// Definisikan semua URL API
-const PENDANT_URL =
-  "/game-info/server-information/pendant-information";
-const GEM_URL =
-  "/game-info/server-information/gem-information";
-const SERVERS_INFO_URL =
-  "/game-info/server-information/serversinfo";
-const SYSTEM_INFO_URL =
-  "/game-info/server-information/systeminfo";
-const FEATURE_DISABLE_URL =
-  "/game-info/server-information/feature-disable";
-const FEATURE_ENABLE_URL =
-  "/game-info/server-information/feature-enable";
-const NPC_LIST_URL =
-  "/game-info/server-information/npclist";
-const DROP_LIST_URL =
-  "/game-info/server-information/droplist";
+
+// API URLs remain the same
+const PENDANT_URL = "/game-info/server-information/pendant-information";
+const GEM_URL = "/game-info/server-information/gem-information";
+const SERVERS_INFO_URL = "/game-info/server-information/serversinfo";
+const SYSTEM_INFO_URL = "/game-info/server-information/systeminfo";
+const FEATURE_DISABLE_URL = "/game-info/server-information/feature-disable";
+const FEATURE_ENABLE_URL = "/game-info/server-information/feature-enable";
+const NPC_LIST_URL = "/game-info/server-information/npclist";
+const DROP_LIST_URL = "/game-info/server-information/droplist";
 
 export default function ServerInfo() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -45,6 +38,8 @@ export default function ServerInfo() {
   useEffect(() => {
     const fetchAllServerData = async () => {
       try {
+        // Promise.all will still make all requests concurrently.
+        // If any request fails, it will jump to the catch block.
         const responses = await Promise.all([
           api.get(PENDANT_URL), // 0
           api.get(GEM_URL), // 1
@@ -56,13 +51,12 @@ export default function ServerInfo() {
           api.get(DROP_LIST_URL), // 7
         ]);
 
-        for (const res of responses) {
-          if (!res.ok) throw new Error("Failed to fetch server information.");
-        }
-
-        const data = await Promise.all(responses.map((res) => res.json()));
+        // CORRECTED: Axios responses are automatically parsed.
+        // The JSON data is in the `data` property of each response.
+        const data = responses.map((res) => res.data);
 
         setServerData({
+          // The structure of your data might need adjustment based on the actual API response
           featureInfo: [...data[0], ...data[1]],
           generalInfo: {
             serversInfo: data[2],
@@ -74,7 +68,10 @@ export default function ServerInfo() {
           dropList: data[7],
         });
       } catch (err) {
-        setError(err.message);
+        // This will now correctly catch the 500 error from axios
+        const errorMessage =
+          err.response?.data?.message || err.message || "An unknown error occurred";
+        setError(`Request failed with status code 500. ${errorMessage}`);
         console.error("Error fetching server data:", err);
       } finally {
         setLoading(false);
@@ -95,12 +92,11 @@ export default function ServerInfo() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  // FIXED: All rendering logic is now correctly placed within this single function.
   const renderContent = (sectionKey, data) => {
     if (
       !data ||
       (Array.isArray(data) && data.length === 0) ||
-      Object.keys(data).length === 0
+      (typeof data === 'object' && !Array.isArray(data) && Object.keys(data).length === 0)
     ) {
       return <p>No information available.</p>;
     }
@@ -242,7 +238,7 @@ export default function ServerInfo() {
                 <div className="w-1/3">
                   {item.map_information?.name || item.map_information_id}
                 </div>
-                <div className="w-1/3">{item.items?.name || item.items_id}</div>
+                <div className="w-1/3">{item.items?.name || item.item.items_name}</div>
               </div>
             ))}
           </div>
@@ -260,11 +256,13 @@ export default function ServerInfo() {
     );
   if (error)
     return (
-      <div className="flex justify-center items-center h-screen text-red-500">
-        Error: {error}
+        // Displaying the modified, more informative error message
+      <div className="flex justify-center items-center h-screen text-red-500 font-bold">
+        ERROR: {error}
       </div>
     );
 
+  // The rest of your return statement (JSX) is correct and does not need changes.
   return (
     <section className="h-full">
       <div className="bg-cover bg-no-repeat main-background-container">
