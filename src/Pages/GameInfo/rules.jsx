@@ -9,11 +9,13 @@ export default function Rules() {
 
   useEffect(() => {
     // Ambil data dari ServerRulesController
-    api.get("/game-info/server-rules")
+    api
+      .get("/game-info/server-rules")
       .then((res) => {
         if (Array.isArray(res.data)) {
           setRulesData(res.data);
         }
+        console.log("Server rules data:", res.data);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -64,14 +66,18 @@ export default function Rules() {
                   {rules.map((rule) => (
                     <div
                       key={rule.id}
-                      className="flex flex-col gap-2 w-full items-center"
+                      className="flex flex-col gap-2 w-full items-start"
                     >
                       <div className="text-left font-semibold text-white w-full">
                         {rule.rules}
                       </div>
                       <img src={LineQuest} alt="LineQuest" className="w-full" />
-                      <div className="text-center text-gray-300 px-8">
-                        {rule.description}
+                      <div className="text-left text-gray-300 px-8">
+                        {rule.description.split("\n").map((line, i) => (
+                          <p key={i}>
+                            {i + 1}. {line}
+                          </p>
+                        ))}
                       </div>
                     </div>
                   ))}
