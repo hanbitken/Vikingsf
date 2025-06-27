@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import api from "../../api";
 
 const GemInformation = () => {
   const [gemInformations, setGemInformations] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    name_item: '',
-    type: '',
-    trade: '',
+    name_item: "",
+    type: "",
+    trade: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [currentItem, setCurrentItem] = useState(null);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState('info');
+  const [toastType, setToastType] = useState("info");
 
   useEffect(() => {
     fetchGemInformations();
@@ -20,15 +21,14 @@ const GemInformation = () => {
 
   const fetchGemInformations = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/game-info/server-information/gem-information');
-      if (!response.ok) {
-          throw new Error('Gagal mengambil data Gem Information: ' + response.statusText);
-      }
-      const data = await response.json();
-      setGemInformations(data);
+      const response = await api.get(
+        "/game-info/server-information/gem-information"
+      );
+      setGemInformations(response.data);
     } catch (error) {
-      setToastMessage(`Gagal mengambil data Gem: ${error.message}`);
-      setToastType('error');
+      console.error("Error fetching gem informations:", error);
+      setToastMessage("Gagal memuat data Gem Information.");
+      setToastType("error");
       setShowToast(true);
     }
   };
@@ -47,27 +47,26 @@ const GemInformation = () => {
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         handleCloseModal();
       }
     };
 
     if (showModal) {
-      window.addEventListener('keydown', handleEsc);
+      window.addEventListener("keydown", handleEsc);
     }
 
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener("keydown", handleEsc);
     };
   }, [showModal]);
 
   const handleShowModal = () => {
     setCurrentItem(null);
     setFormData({
-      name_item: '',
-      type: '',
-      trade: '',
-
+      name_item: "",
+      type: "",
+      trade: "",
     });
     setImageFile(null);
     setShowModal(true);
@@ -79,7 +78,7 @@ const GemInformation = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image' && files && files.length > 0) {
+    if (name === "image" && files && files.length > 0) {
       setImageFile(files[0]);
     } else {
       setFormData((prev) => ({
@@ -94,59 +93,55 @@ const GemInformation = () => {
     try {
       const isUpdate = !!currentItem;
       const url = isUpdate
-        ? `http://127.0.0.1:8000/api/game-info/server-information/gem-information/${currentItem.id}`
-        : 'http://127.0.0.1:8000/api/game-info/server-information/gem-information';
+        ? `/game-info/server-information/gem-information/${currentItem.id}`
+        : "/game-info/server-information/gem-information";
 
-      const method = 'POST';
       const formDataToSend = new FormData();
-      
+
       if (imageFile) {
-        formDataToSend.append('image', imageFile);
-      }
-      formDataToSend.append('name_item', formData.name_item);
-      formDataToSend.append('type', formData.type);
-      formDataToSend.append('trade', formData.trade);
-      
-      if (isUpdate) {
-        formDataToSend.append('_method', 'PUT');
+        formDataToSend.append("image", imageFile);
       }
 
-      const response = await fetch(url, {
-        method,
+      formDataToSend.append("name_item", formData.name_item);
+      formDataToSend.append("type", formData.type);
+      formDataToSend.append("trade", formData.trade);
+
+      if (isUpdate) {
+        formDataToSend.append("_method", "PUT"); // Laravel method spoofing
+      }
+
+      await api.post(url, formDataToSend, {
         headers: {
-            'Accept': 'application/json',
+          "Content-Type": "multipart/form-data",
         },
-        body: formDataToSend,
       });
 
-      const clonedResponse = response.clone();
-      let data;
-
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        throw new Error(`Respons tidak valid dari server (${response.status}): ${rawText.substring(0, 100)}...`);
-      }
-
-      if (response.ok) {
-        fetchGemInformations();
-        handleCloseModal();
-        setToastMessage(isUpdate ? 'Gem Information berhasil diperbarui.' : 'Gem Information berhasil ditambahkan.');
-        setToastType('success');
-        setShowToast(true);
-      } else {
-        let errorMessage = 'Terjadi kesalahan.';
-        if (data && data.message) {
-            errorMessage = data.message;
-        } else if (data && data.errors) {
-            errorMessage = Object.values(data.errors).flat().join('; ');
-        }
-        throw new Error(errorMessage);
-      }
+      // Tangani sukses
+      fetchGemInformations();
+      handleCloseModal();
+      setToastMessage(
+        isUpdate
+          ? "Gem Information berhasil diperbarui."
+          : "Gem Information berhasil ditambahkan."
+      );
+      setToastType("success");
+      setShowToast(true);
     } catch (error) {
-      setToastMessage(`Gagal menyimpan Gem Information: ${error.message}`);
-      setToastType('error');
+      // Tangani error respons
+      let errorMessage = "Gagal menyimpan Gem Information.";
+      if (error.response) {
+        const data = error.response.data;
+        if (data.message) {
+          errorMessage = data.message;
+        } else if (data.errors) {
+          errorMessage = Object.values(data.errors).flat().join("; ");
+        }
+      } else {
+        errorMessage = error.message;
+      }
+
+      setToastMessage(errorMessage);
+      setToastType("error");
       setShowToast(true);
     }
   };
@@ -163,37 +158,21 @@ const GemInformation = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/game-info/server-information/gem-information/${id}`, {
-          method: 'DELETE',
-        });
-        
-        const clonedResponse = response.clone();
-        let data;
-
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          const rawText = await clonedResponse.text();
-          throw new Error(`Respons tidak valid dari server (${response.status}) saat menghapus: ${rawText.substring(0, 100)}...`);
+        await api.delete(`/game-info/server-information/gem-information/${id}`);
+        fetchGemInformations();
+        setToastMessage("Gem Information berhasil dihapus.");
+        setToastType("success");
+        setShowToast(true);
+        let errorMessage = "Gagal menghapus data.";
+        if (data && data.message) {
+          errorMessage = data.message;
         }
-
-        if (response.ok) {
-          fetchGemInformations();
-          setToastMessage('Gem Information berhasil dihapus.');
-          setToastType('success');
-          setShowToast(true);
-        } else {
-          let errorMessage = 'Gagal menghapus data.';
-          if (data && data.message) {
-              errorMessage = data.message;
-          }
-          throw new Error(errorMessage);
-        }
+        throw new Error(errorMessage);
       } catch (error) {
         setToastMessage(`Terjadi kesalahan saat menghapus: ${error.message}`);
-        setToastType('error');
+        setToastType("error");
         setShowToast(true);
       }
     }
@@ -201,12 +180,12 @@ const GemInformation = () => {
 
   const getToastColor = (type) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-500';
-      case 'error':
-        return 'bg-red-500';
+      case "success":
+        return "bg-green-500";
+      case "error":
+        return "bg-red-500";
       default:
-        return 'bg-blue-500';
+        return "bg-blue-500";
     }
   };
 
@@ -238,16 +217,24 @@ const GemInformation = () => {
             {gemInformations.map((item, index) => (
               <tr
                 key={item.id}
-                className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
-                <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
+                <td className="py-3 px-6 text-left whitespace-nowrap">
+                  {item.id}
+                </td>
                 <td className="py-3 px-6 text-left">
                   {item.image ? (
                     <img
                       src={`http://127.0.0.1:8000/storage/${item.image}`}
                       alt={item.name_item}
                       className="w-12 h-12 object-cover rounded-full"
-                      onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/48x48/cccccc/000000?text=No+Image'; }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://placehold.co/48x48/cccccc/000000?text=No+Image";
+                      }}
                     />
                   ) : (
                     <img
@@ -289,14 +276,18 @@ const GemInformation = () => {
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
             style={{
-                transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-                opacity: showModal ? 1 : 0
+              transform: showModal
+                ? "translateY(0) scale(1)"
+                : "translateY(-50px) scale(0.95)",
+              opacity: showModal ? 1 : 0,
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit Gem Information' : 'Tambah Gem Information'}
+                {currentItem
+                  ? "Edit Gem Information"
+                  : "Tambah Gem Information"}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
@@ -307,7 +298,10 @@ const GemInformation = () => {
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
               <div className="mb-4">
-                <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="image"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Image
                 </label>
                 <input
@@ -319,7 +313,10 @@ const GemInformation = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="name_item" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="name_item"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Item Name
                 </label>
                 <input
@@ -333,7 +330,10 @@ const GemInformation = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="type" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="type"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Type
                 </label>
                 <input
@@ -347,7 +347,10 @@ const GemInformation = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="trade" className="block text-gray-700 text-sm font-bold mb-2">
+                <label
+                  htmlFor="trade"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
                   Trade
                 </label>
                 <input
@@ -365,7 +368,7 @@ const GemInformation = () => {
                   type="submit"
                   className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {currentItem ? 'Perbarui' : 'Simpan'}
+                  {currentItem ? "Perbarui" : "Simpan"}
                 </button>
               </div>
             </form>
@@ -375,7 +378,11 @@ const GemInformation = () => {
 
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-slideInFromRight">
-          <div className={`${getToastColor(toastType)} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}>
+          <div
+            className={`${getToastColor(
+              toastType
+            )} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}
+          >
             <span>{toastMessage}</span>
             <button
               onClick={() => setShowToast(false)}

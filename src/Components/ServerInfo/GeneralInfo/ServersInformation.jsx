@@ -1,38 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import api from "../../api";
 
 const ServersInformation = () => {
-  const [serversInformation, setServersInformation] = useState([]); 
+  const [serversInformation, setServersInformation] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    server_info: '',
-    description: '',
+    server_info: "",
+    description: "",
   });
   const [currentItem, setCurrentItem] = useState(null);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState('info'); 
+  const [toastType, setToastType] = useState("info");
 
   const formFields = [
-    { label: 'Server Information', name: 'server_info', type: 'text', required: true },
-    { label: 'Description', name: 'description', type: 'textarea', required: false },
+    {
+      label: "Server Information",
+      name: "server_info",
+      type: "text",
+      required: true,
+    },
+    {
+      label: "Description",
+      name: "description",
+      type: "textarea",
+      required: false,
+    },
   ];
 
   useEffect(() => {
-    fetchServersInformation(); 
+    fetchServersInformation();
   }, []);
 
-  const fetchServersInformation = async () => { 
+  const fetchServersInformation = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/game-info/server-information/serversinfo'); 
-      if (!response.ok) {
-          throw new Error('Gagal mengambil data Server Information: ' + response.statusText); 
-      }
-      const data = await response.json();
-      setServersInformation(data); 
+      const response = await api.get(
+        "/game-info/server-information/serversinfo"
+      );
+      const data = await response.data;
+      setServersInformation(data);
     } catch (error) {
-      console.error('Error fetching Server Information data:', error); 
-      setToastMessage(`Gagal mengambil data Server Information: ${error.message}`); 
-      setToastType('error'); 
+      console.error("Error fetching Server Information data:", error);
+      setToastMessage(
+        `Gagal mengambil data Server Information: ${error.message}`
+      );
+      setToastType("error");
       setShowToast(true);
     }
   };
@@ -42,34 +54,34 @@ const ServersInformation = () => {
     if (showToast) {
       timer = setTimeout(() => {
         setShowToast(false);
-      }, 3000); 
+      }, 3000);
     }
     return () => {
-      clearTimeout(timer); 
+      clearTimeout(timer);
     };
   }, [showToast]);
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         handleCloseModal();
       }
     };
 
     if (showModal) {
-      window.addEventListener('keydown', handleEsc);
+      window.addEventListener("keydown", handleEsc);
     }
 
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener("keydown", handleEsc);
     };
-  }, [showModal]); 
+  }, [showModal]);
 
   const handleShowModal = () => {
-    setCurrentItem(null); 
+    setCurrentItem(null);
     setFormData({
-      server_info: '',
-      description: '',
+      server_info: "",
+      description: "",
     });
     setShowModal(true);
   };
@@ -88,53 +100,30 @@ const ServersInformation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const method = currentItem ? "PUT" : "POST";
+    const url = currentItem
+      ? `/game-info/server-information/serversinfo/${currentItem.id}`
+      : "/game-info/server-information/serversinfo";
     try {
-      const method = currentItem ? 'PUT' : 'POST';
-      const url = currentItem
-        ? `http://127.0.0.1:8000/api/game-info/server-information/serversinfo/${currentItem.id}` 
-        : 'http://127.0.0.1:8000/api/game-info/server-information/serversinfo'; 
+      const response = (await currentItem)
+        ? await api.put(url, formData)
+        : await api.post(url, formData);
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json', 
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const clonedResponse = response.clone();
-      let data;
-
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        const rawText = await clonedResponse.text();
-        console.error("Gagal parse respons sebagai JSON:", jsonError);
-        console.error("Teks respons mentah (non-JSON):", rawText);
-        throw new Error(`Respons tidak valid dari server (${response.status}): ${rawText.substring(0, 100)}...`);
-      }
-
-      if (response.ok) {
-        fetchServersInformation(); 
-        handleCloseModal(); 
-        setToastMessage(currentItem ? 'Server Information berhasil diperbarui.' : 'Server Information berhasil ditambahkan.'); 
-        setToastType('success'); 
-        setShowToast(true);
-      } else {
-        console.error('Backend error response:', data);
-        let errorMessage = 'Terjadi kesalahan.';
-        if (data && data.message) {
-            errorMessage = data.message;
-        } else if (data && data.errors) {
-            errorMessage = Object.values(data.errors).flat().join('; '); 
-        }
-        throw new Error(errorMessage);
-      }
+      fetchServersInformation();
+      handleCloseModal();
+      setToastMessage(
+        currentItem
+          ? "Server Information berhasil diperbarui."
+          : "Server Information berhasil ditambahkan."
+      );
+      setToastType("success");
+      setShowToast(true);
     } catch (error) {
-      console.error('Error submitting Server Information data:', error); 
-      setToastMessage(`Gagal menyimpan Server Information data: ${error.message}`); 
-      setToastType('error'); 
+      console.error("Error submitting Server Information data:", error);
+      setToastMessage(
+        `Gagal menyimpan Server Information data: ${error.message}`
+      );
+      setToastType("error");
       setShowToast(true);
     }
   };
@@ -148,41 +137,18 @@ const ServersInformation = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id) => { 
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+  const handleDelete = async (id) => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/game-info/server-information/serversinfo/${id}`, { 
-          method: 'DELETE',
-        });
-        
-        const clonedResponse = response.clone();
-        let data;
-
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          const rawText = await clonedResponse.text();
-          console.error("Gagal parse respons error hapus sebagai JSON:", jsonError);
-          console.error("Teks respons hapus mentah:", rawText);
-          throw new Error(`Respons tidak valid dari server (${response.status}) saat menghapus: ${rawText.substring(0, 100)}...`);
-        }
-
-        if (response.ok) {
-          fetchServersInformation(); 
-          setToastMessage('Server Information berhasil dihapus.'); 
-          setToastType('success'); 
-          setShowToast(true);
-        } else {
-          let errorMessage = 'Gagal menghapus data.';
-          if (data && data.message) {
-              errorMessage = data.message;
-          }
-          throw new Error(errorMessage);
-        }
+        await fetch(`/game-info/server-information/serversinfo/${id}`);
+        fetchServersInformation();
+        setToastMessage("Server Information berhasil dihapus.");
+        setToastType("success");
+        setShowToast(true);
       } catch (error) {
-        console.error('Error deleting Server Information data:', error); 
+        console.error("Error deleting Server Information data:", error);
         setToastMessage(`Terjadi kesalahan saat menghapus: ${error.message}`);
-        setToastType('error'); 
+        setToastType("error");
         setShowToast(true);
       }
     }
@@ -190,24 +156,24 @@ const ServersInformation = () => {
 
   const getToastColor = (type) => {
     switch (type) {
-      case 'success':
-        return 'bg-green-500';
-      case 'error':
-        return 'bg-red-500';
+      case "success":
+        return "bg-green-500";
+      case "error":
+        return "bg-red-500";
       default:
-        return 'bg-blue-500'; 
+        return "bg-blue-500";
     }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-5xl">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Server Information</h2> 
+        <h2 className="text-3xl font-bold text-gray-800">Server Information</h2>
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
           onClick={handleShowModal}
         >
-          Tambah Server Information 
+          Tambah Server Information
         </button>
       </div>
 
@@ -222,13 +188,18 @@ const ServersInformation = () => {
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm">
-            {serversInformation.map((item, index) => ( 
+            {serversInformation.map((item, index) => (
               <tr
                 key={item.id}
-                className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 border-b border-gray-200 transition duration-150 ease-in-out`}
               >
-                <td className="py-3 px-6 text-left whitespace-nowrap">{item.id}</td>
-                <td className="py-3 px-6 text-left">{item.server_info}</td> {/* Changed from item.title to item.server_info */}
+                <td className="py-3 px-6 text-left whitespace-nowrap">
+                  {item.id}
+                </td>
+                <td className="py-3 px-6 text-left">{item.server_info}</td>{" "}
+                {/* Changed from item.title to item.server_info */}
                 <td className="py-3 px-6 text-left">{item.description}</td>
                 <td className="py-3 px-6 text-center">
                   <button
@@ -254,34 +225,41 @@ const ServersInformation = () => {
         <div
           className="fixed inset-0 bg-gray-900 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center z-50 transition-opacity duration-300 ease-out"
           style={{ opacity: showModal ? 1 : 0 }}
-          onClick={handleCloseModal} 
+          onClick={handleCloseModal}
         >
           <div
             className="relative p-8 bg-white w-full max-w-md mx-auto rounded-lg shadow-2xl transition-all duration-300 ease-out"
             style={{
-                transform: showModal ? 'translateY(0) scale(1)' : 'translateY(-50px) scale(0.95)',
-                opacity: showModal ? 1 : 0
+              transform: showModal
+                ? "translateY(0) scale(1)"
+                : "translateY(-50px) scale(0.95)",
+              opacity: showModal ? 1 : 0,
             }}
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">
-                {currentItem ? 'Edit Server Information' : 'Tambah Server Information'} 
+                {currentItem
+                  ? "Edit Server Information"
+                  : "Tambah Server Information"}
               </h3>
               <button
                 className="text-gray-400 hover:text-gray-600 text-2xl p-1 rounded-full hover:bg-gray-100 transition duration-150 ease-in-out"
                 onClick={handleCloseModal}
               >
-                &times; 
+                &times;
               </button>
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
               {formFields.map((field, index) => (
                 <div className="mb-4" key={index}>
-                  <label htmlFor={field.name} className="block text-gray-700 text-sm font-bold mb-2">
+                  <label
+                    htmlFor={field.name}
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
                     {field.label}
                   </label>
-                  {field.type === 'textarea' ? (
+                  {field.type === "textarea" ? (
                     <textarea
                       id={field.name}
                       name={field.name}
@@ -315,7 +293,7 @@ const ServersInformation = () => {
                   type="submit"
                   className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  {currentItem ? 'Perbarui' : 'Simpan'}
+                  {currentItem ? "Perbarui" : "Simpan"}
                 </button>
               </div>
             </form>
@@ -326,7 +304,11 @@ const ServersInformation = () => {
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-slideInFromRight">
-          <div className={`${getToastColor(toastType)} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}>
+          <div
+            className={`${getToastColor(
+              toastType
+            )} text-white px-6 py-3 rounded-lg shadow-lg flex items-center transition duration-300 ease-in-out transform hover:scale-105`}
+          >
             <span>{toastMessage}</span>
             <button
               onClick={() => setShowToast(false)}
