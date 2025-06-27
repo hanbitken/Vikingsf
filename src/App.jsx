@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
 // --- Components & Pages (Public)
@@ -111,7 +106,7 @@ function App() {
   if (loading) return <p className="text-white text-center">Loading...</p>;
 
   return (
-    <Router>
+    <BrowserRouter basename="/Vikingsf">
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route
@@ -271,7 +266,7 @@ function App() {
           }
         />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
