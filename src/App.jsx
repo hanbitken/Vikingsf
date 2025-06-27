@@ -106,7 +106,7 @@ function App() {
   if (loading) return <p className="text-white text-center">Loading...</p>;
 
   return (
-    <BrowserRouter basename="/Vikingsf">
+    <BrowserRouter>
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route
