@@ -10,7 +10,7 @@ import InfoLine from "../assets/Picture/Line-Info.png";
 import profile from "../assets/Picture/profile.png";
 import Cora from "../assets/Picture/Cora.png";
 import Bellato from "../assets/Picture/Bellato.png";
-import Accretia from "../assets/Picture/Accretia.png";
+import Accretia from "../assets/Picture/accretia.png";
 
 export default function Home() {
   const raceStats = [
