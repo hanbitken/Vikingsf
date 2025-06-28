@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "./api";
 import Logo from "../assets/Picture/LOGO VIKINGS 1.png";
 import Tree from "../assets/Picture/Tree Celtic.png";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,11 +12,21 @@ export default function Login() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  const csrf = async () => {
+    await axios.get(
+      "https://backend-viking-project-production.up.railway.app/sanctum/csrf-cookie",
+      {
+        withCredentials: true,
+      }
+    );
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage("");
 
     try {
+      await csrf(); // Memastikan CSRF token sudah diambil
       const response = await api.post("/login", { username, password });
       const { token } = response.data;
       localStorage.setItem("token", token);
