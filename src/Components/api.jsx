@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://backend-viking-project-production.up.railway.app/api", // ganti sesuai backend-mu
+  baseURL: "http://31.97.66.224:8000/api", // ganti sesuai backend-mu
   withCredentials: true, // jika pakai Sanctum untuk login
   headers: {
     Accept: "application/json",
